@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 const Register = () => {
-  // const [username, setUsername] = useState('');
-  // const [password, setPassword] = useState('');
+  const [isRegistered, setIsRegistered] = useState(false);
 
   const submitRegister = (e) => {
     e.preventDefault();
@@ -15,8 +14,11 @@ const Register = () => {
       username: username,
       password: password
     })
-    .then(() => {
-
+    .then((data) => {
+      // console.log('register data: ', data)
+      if (data.status === 200) {
+        setIsRegistered(true);
+      }
     })
 
   }
@@ -35,6 +37,7 @@ const Register = () => {
         </section>
         <button type="submit" value="Register">Register</button>
       </form>
+      {isRegistered && <p>User created!</p>}
     </div>
   )
 }

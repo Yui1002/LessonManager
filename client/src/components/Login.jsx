@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 const Login = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [formError, setFormError] = useState(false);
+  const [isLogined, setIsLogined] = useState(false);
+  const [loginError, setLoginError]= useState(false);
 
   const submitLogin = (e) => {
     e.preventDefault();
@@ -12,18 +11,20 @@ const Login = () => {
     let username = e.target[0].value;
     let password = e.target[1].value;
 
-    if (!username.length || !password.length) {
-      setFormError(true);
-    }
-
     axios.post('/login', {
       username: username,
       password: password
     })
-    .then(() => {
-
+    .then((data) => {
+      if (data.status === 200) {
+        setIsLogined(true);
+        setLoginError(false);
+      }
     })
-
+    .catch(err => {
+      setIsLogined(false);
+      setLoginError(true);
+    })
   }
 
   return (
@@ -40,7 +41,8 @@ const Login = () => {
         </section>
         <button type="submit" value="Sign in">Log in</button>
       </form>
-      {formError && <p>username or passport is empty</p>}
+      {isLogined && <p>authenticated</p>}
+      {loginError && <p>failed to authenticate</p>}
     </div>
   )
 }

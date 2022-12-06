@@ -29,18 +29,20 @@ app.get('/login', (req, res) => {
 });
 
 app.post('/login', (req, res, next) => {
-  console.log(req.body);
+  // console.log(req.body);
   passport.authenticate('local', (err, user, info) => {
     console.log('err: ', err);
-    console.log('user: ', user);
+    console.log('user in route: ', user);
     if (err) throw err;
-    if (!user) {
-      res.send('No user exists');
+    if (!user.length || !user) {
+      res.status(404).send('Incorrect username or password');
     } else {
+      // establish a login session
       req.logIn(user, err => {
         if (err) throw err;
-        console.log('Successfully Authenticated!')
-        res.send('Successfully Authenticated!');
+        // console.log('Successfully Authenticated!')
+        // redirect to login page
+        res.status(200).send('authenticated');
       })
     }
   })(req, res, next)
@@ -49,13 +51,12 @@ app.post('/login', (req, res, next) => {
 app.post('/register', (req, res) => {
   let username = req.body.username;
   let password = req.body.password;
-  // check if the user info is in the database
+
   db.query('select * from users where username = ?', [username], async (err, result) => {
     if (err) throw err;
-    console.log('result data: ', result.length)
 
     if (result.length !== 0) {
-      res.send('User already exists')
+      res.status(400).send('User already exists')
     }
 
     if (result.length === 0) {
@@ -63,7 +64,8 @@ app.post('/register', (req, res) => {
       db.query('insert into users (username, password) values (?, ?);', [username, hashedPassword], (err, result) => {
         if (err) throw err;
 
-        console.log('User created!')
+        // console.log('User created!');
+        res.status(200).send('User created!')
       });
     }
   })
