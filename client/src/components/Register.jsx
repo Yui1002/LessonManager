@@ -1,22 +1,17 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const Login = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [formError, setFormError] = useState(false);
+const Register = () => {
+  // const [username, setUsername] = useState('');
+  // const [password, setPassword] = useState('');
 
-  const submitLogin = (e) => {
+  const submitRegister = (e) => {
     e.preventDefault();
 
     let username = e.target[0].value;
     let password = e.target[1].value;
 
-    if (!username.length || !password.length) {
-      setFormError(true);
-    }
-
-    axios.post('/login', {
+    axios.post('/register', {
       username: username,
       password: password
     })
@@ -28,8 +23,8 @@ const Login = () => {
 
   return (
     <div>
-      <h1>Log in</h1>
-      <form onSubmit={submitLogin}>
+      <h1>Register</h1>
+      <form onSubmit={submitRegister}>
         <section>
           <label htmlFor="username">Username</label>
           <input id="username" name="username" type="text" autoComplete="username" required autoFocus />
@@ -38,11 +33,10 @@ const Login = () => {
           <label htmlFor="current-password">Password</label>
           <input id="current-password" name="password" type="password" autoComplete="current-password" required />
         </section>
-        <button type="submit" value="Sign in">Log in</button>
+        <button type="submit" value="Register">Register</button>
       </form>
-      {formError && <p>username or passport is empty</p>}
     </div>
   )
 }
 
-export default Login;
+export default Register;
