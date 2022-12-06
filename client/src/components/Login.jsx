@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const Login = () => {
+  const navigate = useNavigate();
   const [isLogined, setIsLogined] = useState(false);
   const [loginError, setLoginError]= useState(false);
 
@@ -41,7 +43,7 @@ const Login = () => {
         </section>
         <button type="submit" value="Sign in">Log in</button>
       </form>
-      {isLogined && <p>authenticated</p>}
+      {isLogined && navigate('/')}
       {loginError && <p>failed to authenticate</p>}
     </div>
   )

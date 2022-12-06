@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const Register = () => {
+  const navigate = useNavigate();
   const [isRegistered, setIsRegistered] = useState(false);
 
   const submitRegister = (e) => {
@@ -18,6 +20,7 @@ const Register = () => {
       // console.log('register data: ', data)
       if (data.status === 200) {
         setIsRegistered(true);
+        navigate('/login');
       }
     })
 
@@ -37,7 +40,7 @@ const Register = () => {
         </section>
         <button type="submit" value="Register">Register</button>
       </form>
-      {isRegistered && <p>User created!</p>}
+      {isRegistered && navigate('/login')}
     </div>
   )
 }
