@@ -49,7 +49,6 @@ app.post('/login', (req, res, next) => {
 });
 
 app.post('/register', (req, res) => {
-  console.log(req.body)
   let username = req.body.username;
   let password = req.body.password;
 
@@ -71,6 +70,15 @@ app.post('/register', (req, res) => {
     }
   })
 });
+
+app.post('/addStudent', (req, res) => {
+  console.log(req.body);
+  let name = req.body.name;
+  let lessonHour = req.body.lessonHour;
+
+  // check if the student already exists
+  
+})
 
 
 app.listen(port, () => console.log(`Listening on ${port}`));
