@@ -1,8 +1,10 @@
-import React from 'react';
+import React, {useState} from 'react';
 import axios from 'axios';
 
 // Modal window for adding a new student
 const AddStudent = () => {
+  const [addStudentError, setAddStudentError] = useState(false);
+
   const submitNewStudent = (e) => {
     e.preventDefault();
 
@@ -14,25 +16,29 @@ const AddStudent = () => {
       lessonHour: lessonHour
     })
     .then((data) => {
-      console.log('data: ', data)
+      // get latest list of students
+      axios.get('/students')
     })
     .catch(err => {
-
+      setAddStudentError(true);
     })
   }
 
   return (
-    <form onSubmit={submitNewStudent}>
-      <section>
-        <label htmlFor="name">Student's name</label>
-        <input id="name" name="name" type="text" autoComplete="name" required autoFocus />
-      </section>
-      <section>
-        <label htmlFor="lesson-hour">Total lesson hours</label>
-        <input id="lesson-hour" name="lesson-hour" type="number" autoComplete="lesson-hour" required />
-      </section>
-      <button type="submit" value="add-student">Add</button>
-    </form>
+    <div>
+      <form onSubmit={submitNewStudent}>
+        <section>
+          <label htmlFor="name">Student's name</label>
+          <input id="name" name="name" type="text" autoComplete="name" required autoFocus />
+        </section>
+        <section>
+          <label htmlFor="lesson-hour">Total lesson hours</label>
+          <input id="lesson-hour" name="lesson-hour" type="number" min="0" autoComplete="lesson-hour" required />
+        </section>
+        <button type="submit" value="add-student">Add</button>
+      </form>
+      {addStudentError && <p>The student already exists</p>}
+    </div>
   )
 }
 

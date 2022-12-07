@@ -80,11 +80,9 @@ app.get('/students', (req, res) => {
 })
 
 app.post('/students', (req, res) => {
-  // console.log(req.body);
   let name = req.body.name;
   let lessonHour = req.body.lessonHour;
 
-  // check if the student already exists
   db.query('select * from students where name = ?', [name], (err, result) => {
     if (err) throw err;
     if (result.length !== 0) {

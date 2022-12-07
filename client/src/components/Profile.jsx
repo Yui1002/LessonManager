@@ -18,7 +18,6 @@ const Profile = () => {
     axios.get('/students')
     .then(data => {
       const result = data.data;
-      console.log('result: ', result);
       setStudents(result);
     })
     .catch(err => {
