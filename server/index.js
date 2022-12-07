@@ -71,13 +71,31 @@ app.post('/register', (req, res) => {
   })
 });
 
-app.post('/addStudent', (req, res) => {
-  console.log(req.body);
+app.get('/students', (req, res) => {
+  db.query('select * from students', (err, result) => {
+    if (err) throw err;
+
+    res.send(result);
+  })
+})
+
+app.post('/students', (req, res) => {
+  // console.log(req.body);
   let name = req.body.name;
   let lessonHour = req.body.lessonHour;
 
   // check if the student already exists
-  
+  db.query('select * from students where name = ?', [name], (err, result) => {
+    if (err) throw err;
+    if (result.length !== 0) {
+      res.status(400).send('student already exists');
+    } else {
+      db.query('insert into students (name, lesson_hours) values (?, ?)', [name, lessonHour], (err, result) => {
+        if (err) throw err;
+        res.status(200).send('student added')
+      })
+    }
+  })
 })
 
 

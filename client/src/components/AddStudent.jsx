@@ -9,12 +9,12 @@ const AddStudent = () => {
     let name = e.target[0].value;
     let lessonHour = e.target[1].value;
 
-    axios.post('/addStudent', {
+    axios.post('/students', {
       name: name,
       lessonHour: lessonHour
     })
     .then((data) => {
-
+      console.log('data: ', data)
     })
     .catch(err => {
 
