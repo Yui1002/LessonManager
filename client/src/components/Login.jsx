@@ -43,8 +43,9 @@ const Login = () => {
         </section>
         <button type="submit" value="Sign in">Log in</button>
       </form>
-      {isLogined && navigate('/')}
-      {loginError && <p>failed to authenticate</p>}
+      {isLogined && navigate('/home')}
+      {loginError && <p>We cannot find an account with that information</p>}
+      New user?<button onClick={() => navigate('/register')}>Register</button>
     </div>
   )
 }

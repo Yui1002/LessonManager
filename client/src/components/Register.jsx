@@ -5,6 +5,7 @@ import axios from 'axios';
 const Register = () => {
   const navigate = useNavigate();
   const [isRegistered, setIsRegistered] = useState(false);
+  const [registerError, setRegisterError] = useState(false);
 
   const submitRegister = (e) => {
     e.preventDefault();
@@ -23,7 +24,10 @@ const Register = () => {
         navigate('/login');
       }
     })
-
+    .catch(err => {
+      setRegisterError(true);
+      setIsRegistered(false);
+    })
   }
 
   return (
@@ -41,6 +45,8 @@ const Register = () => {
         <button type="submit" value="Register">Register</button>
       </form>
       {isRegistered && navigate('/login')}
+      {registerError && <p>User already exists</p>}
+      Already have an account? <button onClick={() => navigate('/login')}>Login</button>
     </div>
   )
 }

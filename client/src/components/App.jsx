@@ -1,5 +1,5 @@
 import React from 'react';
-import {BrowserRouter,Routes,Route} from "react-router-dom";
+import {HashRouter,Routes,Route} from "react-router-dom";
 import Chat from './Chat.jsx';
 import LessonCounts from './LessonCounts.jsx';
 import Profile from './Profile.jsx';
@@ -7,32 +7,22 @@ import Schedule from './Schedule.jsx';
 import Login from './Login.jsx';
 import Register from './Register.jsx';
 import Home from './Home.jsx';
+import Entry from './Entry.jsx';
+
 
 const App = () => {
   return (
     <>
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
-          <Route exact path="/" element={<Home />}/>
+          <Route exact path="/" element={<Entry />}/>
           <Route exact path="/login" element={<Login />}/>
           <Route exact path="/register" element={<Register />}/>
+          <Route exact path="/home" element={<Home />}/>
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </>
   )
-  // return (
-  //   <div>
-  //     <h1>Lesson Manager</h1>
-  //     <Register />
-  //     {/* <Route path='register' element={<Register />} />
-  //     <Route path='login' element={<Login />} /> */}
-  //     {/* <Login /> */}
-  //     {/* <Profile /> */}
-  //     {/* <LessonCounts /> */}
-  //     {/* <Schedule /> */}
-  //     {/* <Chat /> */}
-  //   </div>
-  // )
 }
 
 export default App;

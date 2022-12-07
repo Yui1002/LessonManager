@@ -49,6 +49,7 @@ app.post('/login', (req, res, next) => {
 });
 
 app.post('/register', (req, res) => {
+  console.log(req.body)
   let username = req.body.username;
   let password = req.body.password;
 
