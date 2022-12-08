@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import axios from 'axios';
 
 // Modal window for adding a new student
-const AddStudent = () => {
+const AddStudent = (props) => {
   const [addStudentError, setAddStudentError] = useState(false);
 
   const submitNewStudent = (e) => {
@@ -18,6 +18,9 @@ const AddStudent = () => {
     .then((data) => {
       // get latest list of students
       axios.get('/students')
+    })
+    .then((data) => {
+      props.setStudents(data.data)
     })
     .catch(err => {
       setAddStudentError(true);
