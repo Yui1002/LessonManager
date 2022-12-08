@@ -104,6 +104,23 @@ app.delete('/student', (req, res) => {
     if (err) throw err;
     res.status(200).send('student deleted');
   })
+});
+
+app.put('/student', (req, res) => {
+  console.log('req.body: ', req.body);
+  let name = req.body.name;
+  let updatedName = req.body.updatedName;
+  let updatedLessonHours = req.body.updatedLessonHours;
+
+  db.query('select id from students where name = ?', [name], (err, result) => {
+    if (err) throw err;
+    const id = result[0].id;
+
+    db.query('update students set name=?, lesson_hours=? where id=?', [updatedName, updatedLessonHours, id], (err, result) => {
+      if (err) throw err;
+    })
+  })
+
 })
 
 

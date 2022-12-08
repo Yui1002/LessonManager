@@ -24,7 +24,7 @@ const Student = (props) => {
       <div>{props.student.lesson_hours} hours</div>
       <button value={props.student.name} onClick={props.deleteStudent}>Delete student</button>
       <div className={duringPopUp}>
-        {popUp && <PopUp />}
+        {popUp && <PopUp name={props.student.name} lessonHours={props.student.lesson_hours} />}
       </div>
     </div>
   )
