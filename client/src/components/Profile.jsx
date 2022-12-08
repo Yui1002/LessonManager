@@ -53,7 +53,7 @@ const Profile = () => {
       <div className="students_list">
         {students.map((student) =>
           <div key={student.id} className="student">
-            <Student />
+            <Student student={student} />
             {/* <div>{student.name}</div>
             <div>{student.lesson_hours}</div> */}
           </div>
