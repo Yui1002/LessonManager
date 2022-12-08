@@ -118,9 +118,9 @@ app.put('/student', (req, res) => {
 
     db.query('update students set name=?, lesson_hours=? where id=?', [updatedName, updatedLessonHours, id], (err, result) => {
       if (err) throw err;
+      res.status(200).send('student updated')
     })
   })
-
 })
 
 

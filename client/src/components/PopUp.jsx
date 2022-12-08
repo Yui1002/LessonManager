@@ -3,6 +3,7 @@ import axios from 'axios';
 import './PopUp.css';
 
 const PopUp = (props) => {
+
   console.log('props in popup: ', props);
 
   const saveChanges = async (e) => {
@@ -18,7 +19,12 @@ const PopUp = (props) => {
       updatedName: updatedName,
       updatedLessonHours: updatedLessonHours
     })
-    const 
+    console.log('res: ', res)
+    if (res.status === 200) {
+      props.getStudents();
+    } else {
+      console.log('update failed');
+    }
   }
 
   return (

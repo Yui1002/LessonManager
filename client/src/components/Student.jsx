@@ -10,9 +10,6 @@ const Student = (props) => {
   const duringPopUp = popUp ? "during-popup" : "";
 
   const goToSettings = () => {
-    console.log('setting')
-
-    // show modal window
     setPopUp(true);
   }
 
@@ -24,7 +21,12 @@ const Student = (props) => {
       <div>{props.student.lesson_hours} hours</div>
       <button value={props.student.name} onClick={props.deleteStudent}>Delete student</button>
       <div className={duringPopUp}>
-        {popUp && <PopUp name={props.student.name} lessonHours={props.student.lesson_hours} />}
+        {popUp &&
+          <PopUp
+            name={props.student.name}
+            lessonHours={props.student.lesson_hours}
+            getStudents={props.getStudents}
+          />}
       </div>
     </div>
   )

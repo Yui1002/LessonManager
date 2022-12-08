@@ -42,8 +42,6 @@ const Profile = () => {
     getStudents();
   }
 
-  const updateStudent = 
-
   return (
     <div>
       <h1>Student's Profile</h1>
@@ -67,6 +65,7 @@ const Profile = () => {
             <Student
               student={student}
               deleteStudent={deleteStudent}
+              getStudents={getStudents}
             />
           </div>
         )}
