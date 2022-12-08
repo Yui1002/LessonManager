@@ -18,6 +18,7 @@ const Profile = () => {
     setShowForm(false);
 
     let name = e.target[0].value;
+    console.log('name: ', name)
     let lessonHour = e.target[1].value;
 
     const res = await axios.post('/students', {
@@ -31,6 +32,18 @@ const Profile = () => {
   const getStudents = async () => {
     const res = await axios.get('/students');
     setStudents(res.data);
+  }
+
+  const deleteStudent = async (e) => {
+    const name = e.target.value;
+    console.log(name)
+
+    const res = await axios.delete('/student', {
+      data: {
+        name: name
+      }
+    });
+    getStudents();
   }
 
   return (
@@ -53,7 +66,10 @@ const Profile = () => {
       <div className="students_list">
         {students.map((student) =>
           <div key={student.id} className="student">
-            <Student student={student} />
+            <Student
+              student={student}
+              deleteStudent={deleteStudent}
+            />
             {/* <div>{student.name}</div>
             <div>{student.lesson_hours}</div> */}
           </div>

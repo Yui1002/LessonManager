@@ -94,6 +94,16 @@ app.post('/students', (req, res) => {
       })
     }
   })
+});
+
+app.delete('/student', (req, res) => {
+  let name = req.body.name;
+  console.log(name)
+
+  db.query('delete from students where name = ?', [name], (err, result) => {
+    if (err) throw err;
+    res.status(200).send('student deleted');
+  })
 })
 
 
