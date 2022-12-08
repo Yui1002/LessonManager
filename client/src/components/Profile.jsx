@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import AddStudent from './AddStudent.jsx';
+import Student from './Student.jsx';
 import axios from 'axios';
+import './Profile.css'
 
 const Profile = () => {
   const [students, setStudents] = useState([]);
@@ -12,6 +14,9 @@ const Profile = () => {
 
   const submitNewStudent = async (e) => {
     e.preventDefault();
+
+    setShowForm(false);
+
     let name = e.target[0].value;
     let lessonHour = e.target[1].value;
 
@@ -19,6 +24,7 @@ const Profile = () => {
       name: name,
       lessonHour: lessonHour
     });
+
     getStudents();
   }
 
@@ -44,13 +50,15 @@ const Profile = () => {
           <button type="submit" value="add-student">Add</button>
         </form>
       }
-      {students.map((student) =>
-        <div key={student.id}>
-          <div>{student.name}</div>
-          <div>{student.lesson_hours}</div>
-        </div>
-      )}
-      {/* {showModal && <AddStudent students={students} setStudents={setStudents}/>} */}
+      <div className="students_list">
+        {students.map((student) =>
+          <div key={student.id} className="student">
+            <Student />
+            {/* <div>{student.name}</div>
+            <div>{student.lesson_hours}</div> */}
+          </div>
+        )}
+      </div>
     </div>
   )
 }

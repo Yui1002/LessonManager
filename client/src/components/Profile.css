@@ -1,0 +1,13 @@
+.students_list {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  background-color: DodgerBlue;
+}
+
+.student {
+  width: 20%;
+  height: 200px;
+  margin: 10px;
+  background-color: #ddd;
+}

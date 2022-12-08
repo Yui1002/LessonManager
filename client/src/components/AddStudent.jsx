@@ -6,6 +6,7 @@ const AddStudent = (props) => {
   const [addStudentError, setAddStudentError] = useState(false);
 
   const submitNewStudent = (e) => {
+    
     e.preventDefault();
 
     let name = e.target[0].value;
