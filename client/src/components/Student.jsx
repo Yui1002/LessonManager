@@ -26,6 +26,7 @@ const Student = (props) => {
             name={props.student.name}
             lessonHours={props.student.lesson_hours}
             getStudents={props.getStudents}
+            setPopUp={setPopUp}
           />}
       </div>
     </div>

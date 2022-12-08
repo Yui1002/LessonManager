@@ -8,6 +8,7 @@ const PopUp = (props) => {
 
   const saveChanges = async (e) => {
     e.preventDefault();
+    props.setPopUp(false);
     let updatedName = e.target[0].value;
     let updatedLessonHours = e.target[1].value;
 
