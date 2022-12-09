@@ -4,23 +4,20 @@ import './PopUp.css';
 
 const PopUp = (props) => {
 
-  console.log('props in popup: ', props);
-
   const saveChanges = async (e) => {
     e.preventDefault();
     props.setPopUp(false);
     let updatedName = e.target[0].value;
     let updatedLessonHours = e.target[1].value;
-
-    console.log('updatedName: ', updatedName)
-    console.log('updatedLessonHours: ', updatedLessonHours)
+    let updatedEmail = e.target[2].value;
 
     const res = await axios.put('/student', {
       name: props.name,
       updatedName: updatedName,
-      updatedLessonHours: updatedLessonHours
-    })
-    console.log('res: ', res)
+      updatedLessonHours: updatedLessonHours,
+      updatedEmail: updatedEmail
+    });
+
     if (res.status === 200) {
       props.getStudents();
     } else {
@@ -31,15 +28,14 @@ const PopUp = (props) => {
   return (
     <div className="popup_container">
       <h3>Account Setting</h3>
+      <span className="popup_close" onClick={props.closePopUp}>&times;</span>
       <form onSubmit={saveChanges}>
         <section>
-          <label htmlFor="name">name</label>
+          <label htmlFor="name">Name</label>
           <input
             id="name"
             name="name"
             type="text"
-            // value={props.name}
-            // value={props.name}
             autoComplete="name"
             required autoFocus
           />
@@ -50,8 +46,17 @@ const PopUp = (props) => {
             id="lesson_hour"
             name="lesson_hour"
             type="number"
-            // value={props.lessonHours}
             autoComplete="lesson_hour"
+            required autoFocus
+          />
+        </section>
+        <section>
+          <label htmlFor="email">Email</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            autoComplete="email"
             required autoFocus
           />
         </section>

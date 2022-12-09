@@ -82,13 +82,14 @@ app.get('/students', (req, res) => {
 app.post('/students', (req, res) => {
   let name = req.body.name;
   let lessonHour = req.body.lessonHour;
+  let email = req.body.email;
 
   db.query('select * from students where name = ?', [name], (err, result) => {
     if (err) throw err;
     if (result.length !== 0) {
       res.status(400).send('student already exists');
     } else {
-      db.query('insert into students (name, lesson_hours) values (?, ?)', [name, lessonHour], (err, result) => {
+      db.query('insert into students (name, lesson_hours, email) values (?, ?, ?)', [name, lessonHour, email], (err, result) => {
         if (err) throw err;
         res.status(200).send('student added')
       })
@@ -98,7 +99,6 @@ app.post('/students', (req, res) => {
 
 app.delete('/student', (req, res) => {
   let name = req.body.name;
-  console.log(name)
 
   db.query('delete from students where name = ?', [name], (err, result) => {
     if (err) throw err;
@@ -111,12 +111,13 @@ app.put('/student', (req, res) => {
   let name = req.body.name;
   let updatedName = req.body.updatedName;
   let updatedLessonHours = req.body.updatedLessonHours;
+  let updatedEmail = req.body.updatedEmail;
 
   db.query('select id from students where name = ?', [name], (err, result) => {
     if (err) throw err;
     const id = result[0].id;
 
-    db.query('update students set name=?, lesson_hours=? where id=?', [updatedName, updatedLessonHours, id], (err, result) => {
+    db.query('update students set name=?, lesson_hours=?, email=? where id=?', [updatedName, updatedLessonHours, updatedEmail, id], (err, result) => {
       if (err) throw err;
       res.status(200).send('student updated')
     })

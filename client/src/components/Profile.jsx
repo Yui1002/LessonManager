@@ -18,10 +18,12 @@ const Profile = () => {
 
     let name = e.target[0].value;
     let lessonHour = e.target[1].value;
+    let email = e.target[2].value;
 
     const res = await axios.post('/students', {
       name: name,
-      lessonHour: lessonHour
+      lessonHour: lessonHour,
+      email: email
     });
     getStudents();
   }
@@ -55,6 +57,10 @@ const Profile = () => {
           <section>
             <label htmlFor="lesson-hour">Total lesson hours</label>
             <input id="lesson-hour" name="lesson-hour" type="number" min="0" autoComplete="lesson-hour" required />
+          </section>
+          <section>
+            <label htmlFor="email">Email</label>
+            <input id="email" name="email" type="email" autoComplete="email" required />
           </section>
           <button type="submit" value="add-student">Add</button>
         </form>

@@ -1,20 +1,18 @@
 .popup_container {
-  position: fixed;
+  position: relative;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
 
-  left: 25%;
-  top: 30%;
-
-  width: 50%;
-
-  border: 1px solid #011627;
-  border-radius: 1em;
-
-  background-color: #FDFFFC;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-
-  color: #011627;
+.popup_close {
+  color: #aaaaaa;
+  font-size: 28px;
+  font-weight: bold;
+  position: absolute;
+  top: 2%;
+  right: 2%;
+  cursor: pointer;
 }
