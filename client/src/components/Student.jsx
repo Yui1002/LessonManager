@@ -14,12 +14,21 @@ const Student = (props) => {
   }
 
   return (
-    <div>
-      <FaUserAlt />
-      <AiFillSetting onClick={goToSettings}/>
-      <div>{props.student.name}</div>
-      <div>{props.student.lesson_hours} hours</div>
-      <button value={props.student.name} onClick={props.deleteStudent}>Delete student</button>
+    <div className="student_container">
+      <div className="student_head_icon">
+        <FaUserAlt className="student_photo_icon"/>
+        <AiFillSetting
+          className="student_setting_icon"
+          onClick={goToSettings}
+        />
+      </div>
+      <div className="student_name">{props.student.name}</div>
+      <div className="student_lesson_hours">{props.student.lesson_hours} hours</div>
+      <button
+        className="student_delete_btn"
+        value={props.student.name}
+        onClick={props.deleteStudent}>Delete student
+      </button>
       <div className={duringPopUp}>
         {popUp &&
           <PopUp

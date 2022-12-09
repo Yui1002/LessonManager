@@ -1,3 +1,44 @@
+.student_container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
 .during-popup {
   background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7));
+}
+
+.student_head_icon {
+  display: flex;
+  justify-content: space-between;
+}
+
+.student_photo_icon {
+  width: 25%;
+  height: 25%;
+  border-radius: 50%;
+  background-color: #fff;
+  margin: 5px;
+}
+
+.student_setting_icon {
+  width: 10%;
+  height: 10%;
+  margin: 5px;
+}
+
+.student_name, .student_lesson_hours {
+  text-align: center;
+}
+
+.student_name {
+  font-size: 20px;
+}
+
+.student_delete_btn {
+  position: absolute;
+  top: 75%;
+  right: 25%;
+  width: 50%;
+  height: 15%;
 }
