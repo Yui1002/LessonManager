@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import AddStudent from './AddStudent.jsx';
 import Student from './Student.jsx';
 import axios from 'axios';
 import './Profile.css'
