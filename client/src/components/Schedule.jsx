@@ -102,18 +102,18 @@ const Schedule = () => {
       <button onClick={getPreviousMonth}>prev</button>
       <button onClick={getNextMonth}>next</button>
       <div>{year}, {month + 1}</div>
-      <table>
+      <table className="schedule_calendar">
         <thead>
           <tr>
             {days.map(day => (
-              <th key={day}>{day}</th>
+              <th className="schedule_day" key={day}>{day}</th>
             ))}
           </tr>
         </thead>
         <tbody>
           {calendar.map(week => {
             return (
-              <tr>{week.map(day => (
+              <tr className="schedule_week">{week.map(day => (
                 <td className="schedule_date">{day.date}</td>
               ))}</tr>
             )
