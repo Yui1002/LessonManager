@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import './Schedule.css';
+import PopUpEvent from './PopUpEvent.jsx';
 
 const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const today = new Date();
@@ -8,9 +9,9 @@ let month = today.getMonth();
 
 const Schedule = () => {
 
-  let [calendar, setCalendar] = useState([]);
-  let [displayedMonth, setDisplayedMonth] = useState(month);
-  let [displayedYear, setDisplayedYear] = useState(year);
+  const [calendar, setCalendar] = useState([]);
+  const [popUp, setPopUp] = useState(false);
+  const duringPopUp = popUp ? "during-popup" : "";
 
   useEffect(() => {
     showCalendar();
@@ -97,6 +98,10 @@ const Schedule = () => {
     showCalendar();
   }
 
+  const setEvent = () => {
+    setPopUp(true);
+  }
+
   return (
     <div className="schedule_container">
       <button onClick={getPreviousMonth}>prev</button>
@@ -114,13 +119,15 @@ const Schedule = () => {
           {calendar.map(week => {
             return (
               <tr className="schedule_week">{week.map(day => (
-                <td className="schedule_date">{day.date}</td>
+                <td className="schedule_date" onClick={setEvent}>{day.date}</td>
               ))}</tr>
             )
-
           })}
         </tbody>
       </table>
+      <div className={duringPopUp}>
+        {popUp && <PopUpEvent />}
+      </div>
     </div>
   )
 }
