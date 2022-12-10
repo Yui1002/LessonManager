@@ -102,6 +102,10 @@ const Schedule = () => {
     setPopUp(true);
   }
 
+  const closeEvent = () => {
+    setPopUp(false);
+  }
+
   return (
     <div className="schedule_container">
       <button onClick={getPreviousMonth}>prev</button>
@@ -126,7 +130,9 @@ const Schedule = () => {
         </tbody>
       </table>
       <div className={duringPopUp}>
-        {popUp && <PopUpEvent />}
+        {popUp &&
+          <PopUpEvent closeEvent={closeEvent} />
+        }
       </div>
     </div>
   )

@@ -1,8 +1,18 @@
-.popUp_event_container {
+.popup_event_container {
   position: relative;
   background-color: #fefefe;
   margin: auto;
   padding: 20px;
   border: 1px solid #888;
   width: 80%;
+}
+
+.popup_event_close {
+  color: #aaaaaa;
+  font-size: 28px;
+  font-weight: bold;
+  position: absolute;
+  top: 2%;
+  right: 2%;
+  cursor: pointer;
 }
