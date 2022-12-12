@@ -133,17 +133,18 @@ app.post('/schedule', (req, res) => {
 
   db.query('select id from students where name = ?', [name], (err, result) => {
     if (err) throw err;
+    console.log('result: ', result);
     if (!result.length) {
       res.status(400).send('student does not exist');
+    } else {
+      const id = result[0].id
+      const sql = 'insert into schedules (start_time, end_time, student_id, description) values (?, ?, ?, ?);'
+      db.query(sql, [startTime, endTime, id, description], (err, result) => {
+        if (err) throw err;
+
+        res.status(200).send('class scheduled')
+      })
     }
-
-    const id = result[0].id
-    const sql = 'insert into schedules (start_time, end_time, student_id, description) values (?, ?, ?, ?);'
-    db.query(sql, [startTime, endTime, id, description], (err, result) => {
-      if (err) throw err;
-
-      res.status(200).send('class scheduled')
-    })
   })
 })
 

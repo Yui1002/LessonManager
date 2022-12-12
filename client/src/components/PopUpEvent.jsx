@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import axios from 'axios';
 import './PopUpEvent.css';
 
 const PopUpEvent = (props) => {
+  const [scheduleError, setScheduleError] = useState(false);
 
   const convertToUTC = (dateTime) => {
     const dateTimeObj = new Date(dateTime);
@@ -32,15 +33,40 @@ const PopUpEvent = (props) => {
     const UTCStartDateTime = convertToUTC(startDateTime);
     const UTCEndDateTime = convertToUTC(endDateTime);
 
-    const res = await axios.post('/schedule', {
+    // const res = await axios.post('/schedule', {
+    //   startTime: UTCStartDateTime,
+    //   endTime: UTCEndDateTime,
+    //   name: name,
+    //   description: description
+    // });
+
+    axios.post('/schedule', {
       startTime: UTCStartDateTime,
       endTime: UTCEndDateTime,
       name: name,
       description: description
-    });
-    if (res.status === 200) {
-      console.log(`class scheduled with ${name}`);
-    }
+    })
+    .then(res => {
+      console.log('res: ', res)
+      if (res.status === 200) {
+        props.closeEvent();
+        console.log(`class scheduled with ${name}`);
+      }
+    })
+    .catch(err => {
+      setScheduleError(true);
+    })
+
+
+    // if (res.status === 400) {
+    //   console.log('error: ', res.data)
+    //   setScheduleError(true);
+    // }
+
+    // if (res.status === 200) {
+    //   props.closeEvent();
+    //   console.log(`class scheduled with ${name}`);
+    // }
   }
 
   return (
@@ -100,6 +126,7 @@ const PopUpEvent = (props) => {
         </section>
         <button type="submit" value="submit">submit</button>
       </form>
+      {scheduleError && <p>Student does not exist</p>}
     </div>
   )
 }
