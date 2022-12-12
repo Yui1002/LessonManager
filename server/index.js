@@ -29,7 +29,6 @@ app.get('/login', (req, res) => {
 });
 
 app.post('/login', (req, res, next) => {
-  // console.log(req.body);
   passport.authenticate('local', (err, user, info) => {
     console.log('err: ', err);
     console.log('user in route: ', user);
@@ -120,6 +119,30 @@ app.put('/student', (req, res) => {
     db.query('update students set name=?, lesson_hours=?, email=? where id=?', [updatedName, updatedLessonHours, updatedEmail, id], (err, result) => {
       if (err) throw err;
       res.status(200).send('student updated')
+    })
+  })
+});
+
+app.post('/schedule', (req, res) => {
+  console.log('hello')
+  console.log(req.body);
+  const startTime = req.body.startTime;
+  const endTime = req.body.endTime
+  const name = req.body.name;
+  const description = req.body.description;
+
+  db.query('select id from students where name = ?', [name], (err, result) => {
+    if (err) throw err;
+    if (!result.length) {
+      res.status(400).send('student does not exist');
+    }
+
+    const id = result[0].id
+    const sql = 'insert into schedules (start_time, end_time, student_id, description) values (?, ?, ?, ?);'
+    db.query(sql, [startTime, endTime, id, description], (err, result) => {
+      if (err) throw err;
+
+      res.status(200).send('class scheduled')
     })
   })
 })
