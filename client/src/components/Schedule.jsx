@@ -9,8 +9,8 @@ let year = today.getFullYear();
 let month = today.getMonth();
 
 const Schedule = () => {
-
   const [calendar, setCalendar] = useState([]);
+  const [schedules, setSchedules] = useState([]);
   const [newEventDate, setNewEventDate] = useState('');
   const [popUp, setPopUp] = useState(false);
   const duringPopUp = popUp ? "during-popup" : "";
@@ -104,7 +104,8 @@ const Schedule = () => {
   const setEvent = (e) => {
     console.log(e)
     setPopUp(true);
-    setNewEventDate(e)
+    setNewEventDate(e);
+    getSchedule();
   }
 
   const closeEvent = () => {
@@ -114,7 +115,11 @@ const Schedule = () => {
   const getSchedule = () => {
     axios.get('/schedule')
     .then(data => {
-      console.log('data: ', data.data)
+      const d = data.data.map(x => {
+        return new Date(x.start_time).getHours();
+      })
+      console.log('xxx: ', d)
+      setSchedules(d);
     })
     .catch(err => {
       console.log('no class scheduled');
@@ -142,7 +147,7 @@ const Schedule = () => {
                   value={day.date}
                   className={`schedule_date${day.date === newEventDate ? '_new' : ''}`}
                   onClick={() => setEvent(day.date)}>{day.date}
-                  {newEventDate === day.date && <span>hello</span>}
+                  {schedules.indexOf(day.date) > 0 && <span>hello</span>}
                 </td>
               ))}</tr>
             )
