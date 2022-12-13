@@ -33,13 +33,6 @@ const PopUpEvent = (props) => {
     const UTCStartDateTime = convertToUTC(startDateTime);
     const UTCEndDateTime = convertToUTC(endDateTime);
 
-    // const res = await axios.post('/schedule', {
-    //   startTime: UTCStartDateTime,
-    //   endTime: UTCEndDateTime,
-    //   name: name,
-    //   description: description
-    // });
-
     axios.post('/schedule', {
       startTime: UTCStartDateTime,
       endTime: UTCEndDateTime,
@@ -57,16 +50,6 @@ const PopUpEvent = (props) => {
       setScheduleError(true);
     })
 
-
-    // if (res.status === 400) {
-    //   console.log('error: ', res.data)
-    //   setScheduleError(true);
-    // }
-
-    // if (res.status === 200) {
-    //   props.closeEvent();
-    //   console.log(`class scheduled with ${name}`);
-    // }
   }
 
   return (

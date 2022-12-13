@@ -9,7 +9,8 @@ const Student = (props) => {
   const [popUp, setPopUp] = useState(false);
   const duringPopUp = popUp ? "during-popup" : "";
 
-  const openPopUp = () => {
+  const openPopUp = (e) => {
+    console.log()
     setPopUp(true);
   }
 

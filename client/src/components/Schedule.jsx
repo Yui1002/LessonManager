@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import axios from 'axios';
 import './Schedule.css';
 import PopUpEvent from './PopUpEvent.jsx';
 
@@ -10,11 +11,13 @@ let month = today.getMonth();
 const Schedule = () => {
 
   const [calendar, setCalendar] = useState([]);
+  const [newEventDate, setNewEventDate] = useState('');
   const [popUp, setPopUp] = useState(false);
   const duringPopUp = popUp ? "during-popup" : "";
 
   useEffect(() => {
     showCalendar();
+    getSchedule();
   }, [])
 
   const showCalendar = () => {
@@ -98,12 +101,24 @@ const Schedule = () => {
     showCalendar();
   }
 
-  const setEvent = () => {
+  const setEvent = (e) => {
+    console.log(e)
     setPopUp(true);
+    setNewEventDate(e)
   }
 
   const closeEvent = () => {
     setPopUp(false);
+  }
+
+  const getSchedule = () => {
+    axios.get('/schedule')
+    .then(data => {
+      console.log('data: ', data.data)
+    })
+    .catch(err => {
+      console.log('no class scheduled');
+    })
   }
 
   return (
@@ -123,7 +138,11 @@ const Schedule = () => {
           {calendar.map(week => {
             return (
               <tr className="schedule_week">{week.map(day => (
-                <td className="schedule_date" onClick={setEvent}>{day.date}</td>
+                <td
+                  value={day.date}
+                  className={`schedule_date${day.date === newEventDate ? '_new' : ''}`}
+                  onClick={() => setEvent(day.date)}>{day.date}
+                </td>
               ))}</tr>
             )
           })}

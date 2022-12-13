@@ -31,7 +31,6 @@ app.get('/login', (req, res) => {
 app.post('/login', (req, res, next) => {
   passport.authenticate('local', (err, user, info) => {
     console.log('err: ', err);
-    console.log('user in route: ', user);
     if (err) throw err;
     if (!user.length || !user) {
       res.status(404).send('Incorrect username or password');
@@ -106,7 +105,6 @@ app.delete('/student', (req, res) => {
 });
 
 app.put('/student', (req, res) => {
-  console.log('req.body: ', req.body);
   let name = req.body.name;
   let updatedName = req.body.updatedName;
   let updatedLessonHours = req.body.updatedLessonHours;
@@ -123,9 +121,19 @@ app.put('/student', (req, res) => {
   })
 });
 
+app.get('/schedule', (req, res) => {
+  const sql = 'select st.name, sc.start_time, sc.end_time from schedules sc inner join students st on st.id = sc.student_id;';
+  db.query(sql, (err, result) => {
+    if (err) throw err;
+    if (!result.length) {
+      res.status(400).send('no class scheduled');
+    } else {
+      res.status(200).send(result);
+    }
+  })
+})
+
 app.post('/schedule', (req, res) => {
-  console.log('hello')
-  console.log(req.body);
   const startTime = req.body.startTime;
   const endTime = req.body.endTime
   const name = req.body.name;
@@ -133,15 +141,13 @@ app.post('/schedule', (req, res) => {
 
   db.query('select id from students where name = ?', [name], (err, result) => {
     if (err) throw err;
-    console.log('result: ', result);
     if (!result.length) {
       res.status(400).send('student does not exist');
     } else {
-      const id = result[0].id
+      const id = result[0].id;
       const sql = 'insert into schedules (start_time, end_time, student_id, description) values (?, ?, ?, ?);'
       db.query(sql, [startTime, endTime, id, description], (err, result) => {
         if (err) throw err;
-
         res.status(200).send('class scheduled')
       })
     }
