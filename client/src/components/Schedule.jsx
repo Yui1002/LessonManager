@@ -142,6 +142,7 @@ const Schedule = () => {
                   value={day.date}
                   className={`schedule_date${day.date === newEventDate ? '_new' : ''}`}
                   onClick={() => setEvent(day.date)}>{day.date}
+                  {newEventDate === day.date && <span>hello</span>}
                 </td>
               ))}</tr>
             )
