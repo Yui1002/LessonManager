@@ -40,7 +40,6 @@ const PopUpEvent = (props) => {
       description: description
     })
     .then(res => {
-      console.log('res: ', res)
       if (res.status === 200) {
         props.closeEvent();
         console.log(`class scheduled with ${name}`);

@@ -128,6 +128,7 @@ app.get('/schedule', (req, res) => {
     if (!result.length) {
       res.status(400).send('no class scheduled');
     } else {
+      console.log(result)
       res.status(200).send(result);
     }
   })

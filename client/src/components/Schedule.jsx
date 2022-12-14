@@ -13,6 +13,7 @@ const Schedule = () => {
   const [schedules, setSchedules] = useState([]);
   const [newEventDate, setNewEventDate] = useState('');
   const [popUp, setPopUp] = useState(false);
+  const [noClassScheduled, setNoClassScheduled] = useState(false);
   const duringPopUp = popUp ? "during-popup" : "";
 
   useEffect(() => {
@@ -102,7 +103,6 @@ const Schedule = () => {
   }
 
   const setEvent = (e) => {
-    console.log(e)
     setPopUp(true);
     setNewEventDate(e);
     getSchedule();
@@ -112,17 +112,33 @@ const Schedule = () => {
     setPopUp(false);
   }
 
+  const getTimezone = (date) => {
+    const UTCdate = new Date(date);
+    // get difference between UTC and where user is
+    const offset = UTCdate.getTimezoneOffset();
+    const difference = offset / 60;
+
+    return difference;
+  }
+
   const getSchedule = () => {
     axios.get('/schedule')
     .then(data => {
+      // since data is UTC, need to convert into timezone where the user is
+      console.log('data: ', data.data)
       const d = data.data.map(x => {
-        return new Date(x.start_time).getHours();
+        const UTCTime = x.start_time;
+        //get timezone of the user
+        const localTime = new Date(UTCTime).toLocaleString();
+        // calculate the time difference
+        return localTime;
       })
-      console.log('xxx: ', d)
-      setSchedules(d);
+      console.log('localArray: ', d)
+      // setSchedules(d);
+      // setNoClassScheduled(false);
     })
     .catch(err => {
-      console.log('no class scheduled');
+      setNoClassScheduled(true);
     })
   }
 
@@ -131,6 +147,7 @@ const Schedule = () => {
       <button onClick={getPreviousMonth}>prev</button>
       <button onClick={getNextMonth}>next</button>
       <div>{year}, {month + 1}</div>
+      {noClassScheduled && <p className="schedule_no_class">No class scheduled in this month</p>}
       <table className="schedule_calendar">
         <thead>
           <tr>
@@ -144,7 +161,7 @@ const Schedule = () => {
             return (
               <tr className="schedule_week">{week.map(day => (
                 <td
-                  value={day.date}
+
                   className={`schedule_date${day.date === newEventDate ? '_new' : ''}`}
                   onClick={() => setEvent(day.date)}>{day.date}
                   {schedules.indexOf(day.date) > 0 && <span>hello</span>}
