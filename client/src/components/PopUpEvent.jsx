@@ -44,6 +44,7 @@ const PopUpEvent = (props) => {
       if (res.status === 200) {
         props.closeEvent();
         console.log(`class scheduled with ${name}`);
+        props.getSchedule();
       }
     })
     .catch(err => {

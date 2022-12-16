@@ -179,7 +179,10 @@ const Schedule = () => {
       </table>
       <div className={duringPopUp}>
         {popUp &&
-          <PopUpEvent closeEvent={closeEvent} />
+          <PopUpEvent
+            closeEvent={closeEvent}
+            getSchedule={getSchedule}
+          />
         }
       </div>
     </div>
