@@ -12,7 +12,7 @@ let month = today.getMonth();
 const Schedule = () => {
   const [calendar, setCalendar] = useState([]);
   const [schedules, setSchedules] = useState([]);
-  const [testData, setTestData] = useState({});
+  const [testData, setTestData] = useState([]);
   const [newEventDate, setNewEventDate] = useState('');
   const [popUp, setPopUp] = useState(false);
   const [noClassScheduled, setNoClassScheduled] = useState(false);
@@ -127,22 +127,17 @@ const Schedule = () => {
     const response = await axios.get('/schedule');
     const data = response.data; // UTC
 
+    let array = [];
     data.forEach(x => {
-      if (!testData[x.name]) {
-        testData[x.name] = [];
-      }
-      let date = {};
-      date['start_time'] = x.start_time;
-      date['end_time'] = x.end_time;
-      testData[x.name].push(date);
-
-      setTestData(d => ({
-        ...d,
-        ...date
-      }))
+      let subObj = {};
+      subObj['name'] = x.name;
+      subObj['start_time'] = new Date(x.start_time).toLocaleString();
+      subObj['end_time'] = new Date(x.end_time).toLocaleString();
+      array.push(subObj);
     });
 
-    console.log('data: ', testData)
+    console.log('array: ', array)
+    setTestData(array);
   }
 
   return (
@@ -167,7 +162,15 @@ const Schedule = () => {
 
                   className={`schedule_date${day.date === newEventDate ? '_new' : ''}`}
                   onClick={() => setEvent(day.date)}>{day.date}
-                  {}
+                  {testData.map(t => {
+                    const name = t.name;
+                    const startDate = t['start_time'].split(',')[0];
+                    const startTime = t['start_time'].split(',')[1];
+
+                    if (startDate.split('/')[1] === day.date.toString()) {
+                      return (<div>{`${name} - ${startTime}`}</div>)
+                    }
+                  })}
                 </td>
               ))}</tr>
             )
