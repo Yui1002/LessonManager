@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import axios from 'axios';
 import './PopUpEvent.css';
+import moment from 'moment';
 
 const PopUpEvent = (props) => {
   const [scheduleError, setScheduleError] = useState(false);
@@ -28,14 +29,14 @@ const PopUpEvent = (props) => {
     const name = e.target[3].value;
     const description = e.target[4].value;
 
-    const startDateTime = `${date} ${startTime}:00`;
-    const endDateTime = `${date} ${endTime}:00`;
-    const UTCStartDateTime = convertToUTC(startDateTime);
-    const UTCEndDateTime = convertToUTC(endDateTime);
+    const startDateTime = moment().format(`${date} ${startTime}:00`);
+    const endDateTime = moment().format(`${date} ${endTime}:00`);
+    // const startUTCDateTime = new Date(startDateTime).toISOString().replace(/T/, ' '). replace(/\..+/, '');
+    // const endUTCDateTime = new Date(endDateTime).toISOString().replace(/T/, ' '). replace(/\..+/, '');
 
     axios.post('/schedule', {
-      startTime: UTCStartDateTime,
-      endTime: UTCEndDateTime,
+      start: startDateTime,
+      end: endDateTime,
       name: name,
       description: description
     })
@@ -48,7 +49,6 @@ const PopUpEvent = (props) => {
     .catch(err => {
       setScheduleError(true);
     })
-
   }
 
   return (

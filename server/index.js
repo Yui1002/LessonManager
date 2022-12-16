@@ -122,6 +122,7 @@ app.put('/student', (req, res) => {
 });
 
 app.get('/schedule', (req, res) => {
+  console.log('params: ', req.params)
   const sql = 'select st.name, sc.start_time, sc.end_time from schedules sc inner join students st on st.id = sc.student_id;';
   db.query(sql, (err, result) => {
     if (err) throw err;
@@ -135,8 +136,8 @@ app.get('/schedule', (req, res) => {
 })
 
 app.post('/schedule', (req, res) => {
-  const startTime = req.body.startTime;
-  const endTime = req.body.endTime
+  const startTime = req.body.start;
+  const endTime = req.body.end
   const name = req.body.name;
   const description = req.body.description;
 

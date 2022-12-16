@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import './Schedule.css';
 import PopUpEvent from './PopUpEvent.jsx';
+import moment from 'moment';
 
 const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const today = new Date();
@@ -11,6 +12,7 @@ let month = today.getMonth();
 const Schedule = () => {
   const [calendar, setCalendar] = useState([]);
   const [schedules, setSchedules] = useState([]);
+  const [testData, setTestData] = useState({});
   const [newEventDate, setNewEventDate] = useState('');
   const [popUp, setPopUp] = useState(false);
   const [noClassScheduled, setNoClassScheduled] = useState(false);
@@ -121,25 +123,26 @@ const Schedule = () => {
     return difference;
   }
 
-  const getSchedule = () => {
-    axios.get('/schedule')
-    .then(data => {
-      // since data is UTC, need to convert into timezone where the user is
-      console.log('data: ', data.data)
-      const d = data.data.map(x => {
-        const UTCTime = x.start_time;
-        //get timezone of the user
-        const localTime = new Date(UTCTime).toLocaleString();
-        // calculate the time difference
-        return localTime;
-      })
-      console.log('localArray: ', d)
-      // setSchedules(d);
-      // setNoClassScheduled(false);
-    })
-    .catch(err => {
-      setNoClassScheduled(true);
-    })
+  const getSchedule = async () => {
+    const response = await axios.get('/schedule');
+    const data = response.data; // UTC
+
+    data.forEach(x => {
+      if (!testData[x.name]) {
+        testData[x.name] = [];
+      }
+      let date = {};
+      date['start_time'] = x.start_time;
+      date['end_time'] = x.end_time;
+      testData[x.name].push(date);
+
+      setTestData(d => ({
+        ...d,
+        ...date
+      }))
+    });
+
+    console.log('data: ', testData)
   }
 
   return (
@@ -164,7 +167,7 @@ const Schedule = () => {
 
                   className={`schedule_date${day.date === newEventDate ? '_new' : ''}`}
                   onClick={() => setEvent(day.date)}>{day.date}
-                  {schedules.indexOf(day.date) > 0 && <span>hello</span>}
+                  {}
                 </td>
               ))}</tr>
             )
@@ -181,3 +184,32 @@ const Schedule = () => {
 }
 
 export default Schedule;
+
+
+
+/**
+ *
+ *     // need to know where the user is located
+    axios.get('/schedule')
+    .then(data => {
+      console.log('data: ', data.data)
+      data.data.map(x => {
+        let startDateTime = new Date(x.start_time);
+        if (!schedules_1[startDateTime.getDate()]) {
+          schedules_1[startDateTime.getDate()] = [];
+          schedules_1[startDateTime.getDate()].push(startDateTime.getHours());
+        } else {
+          schedules_1[startDateTime.getDate()].push(startDateTime.getHours());
+        }
+      //   const s = moment().format(x.start_time);
+      //   return s;
+      })
+      // console.log('localArray: ', d)
+      // setSchedules(d);
+      // setNoClassScheduled(false);
+    })
+    .catch(err => {
+      setNoClassScheduled(true);
+    })
+ */
+
