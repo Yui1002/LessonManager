@@ -7,7 +7,6 @@ import Register from './Register.jsx';
 import Home from './Home.jsx';
 import Entry from './Entry.jsx';
 
-
 const App = () => {
   return (
     <>
