@@ -10,9 +10,7 @@ class LoginController {
   }
 
   async login(username, password) {
-    const response = await this.LoginManager.login(username, password);
-    console.log(response)
-    return response
+    return await this.LoginManager.login(username, password);
   }
 }
 
