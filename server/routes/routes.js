@@ -1,10 +1,12 @@
 import LoginController from '../controllers/loginController.js';
 import StudentController from '../controllers/studentController.js';
+import ScheduleController from '../controllers/scheduleController.js';
 
 class Routes {
   constructor() {
     this.LoginController = new LoginController();
     this.StudentController = new StudentController();
+    this.ScheduleController = new ScheduleController();
   }
 
   applyRouting(app) {
@@ -31,6 +33,15 @@ class Routes {
       res.status(200).send(response);
     });
 
+    app.get('/schedule', async (req, res) => {
+      const response = await this.ScheduleController.getSchedule();
+      if (response === 'No class scheduled') {
+        res.status(400).send('No class scheduled');
+      } else {
+        res.status(200).send(response);
+      }
+    })
+
     app.post('/students', async (req, res) => {
       const response = await this.StudentController.createNewStudent(req.body);
       if (response === 'Student already exists') {
@@ -40,15 +51,20 @@ class Routes {
       }
     });
 
+    app.post('/schedule', async (req, res) => {
+      const response = await this.ScheduleController.createNewClass(req.body);
+      res.status(200).send('Class scheduled');
+    })
+
     app.delete('/student', async (req, res) => {
       const response = await this.StudentController.deleteStudent(req.body);
-      res.send(200).send('Successfully deleted the student');
+      res.status(200).send('Successfully deleted the student');
     });
 
     app.put('/student', async (req, res) => {
       const response = await this.StudentController.updateStudent(req.body);
-      res.send(200).send(response);
-    })
+      res.status(200).send(response);
+    });
   }
 }
 

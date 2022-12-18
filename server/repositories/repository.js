@@ -49,7 +49,7 @@ class Repository {
     const con = await mysql.createConnection(db_setting);
     const sql = 'select id from students where name = ?';
     const [rows, fields] = await con.query(sql, [name]);
-    return rows[0].id;
+    return rows;
   }
 
   async createNewStudent(req) {
@@ -83,6 +83,25 @@ class Repository {
     const con = await mysql.createConnection(db_setting);
     const sql = 'update students set name=?, lesson_hours=?, email=? where id=?';
     const [rows, fields] = await con.query(sql, [updatedName, updatedLessonHours, updatedEmail, id]);
+    return rows;
+  }
+
+  async getSchedule() {
+    const con = await mysql.createConnection(db_setting);
+    const sql = 'select st.name, sc.start_time, sc.end_time from schedules sc inner join students st on st.id = sc.student_id;';
+    const [rows, fields] = await con.query(sql);
+    return rows;
+  }
+
+  async createNewClass(req, id) {
+    const startTime = req.start;
+    const endTime = req.end
+    const name = req.name;
+    const description = req.description;
+
+    const con = await mysql.createConnection(db_setting);
+    const sql = 'insert into schedules (start_time, end_time, student_id, description) values (?, ?, ?, ?);';
+    const [rows, fields] = await con.query(sql, [startTime, endTime, id, description]);
     return rows;
   }
 
