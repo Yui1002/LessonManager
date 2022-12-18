@@ -1,5 +1,4 @@
 import mysql from 'mysql2/promise';
-import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -18,14 +17,20 @@ class Repository {
     return rows;
   }
 
-  async registerUser(username, password) {
-    const hashedPassword = await bcrypt.hash(password, 10);
+  async findPassword(username) {
+    const con = await mysql.createConnection(db_setting);
+    const sql = 'select password from users where username = ?';
+    const [rows, fields] = await con.query(sql, [username]);
+    return rows[0]['password'];
+  }
 
+  async registerUser(username, hashedPassword) {
     const con = await mysql.createConnection(db_setting);
     const sql = 'insert into users (username, password) values (?, ?);';
     const [rows, fields] = await con.query(sql, [username, hashedPassword]);
     return rows;
   }
+
 }
 
 export default Repository;

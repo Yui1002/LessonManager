@@ -8,6 +8,12 @@ class LoginController {
   async register(username, password) {
     return await this.LoginManager.register(username, password);
   }
+
+  async login(username, password) {
+    const response = await this.LoginManager.login(username, password);
+    console.log(response)
+    return response
+  }
 }
 
 export default LoginController;

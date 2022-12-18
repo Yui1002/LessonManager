@@ -5,24 +5,18 @@ import path from 'path';
 import { dirname } from 'path';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import bcrypt from 'bcrypt';
 import session from 'express-session';
-import passport from 'passport';
-import Localtrategy from 'passport-local';
-// import db from './db.js';
 import Routes from './routes/routes.js';
-// import Validator from './validator/validator.js';
 
+
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(session({
-  secret: 'keyboard cat',
-  resave: true,
-  saveUninitialized: true,
-}));
-app.use(cors());
-app.use(passport.initialize());
-app.use(passport.session());
+
+
+
+// app.use(passport.initialize());
+// app.use(passport.session());
 // import passportConfig from './passportConfig';
 // passportConfig(passport)
 
@@ -63,30 +57,6 @@ new Routes().applyRouting(app);
   //     })
   //   }
   // })(req, res, next)
-// });
-
-// app.post('/register', (req, res) => {
-//   let username = req.body.username;
-//   let password = req.body.password;
-
-
-  // db.query('select * from users where username = ?', [username], async (err, result) => {
-  //   if (err) throw err;
-
-  //   if (result.length !== 0) {
-  //     res.status(400).send('User already exists')
-  //   }
-
-  //   if (result.length === 0) {
-  //     const hashedPassword = await bcrypt.hash(password, 10);
-  //     db.query('insert into users (username, password) values (?, ?);', [username, hashedPassword], (err, result) => {
-  //       if (err) throw err;
-
-  //       // console.log('User created!');
-  //       res.status(200).send('User created!')
-  //     });
-  //   }
-  // })
 // });
 
 // app.get('/students', (req, res) => {
