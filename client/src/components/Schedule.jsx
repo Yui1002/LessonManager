@@ -136,7 +136,6 @@ const Schedule = () => {
       array.push(subObj);
     });
 
-    console.log('array: ', array)
     setTestData(array);
   }
 
@@ -168,7 +167,7 @@ const Schedule = () => {
                     const startTime = t['start_time'].split(',')[1];
 
                     if (startDate.split('/')[1] === day.date.toString()) {
-                      return (<div>{`${name} - ${startTime}`}</div>)
+                      return (<div className="schedule_class">{`${name} - ${startTime}`}</div>)
                     }
                   })}
                 </td>

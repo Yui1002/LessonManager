@@ -2,7 +2,7 @@ import express from 'express';
 const app = express();
 const port = 8000;
 import path from 'path';
-import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
@@ -12,8 +12,10 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-const __dirname = path.resolve();
-app.use(express.static(path.join(__dirname, './client/dist')));
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+app.use(express.static(path.join(__dirname, '../client/dist')));
 
 new Routes().applyRouting(app);
 
