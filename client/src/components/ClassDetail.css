@@ -1,9 +1,12 @@
 .class_detail_container {
+  position: absolute;
+  top: 0;
+  right: 0;
   background-color: #fefefe;
   margin: auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 80%;
+  width: 55%;
 }
 
 .class_detail_close {

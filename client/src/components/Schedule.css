@@ -17,7 +17,7 @@
   color: red;
 }
 
-.schedule_date, .schedule_date_new {
+.schedule_date {
   width: 10%;
   height: 10%;
   padding: 0px;
@@ -53,17 +53,18 @@
 }
 
 .during-popup_2 {
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
+  position: absolute; /* Stay in place */
+  z-index: 10; /* Sit on top */
   padding-top: 100px; /* Location of the box */
   left: 0;
   top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
+  width: 300%; /* Full width */
+  height: 500%; /* Full height */
   overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(184,184,184, 0.2);
+  background-color: rgb(184,184,184, 0.1);
 }
 
 .schedule_class {
+  position: relative;
   cursor: pointer;
 }

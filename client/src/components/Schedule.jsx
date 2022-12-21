@@ -15,7 +15,6 @@ const Schedule = () => {
   const [calendar, setCalendar] = useState([]);
   const [schedules, setSchedules] = useState([]);
   const [testData, setTestData] = useState([]);
-  const [newEventDate, setNewEventDate] = useState('');
   // const [popUp, setPopUp] = useState(false);
   const [scheduleClassShown, setScheduleClassShown] = useState(false);
   const [noClassScheduled, setNoClassScheduled] = useState(false);
@@ -113,10 +112,7 @@ const Schedule = () => {
   }
 
   const setEvent = (e) => {
-    alert('set event')
     setScheduleClassShown(true);
-    setNewEventDate(e);
-    getSchedule();
   }
 
   const closeEvent = () => {
@@ -146,10 +142,11 @@ const Schedule = () => {
     setTestData(array);
   }
 
-  const showClassDetail = (e, name, startTime, endTime, description) => {
+  const showClassDetail = (e, name, day, startTime, endTime, description) => {
     e.stopPropagation(); // prevent parent function's execution
     const format = {
       name: name,
+      day: day,
       startTime: startTime,
       endTime: endTime,
       description: description
@@ -158,6 +155,10 @@ const Schedule = () => {
     setClassDetailShown(true);
   }
 
+  // 27: [
+  //   {name: 'john', startTime: '14:00', endTime: '15:00', year: 2022},
+  //   {name: 'nick', startTime: '16:00', endTime: '17:00', year: 2022},
+  // ]
   return (
     <div className="schedule_container">
       <button onClick={() => navigate('/home')}>Go Back</button><br />
@@ -169,45 +170,37 @@ const Schedule = () => {
         <thead>
           <tr>
             {days.map(day => (
-              <th className="schedule_day" key={day}>{day}</th>
+              <th className="schedule_day" key={day}>{day}</th> /** Map Mon - Sun */
             ))}
           </tr>
         </thead>
         <tbody>
           {calendar.map(week => {
+            console.log('week: ', week)
             return (
               <tr className="schedule_week">{week.map(day => (
-                <td
-
-                  className={`schedule_date${day.date === newEventDate ? '_new' : ''}`}
+                <td className="schedule_date"
                   onClick={() => setEvent(day.date)}>{day.date}
-                  <div>
-                    {testData.map((t, idx) => {
-                      const name = t.name;
-                      const startDate = t['start_time'].split(',')[0];
+                  {testData.map((t, idx) => {
+                    const startDate = t['start_time'].split(',')[0];
+                    if (startDate.split('/')[1] === day.date.toString()) {
+                      const name = t['name'];
                       const startTime = t['start_time'].split(',')[1];
                       const endTime = t['end_time'].split(',')[1];
-                      const description = t['description']
+                      const description = t['description'];
 
-                      if (startDate.split('/')[1] === day.date.toString()) {
-                        return (
-                          <div>
-                            <div className="schedule_class" onClick={(e) => showClassDetail(e, name, startTime, endTime, description)}>
-                              {`${name} - ${startTime}`}
-                            </div>
+                      return (
+                        <div className="schedule_class" onClick={(e) => showClassDetail(e, name, day, startTime, endTime, description)}>
+                          {`${name} - ${startTime}`}
+                          {classDetailShown && currentDetailClass.day === day &&
                             <div className={duringPopUp2}>
-                              {classDetailShown &&
-                                <ClassDetail
-                                  currentDetailClass={currentDetailClass}
-                                  closeClassDetail={closeClassDetail}
-                                />
-                              }
+                              <ClassDetail currentDetailClass={currentDetailClass} closeClassDetail={closeClassDetail}/>
                             </div>
-                          </div>
-                        )
-                      }
-                    })}
-                  </div>
+                          }
+                        </div>
+                      )
+                    }
+                  })}
                 </td>
               ))}</tr>
             )

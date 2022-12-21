@@ -31,8 +31,6 @@ const PopUpEvent = (props) => {
 
     const startDateTime = moment().format(`${date} ${startTime}:00`);
     const endDateTime = moment().format(`${date} ${endTime}:00`);
-    // const startUTCDateTime = new Date(startDateTime).toISOString().replace(/T/, ' '). replace(/\..+/, '');
-    // const endUTCDateTime = new Date(endDateTime).toISOString().replace(/T/, ' '). replace(/\..+/, '');
 
     axios.post('/schedule', {
       start: startDateTime,
