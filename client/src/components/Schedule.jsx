@@ -3,6 +3,7 @@ import axios from 'axios';
 import './Schedule.css';
 import PopUpEvent from './PopUpEvent.jsx';
 import moment from 'moment';
+import ClassDetail from './ClassDetail.jsx';
 
 const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const today = new Date();
@@ -16,7 +17,9 @@ const Schedule = () => {
   const [newEventDate, setNewEventDate] = useState('');
   const [popUp, setPopUp] = useState(false);
   const [noClassScheduled, setNoClassScheduled] = useState(false);
+  const [classDetailShown, setClassDetailShown] = useState(false);
   const duringPopUp = popUp ? "during-popup" : "";
+  const duringPopUp2 = classDetailShown ? "during-popup_2" : "";
 
   useEffect(() => {
     showCalendar();
@@ -105,6 +108,7 @@ const Schedule = () => {
   }
 
   const setEvent = (e) => {
+    alert('set event')
     setPopUp(true);
     setNewEventDate(e);
     getSchedule();
@@ -112,15 +116,6 @@ const Schedule = () => {
 
   const closeEvent = () => {
     setPopUp(false);
-  }
-
-  const getTimezone = (date) => {
-    const UTCdate = new Date(date);
-    // get difference between UTC and where user is
-    const offset = UTCdate.getTimezoneOffset();
-    const difference = offset / 60;
-
-    return difference;
   }
 
   const getSchedule = async () => {
@@ -137,6 +132,11 @@ const Schedule = () => {
     });
 
     setTestData(array);
+  }
+
+  const showClassDetail = (e) => {
+    e.stopPropagation(); // prevent parent function's execution
+    setClassDetailShown(true);
   }
 
   return (
@@ -161,15 +161,26 @@ const Schedule = () => {
 
                   className={`schedule_date${day.date === newEventDate ? '_new' : ''}`}
                   onClick={() => setEvent(day.date)}>{day.date}
-                  {testData.map(t => {
-                    const name = t.name;
-                    const startDate = t['start_time'].split(',')[0];
-                    const startTime = t['start_time'].split(',')[1];
+                  <div>
+                    {testData.map(t => {
+                      const name = t.name;
+                      const startDate = t['start_time'].split(',')[0];
+                      const startTime = t['start_time'].split(',')[1];
 
-                    if (startDate.split('/')[1] === day.date.toString()) {
-                      return (<div className="schedule_class">{`${name} - ${startTime}`}</div>)
-                    }
-                  })}
+                      if (startDate.split('/')[1] === day.date.toString()) {
+                        return (
+                          <div>
+                            <div className="schedule_class" onClick={showClassDetail}>
+                              {`${name} - ${startTime}`}
+                            </div>
+                            <div className={duringPopUp2}>
+                              {classDetailShown && <ClassDetail />}
+                            </div>
+                          </div>
+                        )
+                      }
+                    })}
+                  </div>
                 </td>
               ))}</tr>
             )
