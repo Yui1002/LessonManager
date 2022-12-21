@@ -7,7 +7,7 @@ const ClassDetail = (props) => {
 
   return (
     <div className="class_detail_container">
-      <span className="class_detail_close" onClick={props.closePopUp}>&times;</span>
+      <span className="class_detail_close" onClick={props.closeClassDetail}>&times;</span>
       <h3>John - 17:00~18:00</h3>
       <p>description description description</p>
     </div>

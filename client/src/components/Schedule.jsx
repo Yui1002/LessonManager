@@ -15,10 +15,11 @@ const Schedule = () => {
   const [schedules, setSchedules] = useState([]);
   const [testData, setTestData] = useState([]);
   const [newEventDate, setNewEventDate] = useState('');
-  const [popUp, setPopUp] = useState(false);
+  // const [popUp, setPopUp] = useState(false);
+  const [scheduleClassShown, setScheduleClassShown] = useState(false);
   const [noClassScheduled, setNoClassScheduled] = useState(false);
   const [classDetailShown, setClassDetailShown] = useState(false);
-  const duringPopUp = popUp ? "during-popup" : "";
+  const duringPopUp = scheduleClassShown ? "during-popup" : "";
   const duringPopUp2 = classDetailShown ? "during-popup_2" : "";
 
   useEffect(() => {
@@ -109,13 +110,18 @@ const Schedule = () => {
 
   const setEvent = (e) => {
     alert('set event')
-    setPopUp(true);
+    setScheduleClassShown(true);
     setNewEventDate(e);
     getSchedule();
   }
 
   const closeEvent = () => {
-    setPopUp(false);
+    setScheduleClassShown(false);
+  }
+
+  const closeClassDetail = (e) => {
+    e.stopPropagation();
+    setClassDetailShown(false);
   }
 
   const getSchedule = async () => {
@@ -174,7 +180,7 @@ const Schedule = () => {
                               {`${name} - ${startTime}`}
                             </div>
                             <div className={duringPopUp2}>
-                              {classDetailShown && <ClassDetail />}
+                              {classDetailShown && <ClassDetail closeClassDetail={closeClassDetail} />}
                             </div>
                           </div>
                         )
@@ -188,7 +194,7 @@ const Schedule = () => {
         </tbody>
       </table>
       <div className={duringPopUp}>
-        {popUp &&
+        {scheduleClassShown &&
           <PopUpEvent
             closeEvent={closeEvent}
             getSchedule={getSchedule}
