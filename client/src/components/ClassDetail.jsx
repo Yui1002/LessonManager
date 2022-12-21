@@ -9,8 +9,9 @@ const ClassDetail = (props) => {
   return (
     <div className="class_detail_container">
       <span className="class_detail_close" onClick={props.closeClassDetail}>&times;</span>
-      <h3>{`${props.currentDetailClass.name}  ${props.currentDetailClass.startTime}`}</h3>
-      <p>description description description</p>
+      <h2>{props.currentDetailClass.name}</h2>
+      <div>{`${props.currentDetailClass.startTime} - ${props.currentDetailClass.endTime}`}</div>
+      <p>{props.currentDetailClass.description}</p>
     </div>
   )
 }

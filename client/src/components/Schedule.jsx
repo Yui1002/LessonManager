@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Schedule.css';
 import PopUpEvent from './PopUpEvent.jsx';
@@ -22,6 +23,8 @@ const Schedule = () => {
   const [currentDetailClass, setCurrentDetailClass] = useState({});
   const duringPopUp = scheduleClassShown ? "during-popup" : "";
   const duringPopUp2 = classDetailShown ? "during-popup_2" : "";
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     showCalendar();
@@ -131,35 +134,33 @@ const Schedule = () => {
 
     let array = [];
     data.forEach(x => {
+      console.log(x)
       let subObj = {};
       subObj['name'] = x.name;
       subObj['start_time'] = new Date(x.start_time).toLocaleString();
       subObj['end_time'] = new Date(x.end_time).toLocaleString();
+      subObj['description'] = x.description;
       array.push(subObj);
     });
 
     setTestData(array);
   }
 
-  const showClassDetail = (e, name, startTime) => {
-    //get target element value
-    //parse value in format 'name:{name},startTime:{startTime}'
-    //setState for name and startTime
-    //in classDetail modal, use the state for name and startTime
-
-
+  const showClassDetail = (e, name, startTime, endTime, description) => {
     e.stopPropagation(); // prevent parent function's execution
     const format = {
       name: name,
-      startTime: startTime
+      startTime: startTime,
+      endTime: endTime,
+      description: description
     };
     setCurrentDetailClass(format);
-    console.log(format)
     setClassDetailShown(true);
   }
 
   return (
     <div className="schedule_container">
+      <button onClick={() => navigate('/home')}>Go Back</button><br />
       <button onClick={getPreviousMonth}>prev</button>
       <button onClick={getNextMonth}>next</button>
       <div>{year}, {month + 1}</div>
@@ -185,14 +186,13 @@ const Schedule = () => {
                       const name = t.name;
                       const startDate = t['start_time'].split(',')[0];
                       const startTime = t['start_time'].split(',')[1];
+                      const endTime = t['end_time'].split(',')[1];
+                      const description = t['description']
 
                       if (startDate.split('/')[1] === day.date.toString()) {
                         return (
                           <div>
-                            <div className="schedule_class" onClick={(e) => showClassDetail(e, name, startTime)}
-                              // key={`showClassDetail-${idx}`}
-                              // value={`name:${name},startTime:${startTime}`}
-                            >
+                            <div className="schedule_class" onClick={(e) => showClassDetail(e, name, startTime, endTime, description)}>
                               {`${name} - ${startTime}`}
                             </div>
                             <div className={duringPopUp2}>
@@ -228,31 +228,4 @@ const Schedule = () => {
 
 export default Schedule;
 
-
-
-/**
- *
- *     // need to know where the user is located
-    axios.get('/schedule')
-    .then(data => {
-      console.log('data: ', data.data)
-      data.data.map(x => {
-        let startDateTime = new Date(x.start_time);
-        if (!schedules_1[startDateTime.getDate()]) {
-          schedules_1[startDateTime.getDate()] = [];
-          schedules_1[startDateTime.getDate()].push(startDateTime.getHours());
-        } else {
-          schedules_1[startDateTime.getDate()].push(startDateTime.getHours());
-        }
-      //   const s = moment().format(x.start_time);
-      //   return s;
-      })
-      // console.log('localArray: ', d)
-      // setSchedules(d);
-      // setNoClassScheduled(false);
-    })
-    .catch(err => {
-      setNoClassScheduled(true);
-    })
- */
 

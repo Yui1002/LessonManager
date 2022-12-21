@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import { useNavigate } from 'react-router-dom';
 import Student from './Student.jsx';
 import axios from 'axios';
 import './Profile.css'
@@ -6,6 +7,7 @@ import './Profile.css'
 const Profile = () => {
   const [students, setStudents] = useState([]);
   const [showForm, setShowForm] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getStudents();
@@ -45,6 +47,7 @@ const Profile = () => {
 
   return (
     <div>
+      <button onClick={() => navigate('/home')}>Go Back</button><br />
       <h1>Student's Profile</h1>
       <button onClick={() => setShowForm(true)}>Add a new student</button>
       {showForm &&

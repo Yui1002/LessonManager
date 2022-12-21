@@ -88,7 +88,7 @@ class Repository {
 
   async getSchedule() {
     const con = await mysql.createConnection(db_setting);
-    const sql = 'select st.name, sc.start_time, sc.end_time from schedules sc inner join students st on st.id = sc.student_id;';
+    const sql = 'select st.name, sc.start_time, sc.end_time, sc.description from schedules sc inner join students st on st.id = sc.student_id;';
     const [rows, fields] = await con.query(sql);
     return rows;
   }
