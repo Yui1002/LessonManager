@@ -19,6 +19,7 @@ const Schedule = () => {
   const [scheduleClassShown, setScheduleClassShown] = useState(false);
   const [noClassScheduled, setNoClassScheduled] = useState(false);
   const [classDetailShown, setClassDetailShown] = useState(false);
+  const [currentDetailClass, setCurrentDetailClass] = useState({});
   const duringPopUp = scheduleClassShown ? "during-popup" : "";
   const duringPopUp2 = classDetailShown ? "during-popup_2" : "";
 
@@ -140,8 +141,20 @@ const Schedule = () => {
     setTestData(array);
   }
 
-  const showClassDetail = (e) => {
+  const showClassDetail = (e, name, startTime) => {
+    //get target element value
+    //parse value in format 'name:{name},startTime:{startTime}'
+    //setState for name and startTime
+    //in classDetail modal, use the state for name and startTime
+
+
     e.stopPropagation(); // prevent parent function's execution
+    const format = {
+      name: name,
+      startTime: startTime
+    };
+    setCurrentDetailClass(format);
+    console.log(format)
     setClassDetailShown(true);
   }
 
@@ -168,7 +181,7 @@ const Schedule = () => {
                   className={`schedule_date${day.date === newEventDate ? '_new' : ''}`}
                   onClick={() => setEvent(day.date)}>{day.date}
                   <div>
-                    {testData.map(t => {
+                    {testData.map((t, idx) => {
                       const name = t.name;
                       const startDate = t['start_time'].split(',')[0];
                       const startTime = t['start_time'].split(',')[1];
@@ -176,11 +189,19 @@ const Schedule = () => {
                       if (startDate.split('/')[1] === day.date.toString()) {
                         return (
                           <div>
-                            <div className="schedule_class" onClick={showClassDetail}>
+                            <div className="schedule_class" onClick={(e) => showClassDetail(e, name, startTime)}
+                              // key={`showClassDetail-${idx}`}
+                              // value={`name:${name},startTime:${startTime}`}
+                            >
                               {`${name} - ${startTime}`}
                             </div>
                             <div className={duringPopUp2}>
-                              {classDetailShown && <ClassDetail closeClassDetail={closeClassDetail} />}
+                              {classDetailShown &&
+                                <ClassDetail
+                                  currentDetailClass={currentDetailClass}
+                                  closeClassDetail={closeClassDetail}
+                                />
+                              }
                             </div>
                           </div>
                         )
