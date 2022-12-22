@@ -6,8 +6,6 @@ import {AiFillCalendar} from 'react-icons/ai';
 import {FaStickyNote} from 'react-icons/fa';
 import {DAYS, MONTHS} from '../CONSTANT.js';
 
-console.log(DAYS)
-
 const ClassDetail = (props) => {
   const navigate = useNavigate();
 

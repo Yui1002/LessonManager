@@ -15,13 +15,12 @@ let month = today.getMonth();
 
 const Schedule = () => {
   const [calendar, setCalendar] = useState([]);
-  const [schedules, setSchedules] = useState([]);
   const [testData, setTestData] = useState([]);
-  // const [popUp, setPopUp] = useState(false);
   const [scheduleClassShown, setScheduleClassShown] = useState(false);
   const [noClassScheduled, setNoClassScheduled] = useState(false);
   const [classDetailShown, setClassDetailShown] = useState(false);
   const [currentDetailClass, setCurrentDetailClass] = useState({});
+  const [currentShownSchedule, setCurrentShownSchedule] = useState({})
   const duringPopUp = scheduleClassShown ? "during-popup" : "";
   const duringPopUp2 = classDetailShown ? "during-popup_2" : "";
 
@@ -51,16 +50,17 @@ const Schedule = () => {
 
   const getCalendarHead = () => {
     let dates = [];
-    let d = new Date(year, month, 0).getDate();
-    let n = new Date(year, month, 1).getDay();
+    let d = new Date(year, month, 0).getDate(); // 30
+    let n = new Date(year, month, 1).getDay(); // 4
 
     for(let i = 0; i < n; i++) {
-        dates.unshift({
-            date: d - i,
-            isToday: false,
-            isDisabled: true
-        });
+      dates.unshift({
+        date: d - i,
+        month: month - 1,
+        year: year
+      });
     }
+    // console.log('head dates:', dates)
     return dates;
   }
 
@@ -69,15 +69,13 @@ const Schedule = () => {
     let lastDate = new Date(year, month + 1, 0).getDate();
 
     for(let i = 1; i <= lastDate; i++) {
-        dates.push({
-            date: i,
-            isToday: false,
-            isDisabled: false
-        });
+      dates.push({
+        date: i,
+        month: month,
+        year: year
+      });
     }
-    if(year === today.getFullYear() && month === today.getMonth()) {
-        dates[today.getDate() - 1].isToday = true;
-    }
+    // console.log('body dates: ', dates)
     return dates;
   }
 
@@ -86,12 +84,13 @@ const Schedule = () => {
     let lastDay = new Date(year, month + 1, 0).getDay();
 
     for(let i = 1; i < 7 - lastDay; i++) {
-        dates.push({
-            date: i,
-            isToday: false,
-            isDisabled: true
-        });
+      dates.push({
+        date: i,
+        month: month + 1,
+        year: year
+      });
     }
+    // console.log('tail dates: ', dates)
     return dates;
   }
 
@@ -101,6 +100,7 @@ const Schedule = () => {
       year--;
       month = 11;
     }
+    // setCurrentShownMonth(month);
     showCalendar();
   }
 
@@ -113,7 +113,13 @@ const Schedule = () => {
     showCalendar();
   }
 
-  const setEvent = (e) => {
+  const setEvent = (year, month, date) => {
+    const event = {
+      year: year,
+      month: month + 1,
+      date: date
+    }
+    setCurrentShownSchedule(event)
     setScheduleClassShown(true);
   }
 
@@ -164,11 +170,9 @@ const Schedule = () => {
   return (
     <div className="schedule_container">
       <button className="schedule_go_back_button" onClick={() => navigate('/home')}>Go Back</button><br />
-      {/* <div className="schedule_title"> */}
         <button className="schedule_prev_button" onClick={getPreviousMonth}>&lt;</button>
         <div className="schedule_title_date">{NUMBER_MONTHS[month + 1]}  {year}</div>
         <button className="schedule_next_button" onClick={getNextMonth}>&gt;</button>
-      {/* </div> */}
       {noClassScheduled && <p className="schedule_no_class">No class scheduled in this month</p>}
       <table className="schedule_calendar">
         <thead>
@@ -183,7 +187,7 @@ const Schedule = () => {
             return (
               <tr className="schedule_week">{week.map(day => (
                 <td className="schedule_date"
-                  onClick={() => setEvent(day.date)}>
+                  onClick={() => setEvent(year, day['month'], day['date'])}>
                     <span className="schedule_date_text">{day.date}</span>
                   {testData.map((t, idx) => {
                     const startDate = t['start_time'].split(',')[0];
@@ -214,6 +218,7 @@ const Schedule = () => {
       <div className={duringPopUp}>
         {scheduleClassShown &&
           <PopUpEvent
+            currentShownSchedule={currentShownSchedule}
             closeEvent={closeEvent}
             getSchedule={getSchedule}
           />

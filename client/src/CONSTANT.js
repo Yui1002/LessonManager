@@ -18,7 +18,7 @@ export const MONTHS = {
   'Jul': 'July',
   'Aug': 'August',
   'Sep': 'September',
-  'Aug': 'August',
+  'Oct': 'October',
   'Nov': 'November',
   'Dec': 'December'
 };
@@ -33,7 +33,7 @@ export const NUMBER_MONTHS = {
   7: 'July',
   8: 'August',
   9: 'September',
-  10: 'August',
+  10: 'October',
   11: 'November',
   12: 'December'
 }

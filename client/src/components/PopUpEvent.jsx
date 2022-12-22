@@ -55,16 +55,7 @@ const PopUpEvent = (props) => {
       <h3>Schedule a class</h3>
       <span className="popup_event_close" onClick={props.closeEvent}>&times;</span>
       <form onSubmit={scheduleClass}>
-        <section>
-          <label htmlFor="date">Date</label>
-          <input
-            id="date"
-            name="date"
-            type="date"
-            autoComplete="date"
-            required autoFocus
-          />
-        </section>
+        <div>{props.currentShownSchedule.year} / {props.currentShownSchedule.month} / {props.currentShownSchedule.date}</div>
         <section>
           <label htmlFor="start_time">Start time</label>
           <input
