@@ -1,12 +1,16 @@
 .class_detail_container {
-  position: absolute;
-  top: 0;
-  right: 0;
+  /* position: absolute;
+  top: 30%;
+  left: 15%;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888; */
   background-color: #fefefe;
   margin: auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 55%;
+  width: 40%;
 }
 
 .class_detail_close {
@@ -15,4 +19,21 @@
   font-size: 28px;
   font-weight: bold;
   cursor: pointer;
+}
+
+.class_student_icon {
+  padding-top: 5px;
+  padding-right: 10px;
+}
+
+.class_calendar_icon {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+}
+
+.class_description_icon {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
 }

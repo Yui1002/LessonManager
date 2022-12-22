@@ -47,7 +47,7 @@ const Profile = () => {
 
   return (
     <div>
-      <button onClick={() => navigate('/home')}>Go Back</button><br />
+      <button className="profile_go_back_button" onClick={() => navigate('/home')}>Go Back</button><br />
       <h1>Student's Profile</h1>
       <button onClick={() => setShowForm(true)}>Add a new student</button>
       {showForm &&

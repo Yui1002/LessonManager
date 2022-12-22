@@ -5,6 +5,7 @@ import './Schedule.css';
 import PopUpEvent from './PopUpEvent.jsx';
 import moment from 'moment';
 import ClassDetail from './ClassDetail.jsx';
+import {NUMBER_MONTHS} from '../CONSTANT.js';
 
 const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const today = new Date();
@@ -130,7 +131,6 @@ const Schedule = () => {
 
     let array = [];
     data.forEach(x => {
-      console.log(x)
       let subObj = {};
       subObj['name'] = x.name;
       subObj['start_time'] = new Date(x.start_time).toLocaleString();
@@ -142,11 +142,12 @@ const Schedule = () => {
     setTestData(array);
   }
 
-  const showClassDetail = (e, name, day, startTime, endTime, description) => {
+  const showClassDetail = (e, name, day, startDate, startTime, endTime, description) => {
     e.stopPropagation(); // prevent parent function's execution
     const format = {
       name: name,
       day: day,
+      startDate: startDate,
       startTime: startTime,
       endTime: endTime,
       description: description
@@ -161,10 +162,12 @@ const Schedule = () => {
   // ]
   return (
     <div className="schedule_container">
-      <button onClick={() => navigate('/home')}>Go Back</button><br />
-      <button onClick={getPreviousMonth}>prev</button>
-      <button onClick={getNextMonth}>next</button>
-      <div>{year}, {month + 1}</div>
+      <button className="schedule_go_back_button" onClick={() => navigate('/home')}>Go Back</button><br />
+      <div className="schedule_title">
+        <button className="schedule_prev_button" onClick={getPreviousMonth}>&lt;</button>
+        <div className="schedule_title_date">{NUMBER_MONTHS[month + 1]}  {year}</div>
+        <button className="schedule_next_button" onClick={getNextMonth}>&gt;</button>
+      </div>
       {noClassScheduled && <p className="schedule_no_class">No class scheduled in this month</p>}
       <table className="schedule_calendar">
         <thead>
@@ -176,11 +179,10 @@ const Schedule = () => {
         </thead>
         <tbody>
           {calendar.map(week => {
-            console.log('week: ', week)
             return (
               <tr className="schedule_week">{week.map(day => (
                 <td className="schedule_date"
-                  onClick={() => setEvent(day.date)}>{day.date}
+                  onClick={() => setEvent(day.date)}><span className="schedule_date_text">{day.date}</span>
                   {testData.map((t, idx) => {
                     const startDate = t['start_time'].split(',')[0];
                     if (startDate.split('/')[1] === day.date.toString()) {
@@ -190,7 +192,7 @@ const Schedule = () => {
                       const description = t['description'];
 
                       return (
-                        <div className="schedule_class" onClick={(e) => showClassDetail(e, name, day, startTime, endTime, description)}>
+                        <div className="schedule_class" onClick={(e) => showClassDetail(e, name, day, startDate, startTime, endTime, description)}>
                           {`${name} - ${startTime}`}
                           {classDetailShown && currentDetailClass.day === day &&
                             <div className={duringPopUp2}>
