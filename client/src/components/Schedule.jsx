@@ -9,6 +9,7 @@ import {NUMBER_MONTHS} from '../CONSTANT.js';
 
 const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const today = new Date();
+const TODAY = today.getDate();
 let year = today.getFullYear();
 let month = today.getMonth();
 
@@ -163,11 +164,11 @@ const Schedule = () => {
   return (
     <div className="schedule_container">
       <button className="schedule_go_back_button" onClick={() => navigate('/home')}>Go Back</button><br />
-      <div className="schedule_title">
+      {/* <div className="schedule_title"> */}
         <button className="schedule_prev_button" onClick={getPreviousMonth}>&lt;</button>
         <div className="schedule_title_date">{NUMBER_MONTHS[month + 1]}  {year}</div>
         <button className="schedule_next_button" onClick={getNextMonth}>&gt;</button>
-      </div>
+      {/* </div> */}
       {noClassScheduled && <p className="schedule_no_class">No class scheduled in this month</p>}
       <table className="schedule_calendar">
         <thead>
@@ -182,7 +183,8 @@ const Schedule = () => {
             return (
               <tr className="schedule_week">{week.map(day => (
                 <td className="schedule_date"
-                  onClick={() => setEvent(day.date)}><span className="schedule_date_text">{day.date}</span>
+                  onClick={() => setEvent(day.date)}>
+                    <span className="schedule_date_text">{day.date}</span>
                   {testData.map((t, idx) => {
                     const startDate = t['start_time'].split(',')[0];
                     if (startDate.split('/')[1] === day.date.toString()) {
@@ -193,7 +195,7 @@ const Schedule = () => {
 
                       return (
                         <div className="schedule_class" onClick={(e) => showClassDetail(e, name, day, startDate, startTime, endTime, description)}>
-                          {`${name} - ${startTime}`}
+                          {`${startTime.slice(0, -6)} - ${name}`}
                           {classDetailShown && currentDetailClass.day === day &&
                             <div className={duringPopUp2}>
                               <ClassDetail currentDetailClass={currentDetailClass} closeClassDetail={closeClassDetail}/>

@@ -5,6 +5,7 @@ import PopUp from './PopUp.jsx';
 import './Student.css';
 
 const Student = (props) => {
+
   const [popUp, setPopUp] = useState(false);
   const duringPopUp = popUp ? "during-popup" : "";
 
