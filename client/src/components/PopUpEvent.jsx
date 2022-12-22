@@ -4,7 +4,7 @@ import './PopUpEvent.css';
 import moment from 'moment';
 
 const PopUpEvent = (props) => {
-  const [scheduleError, setScheduleError] = useState(false);
+  const [scheduleError, setScheduleError] = useState('');
 
   const convertToUTC = (dateTime) => {
     const dateTimeObj = new Date(dateTime);
@@ -23,14 +23,20 @@ const PopUpEvent = (props) => {
   const scheduleClass = async (e) => {
     e.preventDefault();
 
-    const date = e.target[0].value;
-    const startTime = e.target[1].value;
-    const endTime = e.target[2].value;
-    const name = e.target[3].value;
-    const description = e.target[4].value;
+    // const date = e.target[0].value;
+    const date = `${props.currentShownSchedule.year} / ${props.currentShownSchedule.month} / ${props.currentShownSchedule.date}`;
+    const startTime = e.target[0].value;
+    const endTime = e.target[1].value;
+    const name = e.target[2].value;
+    const description = e.target[3].value;
 
     const startDateTime = moment().format(`${date} ${startTime}:00`);
     const endDateTime = moment().format(`${date} ${endTime}:00`);
+
+    if (startTime > endTime) {
+      setScheduleError('Time Error')
+      return;
+    }
 
     axios.post('/schedule', {
       start: startDateTime,
@@ -46,7 +52,7 @@ const PopUpEvent = (props) => {
       }
     })
     .catch(err => {
-      setScheduleError(true);
+      setScheduleError('Student does not exist');
     })
   }
 
@@ -98,7 +104,7 @@ const PopUpEvent = (props) => {
         </section>
         <button type="submit" value="submit">submit</button>
       </form>
-      {scheduleError && <p>Student does not exist</p>}
+      {scheduleError.length && <p>{scheduleError}</p>}
     </div>
   )
 }
