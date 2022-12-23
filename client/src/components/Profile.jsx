@@ -49,9 +49,9 @@ const Profile = () => {
     <div>
       <button className="profile_go_back_button" onClick={() => navigate('/home')}>Go Back</button><br />
       <h1>Student's Profile</h1>
-      <button onClick={() => setShowForm(true)}>Add a new student</button>
+      <button className="profile_add_student_button" onClick={() => setShowForm(true)}>Add a new student</button>
       {showForm &&
-        <form onSubmit={submitNewStudent}>
+        <form className="profile_add_student_form" onSubmit={submitNewStudent}>
           <section>
             <label htmlFor="name">Student's name</label>
             <input id="name" name="name" type="text" autoComplete="name" required autoFocus />

@@ -2,7 +2,6 @@
   width: 100%;
   display: flex;
   flex-wrap: wrap;
-  background-color: DodgerBlue;
 }
 
 .student {
@@ -10,4 +9,29 @@
   height: 200px;
   margin: 10px;
   background-color: #ddd;
+}
+
+.profile_go_back_button, .profile_add_student_button {
+  border-radius: 12px;
+  background-color: white;
+  color: black;
+  border: 2px solid #04AA6D;
+  padding: 4px 8px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+
+.profile_go_back_button:hover, .profile_add_student_button:hover {
+  background-color: #04AA6D;
+}
+
+.profile_add_student_form {
+  border: 2px solid #04AA6D;
+  margin-bottom: 10px;
+  margin-top: 10px;
 }
