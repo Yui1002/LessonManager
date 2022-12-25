@@ -93,6 +93,28 @@ class Repository {
     return rows;
   }
 
+  async isClassDuplicated(req) {
+    // const date = req.start.split(' ')[0];
+    // const startTime = req.start.split(' ')[1];
+    // const endTime = req.end.split(' ')[1];
+    // const name = req.name;
+
+    // const replacedDate = date.toString().replaceAll(':', '/');
+    // const replacedDateTime = `${replacedDate} ${startTime}`
+
+    // const MS_PER_MINUTE = 60000;
+    // const myStartDate = new Date(new Date(replacedDateTime) - 60 * MS_PER_MINUTE);
+
+    // console.log('myStartDate: ', myStartDate);
+
+
+    // class time: 4:35 - 5:35
+    // cannot schedule between 4:05 - 6:05 cannot schedule
+    // const con = await mysql.createConnection(db_setting);
+    // const sql = 'SELECT * FROM schedules WHERE (start_time BETWEEN ? AND ?)';
+    // const [rows, fields] = await con.query(sql, [])
+  }
+
   async createNewClass(req, id) {
     const startTime = req.start;
     const endTime = req.end

@@ -4,14 +4,9 @@ import Student from './Student.jsx';
 import axios from 'axios';
 import './Profile.css'
 
-const Profile = () => {
-  const [students, setStudents] = useState([]);
+const Profile = (props) => {
   const [showForm, setShowForm] = useState(false);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    getStudents();
-  }, [])
 
   const submitNewStudent = async (e) => {
     e.preventDefault();
@@ -26,12 +21,7 @@ const Profile = () => {
       lessonHour: lessonHour,
       email: email
     });
-    getStudents();
-  }
-
-  const getStudents = async () => {
-    const res = await axios.get('/students');
-    setStudents(res.data);
+    props.getStudents();
   }
 
   const deleteStudent = async (e) => {
@@ -42,7 +32,7 @@ const Profile = () => {
         name: name
       }
     });
-    getStudents();
+    props.getStudents();
   }
 
   return (
@@ -68,12 +58,12 @@ const Profile = () => {
         </form>
       }
       <div className="students_list">
-        {students.map((student) =>
+        {props.students.map((student) =>
           <div key={student.id} className="student">
             <Student
               student={student}
               deleteStudent={deleteStudent}
-              getStudents={getStudents}
+              getStudents={props.getStudents}
             />
           </div>
         )}

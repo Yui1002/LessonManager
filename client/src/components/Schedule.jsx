@@ -13,7 +13,7 @@ const TODAY = today.getDate();
 let year = today.getFullYear();
 let month = today.getMonth();
 
-const Schedule = () => {
+const Schedule = (props) => {
   const [calendar, setCalendar] = useState([]);
   const [testData, setTestData] = useState([]);
   const [scheduleClassShown, setScheduleClassShown] = useState(false);
@@ -227,7 +227,7 @@ const Schedule = () => {
                         return (
                           <div>
                             {day.year.toString() === year && (day.month + 1).toString() === month &&
-                              <div>
+                              <div className="schedule_class">
                                 {`${startTime.slice(0, -6)} - ${name}`}
                                 {classDetailShown &&
                                   currentDetailClass.day === day && (
@@ -242,26 +242,6 @@ const Schedule = () => {
                             }
                           </div>
                         )
-
-                        // {
-                        //   day.year.toString() === year &&
-                        //     day.month.toString() === month && (
-                        //       <div>
-                        //         {`${startTime.slice(0, -6)} - ${name}`}
-                        //       </div>
-                        //     );
-                        // }
-                        // return (
-
-                        // <div className="schedule_class" onClick={(e) => showClassDetail(e, name, day, startDate, startTime, endTime, description)}>
-                        //   {`${startTime.slice(0, -6)} - ${name}`}
-                        //   {classDetailShown && currentDetailClass.day === day &&
-                        //     <div className={duringPopUp2}>
-                        //       <ClassDetail currentDetailClass={currentDetailClass} closeClassDetail={closeClassDetail}/>
-                        //     </div>
-                        //   }
-                        // </div>
-                        // )
                       }
                     })}
                   </td>
@@ -277,6 +257,7 @@ const Schedule = () => {
             currentShownSchedule={currentShownSchedule}
             closeEvent={closeEvent}
             getSchedule={getSchedule}
+            students={props.students}
           />
         )}
       </div>
