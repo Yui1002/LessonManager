@@ -1,13 +1,30 @@
+.profile_title {
+  text-align: center;
+}
+
+.profile_add_student_button_wrap {
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  height: 40px;
+}
+
+.profile_add_student_button {
+  width: 30%;
+  height: 100%;
+}
+
 .students_list {
-  width: 100%;
+  width: 90%;
   display: flex;
+  margin: auto;
   flex-wrap: wrap;
 }
 
 .student {
-  width: 20%;
+  width: 18.5%;
   height: 200px;
-  margin: 10px;
+  margin: 0.75%;
   background-color: #ddd;
 }
 
@@ -35,3 +52,4 @@
   margin-bottom: 10px;
   margin-top: 10px;
 }
+

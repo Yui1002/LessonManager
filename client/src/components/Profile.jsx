@@ -38,8 +38,8 @@ const Profile = (props) => {
   return (
     <div>
       <button className="profile_go_back_button" onClick={() => navigate('/home')}>Go Back</button><br />
-      <h1>Student's Profile</h1>
-      <button className="profile_add_student_button" onClick={() => setShowForm(true)}>Add a new student</button>
+      <h1 className="profile_title">Student's Profile</h1>
+      <div className="profile_add_student_button_wrap"><button className="profile_add_student_button" onClick={() => setShowForm(true)}>Create a New Student</button></div>
       {showForm &&
         <form className="profile_add_student_form" onSubmit={submitNewStudent}>
           <section>

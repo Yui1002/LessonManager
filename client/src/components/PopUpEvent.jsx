@@ -6,8 +6,6 @@ import moment from "moment";
 const PopUpEvent = (props) => {
   const [scheduleError, setScheduleError] = useState("");
 
-  console.log("students: ", props.students);
-
   const scheduleClass = async (e) => {
     e.preventDefault();
 
@@ -46,16 +44,24 @@ const PopUpEvent = (props) => {
 
   return (
     <div className="popup_event_container">
-      <h3>Schedule a class</h3>
+      <h2 className="popup_event_title">Schedule a class</h2>
       <span className="popup_event_close" onClick={props.closeEvent}>
         &times;
       </span>
       <form onSubmit={scheduleClass}>
-        <div>
+        <div className="popup_event_date">
           {props.currentShownSchedule.year} / {props.currentShownSchedule.month}{" "}
           / {props.currentShownSchedule.date}
         </div>
-        <section>
+        <section className="popup_event_section">
+          <label htmlFor="name">Student name</label>
+          <select name="name" id="name">
+            {props.students.map((student) => (
+              <option key={student.name} value={student.name}>{student.name}</option>
+            ))}
+          </select>
+        </section>
+        <section className="popup_event_section">
           <label htmlFor="start_time">Start time</label>
           <input
             id="start_time"
@@ -66,7 +72,7 @@ const PopUpEvent = (props) => {
             autoFocus
           />
         </section>
-        <section>
+        <section className="popup_event_section">
           <label htmlFor="end_time">End time</label>
           <input
             id="end_time"
@@ -77,15 +83,7 @@ const PopUpEvent = (props) => {
             autoFocus
           />
         </section>
-        <section>
-          <label htmlFor="name">Student name</label>
-          <select name="name" id="name">
-            {props.students.map((student) => (
-              <option key={student.name} value={student.name}>{student.name}</option>
-            ))}
-          </select>
-        </section>
-        <section>
+        <section className="popup_event_section">
           <label htmlFor="description">Description</label>
           <input
             id="ndescriptioname"
