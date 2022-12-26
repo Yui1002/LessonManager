@@ -1,12 +1,18 @@
-import React, {useState, useEffect} from 'react';
-import { useNavigate } from 'react-router-dom';
-import Student from './Student.jsx';
-import axios from 'axios';
-import './Profile.css'
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import Student from "./Student.jsx";
+import axios from "axios";
+import "./Profile.css";
+import NewStudent from "./NewStudent.jsx";
 
 const Profile = (props) => {
   const [showForm, setShowForm] = useState(false);
+  const duringPopUp3 = showForm ? "during-popup_3" : "";
   const navigate = useNavigate();
+
+  const closeForm = () => {
+    setShowForm(false);
+  };
 
   const submitNewStudent = async (e) => {
     e.preventDefault();
@@ -16,49 +22,50 @@ const Profile = (props) => {
     let lessonHour = e.target[1].value;
     let email = e.target[2].value;
 
-    const res = await axios.post('/students', {
+    const res = await axios.post("/students", {
       name: name,
       lessonHour: lessonHour,
-      email: email
+      email: email,
     });
     props.getStudents();
-  }
+  };
 
   const deleteStudent = async (e) => {
     const name = e.target.value;
 
-    const res = await axios.delete('/student', {
+    const res = await axios.delete("/student", {
       data: {
-        name: name
-      }
+        name: name,
+      },
     });
     props.getStudents();
-  }
+  };
 
   return (
     <div>
-      <button className="profile_go_back_button" onClick={() => navigate('/home')}>Go Back</button><br />
+      <button
+        className="profile_go_back_button"
+        onClick={() => navigate("/home")}
+      >
+        Go Back
+      </button>
+      <br />
       <h1 className="profile_title">Student's Profile</h1>
-      <div className="profile_add_student_button_wrap"><button className="profile_add_student_button" onClick={() => setShowForm(true)}>Create a New Student</button></div>
-      {showForm &&
-        <form className="profile_add_student_form" onSubmit={submitNewStudent}>
-          <section>
-            <label htmlFor="name">Student's name</label>
-            <input id="name" name="name" type="text" autoComplete="name" required autoFocus />
-          </section>
-          <section>
-            <label htmlFor="lesson-hour">Total lesson hours</label>
-            <input id="lesson-hour" name="lesson-hour" type="number" min="0" autoComplete="lesson-hour" required />
-          </section>
-          <section>
-            <label htmlFor="email">Email</label>
-            <input id="email" name="email" type="email" autoComplete="email" required />
-          </section>
-          <button type="submit" value="add-student">Add</button>
-        </form>
-      }
+      <div className="profile_add_student_button_wrap">
+        <button
+          className="profile_add_student_button"
+          onClick={() => setShowForm(true)}
+        >
+          Create a New Student
+        </button>
+      </div>
+      {showForm && (
+        <div className={duringPopUp3}>
+          <NewStudent closeForm={closeForm}/>
+        </div>
+      )}
       <div className="students_list">
-        {props.students.map((student) =>
+        {props.students.map((student) => (
           <div key={student.id} className="student">
             <Student
               student={student}
@@ -66,10 +73,10 @@ const Profile = (props) => {
               getStudents={props.getStudents}
             />
           </div>
-        )}
+        ))}
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default Profile;
