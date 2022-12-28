@@ -1,46 +1,93 @@
 import React from "react";
-import './NewStudent.css';
+import "./NewStudent.css";
+import COUNTRY_LIST from "./COUNTRY.js";
 
 const NewStudent = (props) => {
-
   return (
     <div className="new_student_container">
-      <h2>Create a New Student</h2>
-      <span className="new_student_close" onClick={props.closeForm}>&times;</span>
+      <h2 className="new_student_title">Create a New Student</h2>
+      <span className="new_student_close" onClick={props.closeForm}>
+        &times;
+      </span>
       <form className="profile_add_student_form">
-        <section>
-          <label htmlFor="name">Student's name</label>
+        <section className="section_first_name">
+          <label htmlFor="first_name">First Name</label>
+          <br />
           <input
-            id="name"
-            name="name"
+            id="first_name"
+            className="input_first_name"
+            name="first_name"
             type="text"
-            autoComplete="name"
+            autoComplete="first_name"
+            placeholder="e.g. John"
             required
             autoFocus
           />
         </section>
-        <section>
-          <label htmlFor="lesson-hour">Total lesson hours</label>
+        <section className="section_last_name">
+          <label htmlFor="last_name">Last Name</label>
+          <br />
           <input
-            id="lesson-hour"
-            name="lesson-hour"
-            type="number"
-            min="0"
-            autoComplete="lesson-hour"
+            id="last_name"
+            className="input_last_name"
+            name="last_name"
+            type="text"
+            autoComplete="last_name"
+            placeholder="e.g. Smith"
+            required
+            autoFocus
+          />
+        </section>
+        <section className="section_country">
+          <label htmlFor="country">Country</label>
+          <br />
+          <select className="select_country">
+            {COUNTRY_LIST.map((c) => (
+              <option value={c}>{c}</option>
+            ))}
+          </select>
+        </section>
+        <section className="section_phone_number">
+          <label htmlFor="phone_number">Phone Number</label>
+          <br />
+          <input
+            id="phone_number"
+            className="input_phone_number"
+            name="phone_number"
+            type="tel"
+            autoComplete="phone_number"
             required
           />
         </section>
-        <section>
-          <label htmlFor="email">Email</label>
+        <section className="section_email">
+          <label htmlFor="email">Email Address</label>
+          <br />
           <input
+            className="input_email"
             id="email"
             name="email"
             type="email"
             autoComplete="email"
+            placeholder="e.g. john@email.com"
             required
           />
         </section>
-        <button type="submit" value="add-student">
+        <section>
+          <label htmlFor="lesson-hour">Initial lesson hours</label>
+          <br />
+          <input
+            id="lesson-hour"
+            className="input_lesson_hour"
+            name="lesson-hour"
+            type="number"
+            min="0"
+            max="50"
+            placeholder="0"
+            autoComplete="lesson-hour"
+            required
+          /> h
+        </section>
+        <button type="submit" value="add-student" className="new_student_btn">
           Add
         </button>
       </form>
