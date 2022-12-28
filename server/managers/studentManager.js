@@ -10,7 +10,7 @@ class StudentManager {
   }
 
   async createNewStudent(req) {
-    const student = await this.Repository.findStudent(req.name);
+    const student = await this.Repository.findStudent(req.email);
     if (student.length !== 0) {
       return 'Student already exists';
     } else {

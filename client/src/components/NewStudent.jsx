@@ -1,15 +1,38 @@
 import React from "react";
+import axios from 'axios';
 import "./NewStudent.css";
 import COUNTRY_LIST from "./COUNTRY.js";
 
 const NewStudent = (props) => {
+  const submitNewStudent = async (e) => {
+    e.preventDefault();
+    props.setShowForm(false);
+
+    const firstName = e.target[0].value;
+    const lastName = e.target[1].value;
+    const country = e.target[2].value;
+    const phoneNumber = e.target[3].value;
+    const email = e.target[4].value;
+    const lessonHours = e.target[5].value;
+
+    const res = await axios.post("/students", {
+      firstName: firstName,
+      lastName: lastName,
+      country: country,
+      phoneNumber: phoneNumber,
+      email: email,
+      lessonHours: lessonHours,
+    });
+    props.getStudents();
+  };
+
   return (
     <div className="new_student_container">
       <h2 className="new_student_title">Create a New Student</h2>
       <span className="new_student_close" onClick={props.closeForm}>
         &times;
       </span>
-      <form className="profile_add_student_form">
+      <form className="profile_add_student_form" onSubmit={submitNewStudent}>
         <section className="section_first_name">
           <label htmlFor="first_name">First Name</label>
           <br />
@@ -85,7 +108,8 @@ const NewStudent = (props) => {
             placeholder="0"
             autoComplete="lesson-hour"
             required
-          /> h
+          />{" "}
+          h
         </section>
         <button type="submit" value="add-student" className="new_student_btn">
           Add

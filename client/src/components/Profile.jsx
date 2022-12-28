@@ -14,28 +14,10 @@ const Profile = (props) => {
     setShowForm(false);
   };
 
-  const submitNewStudent = async (e) => {
-    e.preventDefault();
-    setShowForm(false);
-
-    let name = e.target[0].value;
-    let lessonHour = e.target[1].value;
-    let email = e.target[2].value;
-
-    const res = await axios.post("/students", {
-      name: name,
-      lessonHour: lessonHour,
-      email: email,
-    });
-    props.getStudents();
-  };
-
-  const deleteStudent = async (e) => {
-    const name = e.target.value;
-
+  const deleteStudent = async (email) => {
     const res = await axios.delete("/student", {
       data: {
-        name: name,
+        email: email,
       },
     });
     props.getStudents();
@@ -61,7 +43,7 @@ const Profile = (props) => {
       </div>
       {showForm && (
         <div className={duringPopUp3}>
-          <NewStudent closeForm={closeForm}/>
+          <NewStudent closeForm={closeForm} setShowForm={setShowForm} getStudents={props.getStudents} />
         </div>
       )}
       <div className="students_list">

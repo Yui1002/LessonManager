@@ -38,10 +38,10 @@ class Repository {
     return rows;
   }
 
-  async findStudent(name) {
+  async findStudent(email) {
     const con = await mysql.createConnection(db_setting);
-    const sql = 'select * from students where name = ?';
-    const [rows, fields] = await con.query(sql, [name]);
+    const sql = 'select * from students where email = ?';
+    const [rows, fields] = await con.query(sql, [email]);
     return rows;
   }
 
@@ -53,25 +53,28 @@ class Repository {
   }
 
   async createNewStudent(req) {
-    const name = req.name;
-    const lessonHour = req.lessonHour;
+    const firstName = req.firstName;
+    const lastName = req.lastName;
+    const country = req.country;
+    const phoneNumber = req.phoneNumber;
     const email = req.email;
+    const lessonHours = req.lessonHours;
 
     const con = await mysql.createConnection(db_setting);
-    const sql = 'insert into students (name, lesson_hours, email) values (?, ?, ?)';
-    const [rows, fields] = await con.query(sql, [name, lessonHour, email]);
+    const sql = 'insert into students (first_name, last_name, country, phone_number, email, lesson_hours) values (?, ?, ?, ?, ?, ?)';
+    const [rows, fields] = await con.query(sql, [firstName, lastName, country, phoneNumber, email, lessonHours]);
     return rows;
   }
 
   async deleteStudent(req) {
-    const name = req.name;
+    const email = req.email;
 
-    const sql_1 = 'delete from schedules where student_id = (select id from students where name = ?);'
-    const sql_2 = 'delete from students where name = ?';
+    const sql_1 = 'delete from schedules where student_id = (select id from students where email = ?);'
+    const sql_2 = 'delete from students where email = ?';
 
     const con = await mysql.createConnection(db_setting);
-    const [rows_1, fields_1] = await con.query(sql_1, [name]);
-    const [rows_2, fields_2] = await con.query(sql_2, [name]);
+    const [rows_1, fields_1] = await con.query(sql_1, [email]);
+    const [rows_2, fields_2] = await con.query(sql_2, [email]);
     return rows_2;
   }
 
