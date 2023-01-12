@@ -8,6 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --watch"
   },
+  "type": "module",
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -23,6 +24,7 @@
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
+    "moment": "^2.29.4",
     "mysql2": "^2.3.3",
     "nodemon": "^2.0.20",
     "passport": "^0.6.0",

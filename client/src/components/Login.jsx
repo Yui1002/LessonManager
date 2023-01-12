@@ -45,7 +45,7 @@ const Login = () => {
       </form>
       {isLogined && navigate('/home')}
       {loginError && <p>We cannot find an account with that information</p>}
-      New user?<button onClick={() => navigate('/register')}>Register</button>
+      New user? <button onClick={() => navigate('/register')}>Register</button>
     </div>
   )
 }

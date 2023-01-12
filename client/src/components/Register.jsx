@@ -18,7 +18,6 @@ const Register = () => {
       password: password
     })
     .then((data) => {
-      // console.log('register data: ', data)
       if (data.status === 200) {
         setIsRegistered(true);
         navigate('/login');

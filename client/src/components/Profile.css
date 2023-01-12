@@ -1,13 +1,61 @@
+.profile_title {
+  text-align: center;
+}
+
+.profile_add_student_button_wrap {
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 30px;
+  height: 40px;
+}
+
+.profile_add_student_button {
+  width: 30%;
+  height: 100%;
+}
+
 .students_list {
-  width: 100%;
+  width: 90%;
   display: flex;
+  margin: auto;
   flex-wrap: wrap;
-  background-color: DodgerBlue;
 }
 
 .student {
-  width: 20%;
+  width: 18.5%;
   height: 200px;
-  margin: 10px;
+  margin: 0.75%;
   background-color: #ddd;
+}
+
+.profile_go_back_button, .profile_add_student_button {
+  border-radius: 12px;
+  background-color: white;
+  color: black;
+  border: 2px solid #04AA6D;
+  padding: 4px 8px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+
+.profile_go_back_button:hover, .profile_add_student_button:hover {
+  background-color: #04AA6D;
+}
+
+.during-popup_3 {
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
