@@ -27,7 +27,7 @@ class LoginManager {
     const hashedPassword = await this.LoginRepository.findPassword(username);
     const validPassword = await bcrypt.compare(password, hashedPassword);
 
-    return (!validPassword) ? 'Incorrect username or password' : 'Logined successfully';
+    return (!validPassword) ? 'Incorrect username or password' : { name: user[0].username };
   }
 }
 

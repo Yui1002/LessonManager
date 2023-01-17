@@ -5,12 +5,18 @@ class ScheduleController {
     this.ScheduleManager = new ScheduleManager();
   }
 
-  async getSchedule() {
-    return await this.ScheduleManager.getSchedule();
+  async getSchedule(req, res) {
+    const response = await new ScheduleManager().getSchedule();
+    if (response === 'No class scheduled') {
+      res.status(400).send('No class scheduled');
+    } else {
+      res.status(200).send(response);
+    }
   }
 
-  async createNewClass(req) {
-    return await this.ScheduleManager.createNewClass(req);
+  async createNewClass(req, res) {
+    const response = await new ScheduleManager().createNewClass(req.body)
+    res.status(200).send(response);
   }
 }
 

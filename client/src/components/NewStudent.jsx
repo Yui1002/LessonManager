@@ -1,30 +1,60 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from 'axios';
 import "./NewStudent.css";
 import COUNTRY_LIST from "./COUNTRY.js";
+import { FaUserAlt } from "react-icons/fa";
 
 const NewStudent = (props) => {
+  const [selectedFile, setSelectedFile] = useState();
+  const [isFilePicked, setIsFilePicked] = useState(false);
+  const [src, setSrc] = useState('');
+
   const submitNewStudent = async (e) => {
     e.preventDefault();
     props.setShowForm(false);
 
-    const firstName = e.target[0].value;
-    const lastName = e.target[1].value;
-    const country = e.target[2].value;
-    const phoneNumber = e.target[3].value;
-    const email = e.target[4].value;
-    const lessonHours = e.target[5].value;
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+    formData.append('firstName', e.target[1].value);
+    formData.append('lastName', e.target[2].value);
+    formData.append('country', e.target[3].value);
+    formData.append('phoneNumber', e.target[4].value);
+    formData.append('email', e.target[5].value);
+    formData.append('lessonHours', e.target[5].value);
 
-    const res = await axios.post("/students", {
-      firstName: firstName,
-      lastName: lastName,
-      country: country,
-      phoneNumber: phoneNumber,
-      email: email,
-      lessonHours: lessonHours,
-    });
-    props.getStudents();
+    const response1 = await axios.post('/students', formData, {
+      headers: { "Content-Type": "multipart/form-data" }
+    })
+    const response2 = await axios.get('/profile', { params: {email: e.target[5].value}});
+    console.log(response2)
+
+    // axios({
+    //   method: 'post',
+    //   url: '/students',
+    //   data: formData,
+    //   headers: { "Content-Type": "multipart/form-data" }
+    // })
+    // .then(res => {
+    //   //console.log('ressss: ', res) // ok
+    //   axios.get('/profile', { params: {email: e.target[5].value } })
+    //   // props.getStudents();
+    // })
+    // .then(data => {
+    //   console.log('dataaaaaa: ', data)
+    // })
+    // .catch(err => console.log(err));
   };
+
+  const changeHandler = (e) => {
+    let file = e.target.files[0];
+    setSelectedFile(file);
+    let reader = new FileReader();
+    reader.onload = function() {
+      setSrc(reader.result);
+    }
+    reader.readAsDataURL(file);
+    setIsFilePicked(true);
+  }
 
   return (
     <div className="new_student_container">
@@ -33,6 +63,12 @@ const NewStudent = (props) => {
         &times;
       </span>
       <form className="profile_add_student_form" onSubmit={submitNewStudent}>
+        <section className="section_profile_photo">
+          <label htmlFor="file-upload" className="custom-file-upload">
+            {isFilePicked ? <img className="profile_photo" src={src}/> : <FaUserAlt className="profile_photo" />}
+          </label>
+          <input id="file-upload" type="file" name="file" onChange={changeHandler}/>
+        </section>
         <section className="section_first_name">
           <label htmlFor="first_name">First Name</label>
           <br />
