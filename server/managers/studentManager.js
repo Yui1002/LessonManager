@@ -19,17 +19,7 @@ class StudentManager {
     });
 
     const studentsWithBase64 = await Promise.all(promises);
-    // console.log(studentsWithBase64);
-    
-
-    // for (let i = 0; i < students.length; i++) {
-    //   students[i].profile_photo = await this.getStudentByEmail(students[i].email);
-    // }
-    console.log('studentsWithBase64: ', studentsWithBase64)
-
-    // console.log('studentssss:', students)
     return studentsWithBase64;
-    // return await this.Repository.getStudents();
   }
 
   async createNewStudent(req, file) {
@@ -84,11 +74,11 @@ class StudentManager {
       await this.Repository.saveStudent({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
-        countryCode: req.body.countryCode,
-        phone: req.body.phone,
+        countryCode: req.body.country,
+        phone: req.body.phoneNumber,
         email: req.body.email,
         filePath: path,
-        hours: req.body.hours
+        hours: req.body.lessonHours
       });
     } catch (e) {
       console.log("exception thrown", e);

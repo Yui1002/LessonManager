@@ -4,10 +4,8 @@ import { AiFillSetting } from "react-icons/ai";
 import { FaTrash } from "react-icons/fa";
 import PopUp from "./PopUp.jsx";
 import "./Student.css";
-// import studnet from '../../../images'
 
 const Student = (props) => {
-  console.log('props in student: ', props)
   const [popUp, setPopUp] = useState(false);
   const duringPopUp = popUp ? "during-popup" : "";
 
@@ -35,7 +33,7 @@ const Student = (props) => {
         <div className="student_lesson_hours">
           {props.student.lessonHours} hours
         </div>
-        <div>{props.student.country}</div>
+        <div className="student_country">{props.student.country}</div>
         <div className="student_email">{props.student.email}</div>
         <div>{props.student.phone_number}</div>
 
@@ -43,7 +41,7 @@ const Student = (props) => {
       <div className={duringPopUp}>
         {popUp && (
           <PopUp
-            name={props.student.name}
+            student={props.student}
             lessonHours={props.student.lesson_hours}
             getStudents={props.getStudents}
             setPopUp={setPopUp}

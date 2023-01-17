@@ -15,7 +15,7 @@ class StudentController {
   }
 
   async deleteStudent(req, res) {
-    const response = await StudentManager().deleteStudent(req);
+    const response = await new StudentManager().deleteStudent(req);
     res.status(200).send(response);
   }
 
@@ -41,7 +41,6 @@ class StudentController {
 
   async getStudentProfile(req, res, next) {
     let profile = await new StudentManager().getStudentByEmail(req.query.email);
-    console.log('profile: ', profile)
     res.status(200).send(profile);
   }
 }
