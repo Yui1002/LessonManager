@@ -17,7 +17,7 @@ const Profile = (props) => {
   const deleteStudent = async (email) => {
     const res = await axios.delete("/student", {
       data: {
-        email: email,
+        email: email
       },
     });
     props.getStudents();

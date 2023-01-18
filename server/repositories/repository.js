@@ -69,13 +69,15 @@ class Repository {
   async deleteStudent(req) {
     const email = req.body.email;
 
-    const sql_1 = 'delete from schedules where student_id = (select id from students where email = ?);'
-    const sql_2 = 'delete from students where email = ?';
+    const sql_1 = 'select profile_photo from students where email = ?';
+    const sql_2 = 'delete from schedules where student_id = (select id from students where email = ?);'
+    const sql_3 = 'delete from students where email = ?';
 
     const con = await mysql.createConnection(db_setting);
     const [rows_1, fields_1] = await con.query(sql_1, [email]);
     const [rows_2, fields_2] = await con.query(sql_2, [email]);
-    return rows_2;
+    const [rows_3, fields_3] = await con.query(sql_3, [email]);
+    return rows_1[0].profile_photo;
   }
 
   async updateStudent(req, id) {
