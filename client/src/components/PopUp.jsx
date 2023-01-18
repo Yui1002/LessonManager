@@ -6,13 +6,19 @@ import COUNTRY_LIST from "./COUNTRY.js";
 const PopUp = (props) => {
   const [src, setSrc] = useState("");
   const [isFilePicked, setIsFilePicked] = useState(false);
-  const [selectedFile, setSelectedFile] = useState('');
-  const [editedFirstName, setEditedFirstName] = useState(props.student.firstName);
+  const [selectedFile, setSelectedFile] = useState("");
+  const [editedFirstName, setEditedFirstName] = useState(
+    props.student.firstName
+  );
   const [editedLastName, setEditedLastName] = useState(props.student.lastName);
   const [editedCountry, setEditedCountry] = useState(props.student.country);
-  const [editedPhoneNumber, setEditedPhoneNumber] = useState(props.student.phone);
+  const [editedPhoneNumber, setEditedPhoneNumber] = useState(
+    props.student.phone
+  );
   const [editedEmail, setEditedEmail] = useState(props.student.email);
-  const [editedLessonHours, setEditedLessonHours] = useState(props.student.lessonHours);
+  const [editedLessonHours, setEditedLessonHours] = useState(
+    props.student.lessonHours
+  );
 
   const saveChanges = async (e) => {
     e.preventDefault();
@@ -24,14 +30,14 @@ const PopUp = (props) => {
     formData.append("lastName", editedLastName);
     formData.append("country", editedCountry);
     formData.append("phoneNumber", editedPhoneNumber);
-    formData.append('email', props.student.email);
+    formData.append("email", props.student.email);
     formData.append("newEmail", editedEmail);
     formData.append("lessonHours", editedLessonHours);
 
     const res = await axios.put("/student", formData, {
       headers: { "Content-Type": "multipart/form-data" },
-    })
-    console.log(res)
+    });
+    console.log(res);
 
     if (res.status === 204) {
       props.getStudents();
@@ -53,27 +59,27 @@ const PopUp = (props) => {
 
   const onFirstNameChange = (e) => {
     setEditedFirstName(e.target.value);
-  }
+  };
 
   const onLastNameChange = (e) => {
     setEditedLastName(e.target.value);
-  }
+  };
 
   const onCountryChange = (e) => {
     setEditedCountry(e.target.value);
-  }
+  };
 
   const onPhoneNumberChange = (e) => {
     setEditedPhoneNumber(e.target.value);
-  }
+  };
 
   const onEmailChange = (e) => {
     setEditedEmail(e.target.value);
-  }
+  };
 
   const onLessonHoursChange = (e) => {
     setEditedLessonHours(e.target.value);
-  }
+  };
 
   return (
     <div className="popup_container">
@@ -88,7 +94,8 @@ const PopUp = (props) => {
               <img className="popup_img_photo" src={src} />
             ) : (
               <img
-                className="popup_img_photo" src={`data:image/png;base64, ${props.student.profile_photo}`}
+                className="popup_img_photo"
+                src={`data:image/png;base64, ${props.student.profile_photo}`}
               />
             )}
           </label>
@@ -131,14 +138,13 @@ const PopUp = (props) => {
         <section className="section_country">
           <label htmlFor="country">Country</label>
           <br />
-          <select className="select_country" onChange={onCountryChange}>
+          <select
+            className="select_country"
+            onChange={onCountryChange}
+            value={props.student.country}
+          >
             {COUNTRY_LIST.map((c) => (
-              <option
-                value={c}
-                selected={props.student.country === c ? "selected" : "0"}
-              >
-                {c}
-              </option>
+              <option value={c}>{c}</option>
             ))}
           </select>
         </section>

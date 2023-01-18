@@ -20,7 +20,6 @@ const Student = (props) => {
   return (
     <div className="student_container">
       <div className="student_head_icon">
-        {/* {props.student.profile_photo === null ? <FaUserAlt className="student_photo_icon" /> : <img src={props.student.profile_photo} />} */}
         {props.student.profile_photo === null ? <FaUserAlt className="student_photo_icon" /> : <img className="student_photo_icon" src={`data:image/png;base64, ${props.student.profile_photo}`} />}
         
         <FaTrash className="student_trash_icon" onClick={() => props.deleteStudent(props.student.email)} />
@@ -36,7 +35,6 @@ const Student = (props) => {
         <div className="student_country">{props.student.country}</div>
         <div className="student_email">{props.student.email}</div>
         <div>{props.student.phone_number}</div>
-
       </div>
       <div className={duringPopUp}>
         {popUp && (
