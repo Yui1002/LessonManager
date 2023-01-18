@@ -17,8 +17,9 @@ const App = () => {
   }, []);
 
   const getStudents = async () => {
-    const res = await axios.get("/students");
-    setStudents(res.data);
+    axios.get('/students')
+    .then(res => setStudents(res.data))
+    .catch(err => console.log(err));
   };
 
   return (

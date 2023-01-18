@@ -1,38 +1,69 @@
-import React from "react";
-import axios from 'axios';
-import "./NewStudent.css";
+import React, { useState } from "react";
+import axios from "axios";
+import "./NewStudent.css"
 import COUNTRY_LIST from "./COUNTRY.js";
+import { FaUserAlt } from "react-icons/fa";
 
 const NewStudent = (props) => {
+  const [selectedFile, setSelectedFile] = useState();
+  const [isFilePicked, setIsFilePicked] = useState(false);
+  const [src, setSrc] = useState("");
+
   const submitNewStudent = async (e) => {
     e.preventDefault();
     props.setShowForm(false);
 
-    const firstName = e.target[0].value;
-    const lastName = e.target[1].value;
-    const country = e.target[2].value;
-    const phoneNumber = e.target[3].value;
-    const email = e.target[4].value;
-    const lessonHours = e.target[5].value;
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+    formData.append("firstName", e.target[1].value);
+    formData.append("lastName", e.target[2].value);
+    formData.append("country", e.target[3].value);
+    formData.append("phoneNumber", e.target[4].value);
+    formData.append("email", e.target[5].value);
+    formData.append("lessonHours", e.target[6].value);
 
-    const res = await axios.post("/students", {
-      firstName: firstName,
-      lastName: lastName,
-      country: country,
-      phoneNumber: phoneNumber,
-      email: email,
-      lessonHours: lessonHours,
+    await axios.post("/students", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
     });
+    await axios.get("/profile", { params: { email: e.target[5].value } });
     props.getStudents();
   };
 
+  const changeHandler = (e) => {
+    let file = e.target.files[0];
+    setSelectedFile(file);
+    let reader = new FileReader();
+    reader.onload = function () {
+      setSrc(reader.result);
+    };
+    reader.readAsDataURL(file);
+    setIsFilePicked(true);
+  };
+
   return (
-    <div className="new_student_container">
-      <h2 className="new_student_title">Create a New Student</h2>
-      <span className="new_student_close" onClick={props.closeForm}>
+    <div className="container">
+      <h2 className="title">Create a New Student</h2>
+      <span className="close" onClick={props.closeForm}>
         &times;
       </span>
-      <form className="profile_add_student_form" onSubmit={submitNewStudent}>
+      <form onSubmit={submitNewStudent}>
+        <section className="section_photo">
+          <label htmlFor="file-upload" className="file_upload">
+            {isFilePicked ? (
+              <img className="img_photo" src={src} />
+            ) : (
+              <FaUserAlt className="img_photo" />
+            )}
+          </label>
+          <input
+            id="file-upload"
+            type="file"
+            name="file"
+            onChange={changeHandler}
+            required
+          />
+        </section>
+        {!isFilePicked && <p className="upload_warning">Please upload a file</p>}
         <section className="section_first_name">
           <label htmlFor="first_name">First Name</label>
           <br />
@@ -108,12 +139,14 @@ const NewStudent = (props) => {
             placeholder="0"
             autoComplete="lesson-hour"
             required
-          />{" "}
+          />
           h
         </section>
-        <button type="submit" value="add-student" className="new_student_btn">
-          Add
-        </button>
+        <div className="button_container">
+          <button type="submit" value="add-student" className="submit_button">
+            Add
+          </button>
+        </div>
       </form>
     </div>
   );

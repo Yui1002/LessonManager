@@ -5,7 +5,8 @@ import axios from 'axios';
 const Login = () => {
   const navigate = useNavigate();
   const [isLogined, setIsLogined] = useState(false);
-  const [loginError, setLoginError]= useState(false);
+  const [loginError, setLoginError] = useState(false);
+  const [loginedName, setLoginedName] = useState('');
 
   const submitLogin = (e) => {
     e.preventDefault();
@@ -17,16 +18,17 @@ const Login = () => {
       username: username,
       password: password
     })
-    .then((data) => {
-      if (data.status === 200) {
-        setIsLogined(true);
-        setLoginError(false);
-      }
-    })
-    .catch(err => {
-      setIsLogined(false);
-      setLoginError(true);
-    })
+      .then((data) => {
+        if (data.status === 200) {
+          setIsLogined(true);
+          setLoginError(false);
+          setLoginedName(data.name);
+        }
+      })
+      .catch(err => {
+        setIsLogined(false);
+        setLoginError(true);
+      })
   }
 
   return (
