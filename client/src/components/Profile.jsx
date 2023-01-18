@@ -15,12 +15,14 @@ const Profile = (props) => {
   };
 
   const deleteStudent = async (email) => {
-    const res = await axios.delete("/student", {
-      data: {
-        email: email
-      },
-    });
-    props.getStudents();
+    if (confirm('Are you sure you want to delete the photo?')) {
+      const res = await axios.delete("/student", {
+        data: {
+          email: email
+        },
+      });
+      props.getStudents();
+    }
   };
 
   return (

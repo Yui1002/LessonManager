@@ -142,9 +142,11 @@ const NewStudent = (props) => {
           />
           h
         </section>
-        <button type="submit" value="add-student" className="submit_button">
-          Add
-        </button>
+        <div className="button_container">
+          <button type="submit" value="add-student" className="submit_button">
+            Add
+          </button>
+        </div>
       </form>
     </div>
   );

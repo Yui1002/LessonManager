@@ -4,19 +4,33 @@ import "./PopUp.css";
 import COUNTRY_LIST from "./COUNTRY.js";
 
 const PopUp = (props) => {
+  const [src, setSrc] = useState("");
+  const [isFilePicked, setIsFilePicked] = useState(false);
+  const [selectedFile, setSelectedFile] = useState('');
+  const [editedFirstName, setEditedFirstName] = useState(props.student.firstName);
+  const [editedLastName, setEditedLastName] = useState(props.student.lastName);
+  const [editedCountry, setEditedCountry] = useState(props.student.country);
+  const [editedPhoneNumber, setEditedPhoneNumber] = useState(props.student.phone);
+  const [editedEmail, setEditedEmail] = useState(props.student.email);
+  const [editedLessonHours, setEditedLessonHours] = useState(props.student.lessonHours);
+
   const saveChanges = async (e) => {
     e.preventDefault();
     props.setPopUp(false);
-    let updatedName = e.target[0].value;
-    let updatedLessonHours = e.target[1].value;
-    let updatedEmail = e.target[2].value;
 
-    const res = await axios.put("/student", {
-      name: props.name,
-      updatedName: updatedName,
-      updatedLessonHours: updatedLessonHours,
-      updatedEmail: updatedEmail,
-    });
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+    formData.append("firstName", editedFirstName);
+    formData.append("lastName", editedLastName);
+    formData.append("country", editedCountry);
+    formData.append("phoneNumber", editedPhoneNumber);
+    formData.append('email', props.student.email);
+    formData.append("newEmail", editedEmail);
+    formData.append("lessonHours", editedLessonHours);
+
+    await axios.put("/student", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    })
 
     if (res.status === 200) {
       props.getStudents();
@@ -24,6 +38,41 @@ const PopUp = (props) => {
       console.log("update failed");
     }
   };
+
+  const changeHandler = (e) => {
+    let file = e.target.files[0];
+    setSelectedFile(file);
+    let reader = new FileReader();
+    reader.onload = function () {
+      setSrc(reader.result);
+    };
+    reader.readAsDataURL(file);
+    setIsFilePicked(true);
+  };
+
+  const onFirstNameChange = (e) => {
+    setEditedFirstName(e.target.value);
+  }
+
+  const onLastNameChange = (e) => {
+    setEditedLastName(e.target.value);
+  }
+
+  const onCountryChange = (e) => {
+    setEditedCountry(e.target.value);
+  }
+
+  const onPhoneNumberChange = (e) => {
+    setEditedPhoneNumber(e.target.value);
+  }
+
+  const onEmailChange = (e) => {
+    setEditedEmail(e.target.value);
+  }
+
+  const onLessonHoursChange = (e) => {
+    setEditedLessonHours(e.target.value);
+  }
 
   return (
     <div className="popup_container">
@@ -33,10 +82,21 @@ const PopUp = (props) => {
       </span>
       <form onSubmit={saveChanges}>
         <section className="popup_section_photo">
-          <label htmlFor="file-upload" className="popup_file_upload"></label>
-          <img
-            className="popup_img_photo"
-            src={`data:image/png;base64, ${props.student.profile_photo}`}
+          <label htmlFor="file-upload" className="popup_file_upload">
+            {isFilePicked ? (
+              <img className="popup_img_photo" src={src} />
+            ) : (
+              <img
+                className="popup_img_photo" src={`data:image/png;base64, ${props.student.profile_photo}`}
+              />
+            )}
+          </label>
+          <input
+            id="file-upload"
+            type="file"
+            name="file"
+            onChange={changeHandler}
+            required
           />
         </section>
         <section className="section_first_name">
@@ -47,9 +107,10 @@ const PopUp = (props) => {
             className="input_first_name"
             name="first_name"
             type="text"
-            value={props.student.firstName}
+            defaultValue={props.student.firstName}
             autoComplete="first_name"
             required
+            onChange={onFirstNameChange}
           />
         </section>
         <section className="section_last_name">
@@ -60,15 +121,16 @@ const PopUp = (props) => {
             className="input_last_name"
             name="last_name"
             type="text"
-            value={props.student.lastName}
+            defaultValue={props.student.lastName}
             autoComplete="last_name"
             required
+            onChange={onLastNameChange}
           />
         </section>
         <section className="section_country">
           <label htmlFor="country">Country</label>
           <br />
-          <select className="select_country">
+          <select className="select_country" onChange={onCountryChange}>
             {COUNTRY_LIST.map((c) => (
               <option
                 value={c}
@@ -87,9 +149,10 @@ const PopUp = (props) => {
             className="input_phone_number"
             name="phone_number"
             type="text"
-            value={props.student.phone}
+            defaultValue={props.student.phone}
             autoComplete="phone_number"
             required
+            onChange={onPhoneNumberChange}
           />
         </section>
         <section className="section_email">
@@ -100,9 +163,10 @@ const PopUp = (props) => {
             className="input_email"
             name="email"
             type="email"
-            value={props.student.email}
+            defaultValue={props.student.email}
             autoComplete="email"
             required
+            onChange={onEmailChange}
           />
         </section>
         <section className="section_lesson_hours">
@@ -113,9 +177,10 @@ const PopUp = (props) => {
             className="input_lesson_hour"
             name="lesson_hour"
             type="number"
-            value={props.student.lessonHours}
+            defaultValue={props.student.lessonHours}
             autoComplete="lesson_hour"
             required
+            onChange={onLessonHoursChange}
           />
         </section>
         <div className="button_container">

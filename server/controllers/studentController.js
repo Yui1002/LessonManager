@@ -20,7 +20,16 @@ class StudentController {
   }
 
   async updateStudent(req) {
-    return await this.StudentManager.updateStudent(req);
+    let file = req.files.file;
+    if (!file) {
+      res.status(204).send('No file uploaded');
+      return;
+    }
+
+    let studentUpdatedError = await new StudentManager().updateStudent(req.body, file);
+    // console.log(req.body);
+    // console.log(req.files.file)
+    // return await new StudentManager().updateStudent(req);
   }
 
   async saveStudent(req, res, next) {

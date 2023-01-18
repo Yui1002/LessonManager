@@ -1,7 +1,6 @@
 import Repository from '../repositories/repository.js';
 import fs from "fs"
 import dotenv from 'dotenv';
-import util from "util"
 dotenv.config();
 
 
@@ -37,11 +36,18 @@ class StudentManager {
   }
 
   async deleteStudent(req) {
-    return await this.Repository.deleteStudent(req);
+    const deletedPhoto = await this.Repository.deleteStudent(req);
+    fs.unlink(deletedPhoto, (err) => {
+      if (err) {
+        console.log('Failed to delete the file');
+      } else {
+        console.log('File removed')
+      }
+    });
   }
 
-  async updateStudent(req) {
-    const id = await this.Repository.findStudentId(req.name);
+  async updateStudent(req, file) {
+    const id = await this.Repository.findStudentId(req.email);
     return await this.Repository.updateStudent(req, id);
   }
 
@@ -99,6 +105,7 @@ class StudentManager {
     let timestampSec = Math.floor(Date.now()/1000) + "";
     let path = process.env.IMAGE_PATH;
     name += (timestampSec + nameMime);
+    console.log('path + name: ', path + name)
     return path + name;
   }
 
