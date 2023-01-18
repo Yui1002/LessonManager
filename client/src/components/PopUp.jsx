@@ -28,11 +28,12 @@ const PopUp = (props) => {
     formData.append("newEmail", editedEmail);
     formData.append("lessonHours", editedLessonHours);
 
-    await axios.put("/student", formData, {
+    const res = await axios.put("/student", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     })
+    console.log(res)
 
-    if (res.status === 200) {
+    if (res.status === 204) {
       props.getStudents();
     } else {
       console.log("update failed");

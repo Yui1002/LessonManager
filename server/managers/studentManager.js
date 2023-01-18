@@ -47,8 +47,42 @@ class StudentManager {
   }
 
   async updateStudent(req, file) {
-    const id = await this.Repository.findStudentId(req.email);
-    return await this.Repository.updateStudent(req, id);
+    console.log('reqqqqq: ', req);
+    console.log('file: ', file)
+    const id = await this.Repository.findStudentId(req.body.email);
+    console.log('iddddd: ', id)
+
+    // delete old photo => get image file from database => fs.unlink()
+    const deletedPhoto = await this.Repository.deletePhoto(req.body.email);
+    fs.unlink(deletedPhoto, (err) => {
+      if (err) {
+        console.log('Failed to delete the file');
+      } else {
+        console.log('File removed');
+      }
+    });
+
+    try {
+      let buffer = Buffer.from(file.data);
+      let path = this.generateNameAndPath(file.name);
+      this.writeFile(path, buffer);
+      await this.Repository.updateStudent({
+        id: id,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        countryCode: req.body.country,
+        phone: req.body.phoneNumber,
+        email: req.body.email,
+        newEmail: req.body.newEmail,
+        filePath: path,
+        hours: req.body.lessonHours
+      })
+    } catch (e) {
+      console.log('exception thrown: ', e);
+      return e;
+    }
+    
+    return null;
   }
 
   async getStudentByEmail(email) {

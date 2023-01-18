@@ -19,17 +19,19 @@ class StudentController {
     res.status(200).send(response);
   }
 
-  async updateStudent(req) {
+  async updateStudent(req, res) {
     let file = req.files.file;
     if (!file) {
       res.status(204).send('No file uploaded');
       return;
     }
 
-    let studentUpdatedError = await new StudentManager().updateStudent(req.body, file);
-    // console.log(req.body);
-    // console.log(req.files.file)
-    // return await new StudentManager().updateStudent(req);
+    let studentUpdatedError = await new StudentManager().updateStudent(req, file);
+    if (studentUpdatedError) {
+      res.status(500).send();
+      return;
+    } 
+    res.status(204).send();
   }
 
   async saveStudent(req, res, next) {
