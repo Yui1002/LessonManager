@@ -23,7 +23,7 @@ class Routes {
 
     app.get('/profile', this.StudentController.getStudentProfile);
 
-    app.post('schedule', this.ScheduleController.createNewClass);
+    app.post('/schedule', this.ScheduleController.createNewClass);
 
     app.delete('/student', this.StudentController.deleteStudent);
 

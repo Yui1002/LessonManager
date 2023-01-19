@@ -8,13 +8,14 @@ class ScheduleController {
   async getSchedule(req, res) {
     const response = await new ScheduleManager().getSchedule();
     if (response === 'No class scheduled') {
-      res.status(400).send('No class scheduled');
+      res.status(204).send('No class scheduled');
     } else {
       res.status(200).send(response);
     }
   }
 
   async createNewClass(req, res) {
+    console.log(req.body)
     const response = await new ScheduleManager().createNewClass(req.body)
     res.status(200).send(response);
   }

@@ -14,14 +14,11 @@ class ScheduleManager {
   }
 
   async createNewClass(req) {
-    const response = await this.Repository.findStudentId(req.name);
+    const response = await this.Repository.findStudentId(req.email);
+    console.log('idddddd: ', response)
     if (!response.length) {
       return 'student does not exist';
     }
-
-    // if there id already class scheduled, avoid duplicates
-    // const isDuplicated = await this.Repository.isClassDuplicated(req)
-
     const id = response[0].id;
     await this.Repository.createNewClass(req, id);
   }
