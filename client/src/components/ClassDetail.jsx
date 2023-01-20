@@ -4,15 +4,11 @@ import './ClassDetail.css';
 import { BsFillPeopleFill } from 'react-icons/bs';
 import {AiFillCalendar} from 'react-icons/ai';
 import {FaStickyNote} from 'react-icons/fa';
-import {DAYS, MONTHS} from '../CONSTANT.js';
+import {BiTimeFive} from "react-icons/bi";
+import moment from 'moment'
 
 const ClassDetail = (props) => {
   const navigate = useNavigate();
-
-  const [day, setDay] = useState('');
-  const [month, setMonth] = useState('');
-  const [startTime, setStartTime] = useState('');
-  const [endTime, setEndTime] = useState('');
 
   return (
     <div className="class_detail_container">
@@ -22,8 +18,11 @@ const ClassDetail = (props) => {
         {props.name}
       </h2>
       <div><span className="class_calendar_icon"><AiFillCalendar /></span>
-        {/* {props.date} ・ {startTime} - {endTime} */}
-        {`${props.date} ${props.startDate.getHours()}:${props.startDate.getMinutes()} - ${props.endDate.getHours()}:${props.endDate.getMinutes()}`}
+        {moment(props.startDate).format('MMMM Do YYYY')}
+      </div>
+      <div>
+        <span className="class_time_icon"><BiTimeFive /></span>
+        {`${moment(props.startDate).format('LT')} - ${moment(props.endDate).format('LT')}`}
       </div>
       <p><span className="class_description_icon"><FaStickyNote /></span>
         {props.description}

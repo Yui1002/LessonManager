@@ -130,7 +130,6 @@ const Schedule = (props) => {
   };
 
   const showClassDetail = (date) => {
-    console.log(date);
     setClassDetailShown(true);
     setClassDate(date);
   };
@@ -207,9 +206,7 @@ const Schedule = (props) => {
                             className="class_detail"
                             onClick={() => showClassDetail(day.date)}
                           >
-                            {`${
-                              t["student_name"]
-                            } ${startDate.getHours()}:${startDate.getMinutes()} - ${endDate.getHours()}:${endDate.getMinutes()}`}
+                            {`${t["student_name"]} ${startDate.getHours()}:${startDate.getMinutes()} - ${endDate.getHours()}:${endDate.getMinutes()}`}
                             {classDetailShown &&
                               className === "class_detail" &&
                               classDate === day.date && (
