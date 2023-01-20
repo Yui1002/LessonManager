@@ -47,10 +47,7 @@ class StudentManager {
   }
 
   async updateStudent(req, file) {
-    console.log('reqqqqq: ', req);
-    console.log('file: ', file)
     const id = await this.Repository.findStudentId(req.body.email);
-    console.log('iddddd: ', id)
 
     // delete old photo => get image file from database => fs.unlink()
     const deletedPhoto = await this.Repository.deletePhoto(req.body.email);
@@ -139,7 +136,6 @@ class StudentManager {
     let timestampSec = Math.floor(Date.now()/1000) + "";
     let path = process.env.IMAGE_PATH;
     name += (timestampSec + nameMime);
-    console.log('path + name: ', path + name)
     return path + name;
   }
 

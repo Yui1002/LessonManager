@@ -15,14 +15,15 @@ let month = today.getMonth();
 
 const Schedule = (props) => {
   const [calendar, setCalendar] = useState([]);
-  const [testData, setTestData] = useState([]);
+  const [classes, setClasses] = useState([]);
   const [scheduleClassShown, setScheduleClassShown] = useState(false);
   const [noClassScheduled, setNoClassScheduled] = useState(false);
   const [classDetailShown, setClassDetailShown] = useState(false);
-  const [currentDetailClass, setCurrentDetailClass] = useState({});
   const [currentShownSchedule, setCurrentShownSchedule] = useState({});
   const duringPopUp = scheduleClassShown ? "during-popup" : "";
   const duringPopUp2 = classDetailShown ? "during-popup_2" : "";
+  const [className, setClassName] = useState("");
+  const [classDate, setClassDate] = useState();
 
   const navigate = useNavigate();
 
@@ -113,7 +114,8 @@ const Schedule = (props) => {
     showCalendar();
   };
 
-  const setEvent = (year, month, date) => {
+  const setEvent = (e, year, month, date) => {
+    setClassName(e.target.className);
     const event = {
       year: year,
       month: month + 1,
@@ -127,48 +129,24 @@ const Schedule = (props) => {
     setScheduleClassShown(false);
   };
 
-  const closeClassDetail = (e) => {
-    e.stopPropagation();
-    setClassDetailShown(false);
+  const showClassDetail = (date) => {
+    setClassDetailShown(true);
+    setClassDate(date);
   };
 
   const getSchedule = async () => {
     const response = await axios.get("/schedule");
-    const data = response.data; // UTC
-
-    let array = [];
-    data.forEach((x) => {
-      let subObj = {};
-      subObj["name"] = x.name;
-      subObj["start_time"] = new Date(x.start_time).toLocaleString();
-      subObj["end_time"] = new Date(x.end_time).toLocaleString();
-      subObj["description"] = x.description;
-      array.push(subObj);
+    const data = response.data;
+    data.map((d) => {
+      d["start_date"] = new Date(d["start_date"]).toString();
+      d["end_date"] = new Date(d["end_date"]).toString();
     });
 
-    setTestData(array);
+    setClasses(data);
   };
 
-  const showClassDetail = (
-    e,
-    name,
-    day,
-    startDate,
-    startTime,
-    endTime,
-    description
-  ) => {
-    e.stopPropagation(); // prevent parent function's execution
-    const format = {
-      name: name,
-      day: day,
-      startDate: startDate,
-      startTime: startTime,
-      endTime: endTime,
-      description: description,
-    };
-    setCurrentDetailClass(format);
-    setClassDetailShown(true);
+  const closeClassDetail = () => {
+    setClassDetailShown(false);
   };
 
   return (
@@ -198,50 +176,53 @@ const Schedule = (props) => {
             {days.map((day) => (
               <th className="schedule_day" key={day}>
                 {day}
-              </th> /** Map Mon - Sun */
+              </th>
             ))}
           </tr>
         </thead>
         <tbody>
           {calendar.map((week) => {
-            // console.log("week: ", week);
             return (
               <tr className="schedule_week">
                 {week.map((day) => (
                   <td
                     className="schedule_date"
-                    onClick={() => setEvent(year, day["month"], day["date"])}
+                    onClick={(e) =>
+                      setEvent(e, year, day["month"], day["date"])
+                    }
                   >
                     <span className="schedule_date_text">{day.date}</span>
-                    {testData.map((t, idx) => {
-                      // console.log("t: ", t);
-                      const startDate = t["start_time"].split(",")[0]; // 12/19/2022
-                      if (startDate.split("/")[1] === day.date.toString()) {
-                        const name = t["name"];
-                        const year = startDate.split("/")[2];
-                        const month = startDate.split("/")[0];
-                        const startTime = t["start_time"].split(",")[1];
-                        const endTime = t["end_time"].split(",")[1];
-                        const description = t["description"];
+                    {classes.map((t, idx) => {
+                      const startDate = new Date(t["start_date"]);
+                      const endDate = new Date(t["end_date"]);
 
+                      if (
+                        day.year === startDate.getFullYear() &&
+                        day.month + 1 === startDate.getMonth() + 1 &&
+                        day.date === startDate.getDate()
+                      ) {
                         return (
-                          <div>
-                            {day.year.toString() === year && (day.month + 1).toString() === month &&
-                              <div className="schedule_class">
-                                {`${startTime.slice(0, -6)} - ${name}`}
-                                {classDetailShown &&
-                                  currentDetailClass.day === day && (
-                                    <div className={duringPopUp2}>
-                                      <ClassDetail
-                                        currentDetailClass={currentDetailClass}
-                                        closeClassDetail={closeClassDetail}
-                                      />
-                                    </div>
-                                  )}
-                              </div>
-                            }
+                          <div
+                            className="class_detail"
+                            onClick={() => showClassDetail(day.date)}
+                          >
+                            {`${t["student_name"]} ${startDate.getHours()}:${startDate.getMinutes()} - ${endDate.getHours()}:${endDate.getMinutes()}`}
+                            {classDetailShown &&
+                              className === "class_detail" &&
+                              classDate === day.date && (
+                                <div className={duringPopUp2}>
+                                  <ClassDetail
+                                    closeClassDetail={closeClassDetail}
+                                    name={t['student_name']}
+                                    date={day.date}
+                                    description={t['description']}
+                                    startDate={startDate}
+                                    endDate={endDate}
+                                  />
+                                 </div>
+                              )}
                           </div>
-                        )
+                        );
                       }
                     })}
                   </td>
@@ -251,17 +232,17 @@ const Schedule = (props) => {
           })}
         </tbody>
       </table>
-      <div className={duringPopUp}>
-        {scheduleClassShown && (
-          <PopUpEvent
-            currentShownSchedule={currentShownSchedule}
-            closeEvent={closeEvent}
-            getSchedule={getSchedule}
-            students={props.students}
-          />
+        {scheduleClassShown && className === "schedule_date" && (
+          <div className={duringPopUp}>
+            <PopUpEvent
+              currentShownSchedule={currentShownSchedule}
+              closeEvent={closeEvent}
+              getSchedule={getSchedule}
+              students={props.students}
+            />
+          </div>
         )}
       </div>
-    </div>
   );
 };
 

@@ -137,3 +137,13 @@
 .schedule_go_back_button:hover {
   background-color: #04AA6D;
 }
+
+.class_detail {
+  cursor: pointer;
+  transition-duration: 0.4s;
+}
+
+.class_detail:hover {
+  color: #fff;
+  background-color: #3096CC;
+}

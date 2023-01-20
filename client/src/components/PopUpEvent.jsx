@@ -8,27 +8,31 @@ const PopUpEvent = (props) => {
 
   const scheduleClass = async (e) => {
     e.preventDefault();
+    const name = e.target[0].value.slice(0, e.target[0].value.indexOf('(') - 1);
+    const email = e.target[0].value.slice(e.target[0].value.indexOf('(') + 1, e.target[0].value.length - 1);
+    const startTime = e.target[1].value;
+    const endTime = e.target[2].value;
 
-    const date = `${props.currentShownSchedule.year}:${props.currentShownSchedule.month}:${props.currentShownSchedule.date}`;
-    const startTime = e.target[0].value;
-    const endTime = e.target[1].value;
-    const name = e.target[2].value;
-    const description = e.target[3].value;
+    
+    const year = props.currentShownSchedule.year;
+    const month = (props.currentShownSchedule.month < 10) ? '0' + props.currentShownSchedule.month : props.currentShownSchedule.month;
+    const date = (props.currentShownSchedule.date < 10) ? '0' + props.currentShownSchedule.date : props.currentShownSchedule.date;
+    
+    const startDateInTimeStamp = `${year}-${month}-${date} ${startTime}:00`;
+    const endDateInTimeStamp = `${year}-${month}-${date} ${endTime}:00`;
 
-    const startDateTime = moment().format(`${date} ${startTime}:00`);
-    const endDateTime = moment().format(`${date} ${endTime}:00`);
-
-    if (startTime > endTime) {
-      setScheduleError("Time Error");
+    if (checkDateError(startDateInTimeStamp, endDateInTimeStamp)) {
+      setScheduleError('Error in date');
       return;
     }
 
     axios
       .post("/schedule", {
-        start: startDateTime,
-        end: endDateTime,
         name: name,
-        description: description,
+        email: email,
+        startDate: startDateInTimeStamp,
+        endDate: endDateInTimeStamp,
+        description: e.target[3].value
       })
       .then((res) => {
         if (res.status === 200) {
@@ -41,6 +45,11 @@ const PopUpEvent = (props) => {
         setScheduleError("Student does not exist");
       });
   };
+
+  const checkDateError = (start, end) => {
+    let currentTime = moment().format('YYYY-MM-DD hh:mm:ss');
+    return start > end || start < currentTime || end < currentTime;
+  }
 
   return (
     <div className="popup_event_container">
@@ -56,8 +65,10 @@ const PopUpEvent = (props) => {
         <section className="popup_event_section">
           <label htmlFor="name">Student name</label>
           <select name="name" id="name">
-            {props.students.map((student) => (
-              <option key={student.name} value={student.name}>{student.name}</option>
+            <option>select</option>
+            {props.students.map((student, index) => (
+              // <option key={index}>{student.firstName} {student.lastName} {`(${student.email})`}</option>
+              <option key={index}>{`${student.firstName} ${student.lastName} (${student.email})`}</option>
             ))}
           </select>
         </section>

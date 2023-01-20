@@ -1,23 +1,20 @@
 .class_detail_container {
-  /* position: absolute;
-  top: 30%;
-  left: 15%;
-  background-color: #fefefe;
-  margin: auto;
-  padding: 20px;
-  border: 1px solid #888; */
-  background-color: #fefefe;
-  margin: auto;
+  background-color: #f6f7fc;
+  position: relative;
+  margin: 0 auto;
   padding: 20px;
   border: 1px solid #888;
   width: 40%;
+  height: 20%;
 }
 
 .class_detail_close {
   color: #aaaaaa;
-  float: right;
   font-size: 28px;
   font-weight: bold;
+  position: absolute;
+  top: 3%;
+  right: 5%;
   cursor: pointer;
 }
 
@@ -29,11 +26,18 @@
 .class_calendar_icon {
   display: inline-block;
   width: 30px;
-  height: 30px;
+  height: 20px;
+  margin-bottom: 15px;
 }
 
 .class_description_icon {
   display: inline-block;
   width: 30px;
-  height: 30px;
+  height: 20px;
+}
+
+.class_time_icon {
+  display: inline-block;
+  width: 30px;
+  height: 20px;
 }

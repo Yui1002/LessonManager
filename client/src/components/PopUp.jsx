@@ -37,7 +37,6 @@ const PopUp = (props) => {
     const res = await axios.put("/student", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
-    console.log(res);
 
     if (res.status === 204) {
       props.getStudents();
