@@ -219,6 +219,8 @@ const Schedule = (props) => {
                                     name={t['student_name']}
                                     date={day.date}
                                     description={t['description']}
+                                    startDate={startDate}
+                                    endDate={endDate}
                                   />
                                  </div>
                               )}

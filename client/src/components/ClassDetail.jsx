@@ -22,7 +22,8 @@ const ClassDetail = (props) => {
         {props.name}
       </h2>
       <div><span className="class_calendar_icon"><AiFillCalendar /></span>
-        {/* {day}, {month} {props.date} ・ {startTime} - {endTime} */}
+        {/* {props.date} ・ {startTime} - {endTime} */}
+        {`${props.date} ${props.startDate.getHours()}:${props.startDate.getMinutes()} - ${props.endDate.getHours()}:${props.endDate.getMinutes()}`}
       </div>
       <p><span className="class_description_icon"><FaStickyNote /></span>
         {props.description}
