@@ -19,10 +19,11 @@ const Schedule = (props) => {
   const [scheduleClassShown, setScheduleClassShown] = useState(false);
   const [noClassScheduled, setNoClassScheduled] = useState(false);
   const [classDetailShown, setClassDetailShown] = useState(false);
-  const [currentDetailClass, setCurrentDetailClass] = useState({});
   const [currentShownSchedule, setCurrentShownSchedule] = useState({});
   const duringPopUp = scheduleClassShown ? "during-popup" : "";
   const duringPopUp2 = classDetailShown ? "during-popup_2" : "";
+  const [className, setClassName] = useState("");
+  const [classDate, setClassDate] = useState();
 
   const navigate = useNavigate();
 
@@ -113,7 +114,8 @@ const Schedule = (props) => {
     showCalendar();
   };
 
-  const setEvent = (year, month, date) => {
+  const setEvent = (e, year, month, date) => {
+    setClassName(e.target.className);
     const event = {
       year: year,
       month: month + 1,
@@ -127,9 +129,10 @@ const Schedule = (props) => {
     setScheduleClassShown(false);
   };
 
-  const closeClassDetail = (e) => {
-    e.stopPropagation();
-    setClassDetailShown(false);
+  const showClassDetail = (date) => {
+    console.log(date);
+    setClassDetailShown(true);
+    setClassDate(date);
   };
 
   const getSchedule = async () => {
@@ -143,26 +146,8 @@ const Schedule = (props) => {
     setClasses(data);
   };
 
-  const showClassDetail = (
-    e,
-    name,
-    day,
-    startDate,
-    startTime,
-    endTime,
-    description
-  ) => {
-    e.stopPropagation(); // prevent parent function's execution
-    const format = {
-      name: name,
-      day: day,
-      startDate: startDate,
-      startTime: startTime,
-      endTime: endTime,
-      description: description,
-    };
-    setCurrentDetailClass(format);
-    setClassDetailShown(true);
+  const closeClassDetail = () => {
+    setClassDetailShown(false);
   };
 
   return (
@@ -192,7 +177,7 @@ const Schedule = (props) => {
             {days.map((day) => (
               <th className="schedule_day" key={day}>
                 {day}
-              </th> /** Map Mon - Sun */
+              </th>
             ))}
           </tr>
         </thead>
@@ -203,7 +188,9 @@ const Schedule = (props) => {
                 {week.map((day) => (
                   <td
                     className="schedule_date"
-                    onClick={() => setEvent(year, day["month"], day["date"])}
+                    onClick={(e) =>
+                      setEvent(e, year, day["month"], day["date"])
+                    }
                   >
                     <span className="schedule_date_text">{day.date}</span>
                     {classes.map((t, idx) => {
@@ -216,10 +203,25 @@ const Schedule = (props) => {
                         day.date === startDate.getDate()
                       ) {
                         return (
-                          <div>
+                          <div
+                            className="class_detail"
+                            onClick={() => showClassDetail(day.date)}
+                          >
                             {`${
                               t["student_name"]
                             } ${startDate.getHours()}:${startDate.getMinutes()} - ${endDate.getHours()}:${endDate.getMinutes()}`}
+                            {classDetailShown &&
+                              className === "class_detail" &&
+                              classDate === day.date && (
+                                <div className={duringPopUp2}>
+                                  <ClassDetail
+                                    closeClassDetail={closeClassDetail}
+                                    name={t['student_name']}
+                                    date={day.date}
+                                    description={t['description']}
+                                  />
+                                 </div>
+                              )}
                           </div>
                         );
                       }
@@ -231,17 +233,17 @@ const Schedule = (props) => {
           })}
         </tbody>
       </table>
-      <div className={duringPopUp}>
-        {scheduleClassShown && (
-          <PopUpEvent
-            currentShownSchedule={currentShownSchedule}
-            closeEvent={closeEvent}
-            getSchedule={getSchedule}
-            students={props.students}
-          />
+        {scheduleClassShown && className === "schedule_date" && (
+          <div className={duringPopUp}>
+            <PopUpEvent
+              currentShownSchedule={currentShownSchedule}
+              closeEvent={closeEvent}
+              getSchedule={getSchedule}
+              students={props.students}
+            />
+          </div>
         )}
       </div>
-    </div>
   );
 };
 

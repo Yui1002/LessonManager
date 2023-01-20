@@ -14,35 +14,18 @@ const ClassDetail = (props) => {
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
 
-  useEffect(() => {
-    changeFormat();
-  })
-
-  const changeFormat = () => {
-    const formattedDate = new Date(props.currentDetailClass.startDate).toString();
-    const formattedDay = DAYS[formattedDate.slice(0, 3)];
-    const formatteMonth = MONTHS[formattedDate.slice(4, 7)];
-    const formatteStartTime = props.currentDetailClass.startTime.slice(0, -6);
-    const formattedEndTime = props.currentDetailClass.endTime.slice(0, -6);
-
-    setDay(formattedDay);
-    setMonth(formatteMonth);
-    setStartTime(formatteStartTime);
-    setEndTime(formattedEndTime);
-  }
-
   return (
     <div className="class_detail_container">
       <span className="class_detail_close" onClick={props.closeClassDetail}>&times;</span>
       <h2>
         <span className="class_student_icon"><BsFillPeopleFill /></span>
-        {props.currentDetailClass.name}
+        {props.name}
       </h2>
       <div><span className="class_calendar_icon"><AiFillCalendar /></span>
-        {day}, {month} {props.currentDetailClass.day.date} ・ {startTime} - {endTime}
+        {/* {day}, {month} {props.date} ・ {startTime} - {endTime} */}
       </div>
       <p><span className="class_description_icon"><FaStickyNote /></span>
-        {props.currentDetailClass.description}
+        {props.description}
       </p>
     </div>
   )
