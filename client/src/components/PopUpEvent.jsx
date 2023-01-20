@@ -4,7 +4,6 @@ import "./PopUpEvent.css";
 import moment from "moment";
 
 const PopUpEvent = (props) => {
-  console.log('props in popupEvent', props)
   const [scheduleError, setScheduleError] = useState("");
 
   const scheduleClass = async (e) => {
@@ -48,9 +47,7 @@ const PopUpEvent = (props) => {
   };
 
   const checkDateError = (start, end) => {
-    console.log(start, end);
     let currentTime = moment().format('YYYY-MM-DD hh:mm:ss');
-    console.log(currentTime)
     return start > end || start < currentTime || end < currentTime;
   }
 

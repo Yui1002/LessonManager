@@ -14,13 +14,11 @@ class ScheduleManager {
   }
 
   async createNewClass(req) {
-    const response = await this.Repository.findStudentId(req.email);
-    console.log('idddddd: ', response)
-    if (!response.length) {
+    const studentId = await this.Repository.findStudentId(req.email);
+    if (!studentId) {
       return 'student does not exist';
     }
-    const id = response[0].id;
-    await this.Repository.createNewClass(req, id);
+    await this.Repository.createNewClass(req, studentId);
   }
 }
 

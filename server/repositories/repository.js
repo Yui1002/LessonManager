@@ -26,7 +26,7 @@ class Repository {
 
   async registerUser(username, hashedPassword) {
     const con = await mysql.createConnection(db_setting);
-    const sql = "insert into users (username, password) values (?, ?);";
+    const sql = "insert into users values (?, ?);";
     const [rows, fields] = await con.query(sql, [username, hashedPassword]);
     return rows;
   }
@@ -62,7 +62,7 @@ class Repository {
 
     const con = await mysql.createConnection(db_setting);
     const sql =
-      "insert into students (first_name, last_name, country, phone_number, email, profile_photo, lesson_hours) values (?, ?, ?, ?, ?, ?, ?)";
+      "insert into students values (?, ?, ?, ?, ?, ?, ?)";
     const [rows, fields] = await con.query(sql, [
       firstName,
       lastName,
@@ -99,7 +99,6 @@ class Repository {
   }
 
   async updateStudent(req) {
-    console.log("req22222: ", req);
     const con = await mysql.createConnection(db_setting);
     const sql =
       "update students set first_name=?, last_name=?, country=?, phone_number=?, email=?, profile_photo=?, lesson_hours=? where id=?";
@@ -119,8 +118,7 @@ class Repository {
   async getSchedule() {
     const con = await mysql.createConnection(db_setting);
     const sql =
-      // "select st.first_name, st.last_name, sc.start_date, sc.end_date, sc.description from schedules sc inner join students st on st.id = sc.student_id;";
-      "select student_id, start_date, end_date, description from schedules;";
+      "select student_id, student_name, start_date, end_date, description from schedules;";
     const [rows, fields] = await con.query(sql);
     return rows;
   }
@@ -130,20 +128,16 @@ class Repository {
     const sql = "update students set ";
   }
 
-  async createNewClass(req, id) {
-    const startTime = req.start;
-    const endTime = req.end;
-    const name = req.name;
-    const description = req.description;
-
+  async createNewClass(req, studentId) {
     const con = await mysql.createConnection(db_setting);
     const sql =
-      "insert into schedules (start_time, end_time, student_id, description) values (?, ?, ?, ?);";
+      "insert into schedules values (DEFAULT, ?, ?, ?, ?, ?);";
     const [rows, fields] = await con.query(sql, [
-      startTime,
-      endTime,
-      id,
-      description,
+      studentId,
+      req.name,
+      req.startDate,
+      req.endDate,
+      req.description,
     ]);
     return rows;
   }

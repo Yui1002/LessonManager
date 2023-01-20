@@ -15,7 +15,6 @@ class ScheduleController {
   }
 
   async createNewClass(req, res) {
-    console.log(req.body)
     const response = await new ScheduleManager().createNewClass(req.body)
     res.status(200).send(response);
   }

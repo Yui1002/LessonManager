@@ -15,7 +15,7 @@ let month = today.getMonth();
 
 const Schedule = (props) => {
   const [calendar, setCalendar] = useState([]);
-  const [testData, setTestData] = useState([]);
+  const [classes, setClasses] = useState([]);
   const [scheduleClassShown, setScheduleClassShown] = useState(false);
   const [noClassScheduled, setNoClassScheduled] = useState(false);
   const [classDetailShown, setClassDetailShown] = useState(false);
@@ -134,19 +134,13 @@ const Schedule = (props) => {
 
   const getSchedule = async () => {
     const response = await axios.get("/schedule");
-    const data = response.data; // UTC
-
-    let array = [];
-    data.forEach((x) => {
-      let subObj = {};
-      subObj["name"] = x.name;
-      subObj["start_time"] = new Date(x.start_time).toLocaleString();
-      subObj["end_time"] = new Date(x.end_time).toLocaleString();
-      subObj["description"] = x.description;
-      array.push(subObj);
+    const data = response.data;
+    data.map((d) => {
+      d["start_date"] = new Date(d["start_date"]).toString();
+      d["end_date"] = new Date(d["end_date"]).toString();
     });
 
-    setTestData(array);
+    setClasses(data);
   };
 
   const showClassDetail = (
@@ -204,7 +198,6 @@ const Schedule = (props) => {
         </thead>
         <tbody>
           {calendar.map((week) => {
-            // console.log("week: ", week);
             return (
               <tr className="schedule_week">
                 {week.map((day) => (
@@ -213,35 +206,22 @@ const Schedule = (props) => {
                     onClick={() => setEvent(year, day["month"], day["date"])}
                   >
                     <span className="schedule_date_text">{day.date}</span>
-                    {testData.map((t, idx) => {
-                      // console.log("t: ", t);
-                      const startDate = t["start_time"].split(",")[0]; // 12/19/2022
-                      if (startDate.split("/")[1] === day.date.toString()) {
-                        const name = t["name"];
-                        const year = startDate.split("/")[2];
-                        const month = startDate.split("/")[0];
-                        const startTime = t["start_time"].split(",")[1];
-                        const endTime = t["end_time"].split(",")[1];
-                        const description = t["description"];
+                    {classes.map((t, idx) => {
+                      const startDate = new Date(t["start_date"]);
+                      const endDate = new Date(t["end_date"]);
 
+                      if (
+                        day.year === startDate.getFullYear() &&
+                        day.month + 1 === startDate.getMonth() + 1 &&
+                        day.date === startDate.getDate()
+                      ) {
                         return (
                           <div>
-                            {day.year.toString() === year && (day.month + 1).toString() === month &&
-                              <div className="schedule_class">
-                                {`${startTime.slice(0, -6)} - ${name}`}
-                                {classDetailShown &&
-                                  currentDetailClass.day === day && (
-                                    <div className={duringPopUp2}>
-                                      <ClassDetail
-                                        currentDetailClass={currentDetailClass}
-                                        closeClassDetail={closeClassDetail}
-                                      />
-                                    </div>
-                                  )}
-                              </div>
-                            }
+                            {`${
+                              t["student_name"]
+                            } ${startDate.getHours()}:${startDate.getMinutes()} - ${endDate.getHours()}:${endDate.getMinutes()}`}
                           </div>
-                        )
+                        );
                       }
                     })}
                   </td>
