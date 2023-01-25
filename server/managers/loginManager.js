@@ -8,6 +8,7 @@ class LoginManager {
 
   async register(username, password) {
     const user = await this.LoginRepository.findUser(username);
+    console.log(user.length === 0)
 
     if (user.length === 0) {
       const hashedPassword = await bcrypt.hash(password, 10);

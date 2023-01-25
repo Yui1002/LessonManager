@@ -1,5 +1,5 @@
-import mysql from "mysql2/promise";
-import dotenv from "dotenv";
+import mysql from 'mysql2/promise';
+import dotenv from 'dotenv';
 dotenv.config();
 
 const db_setting = {
@@ -26,7 +26,7 @@ class Repository {
 
   async registerUser(username, hashedPassword) {
     const con = await mysql.createConnection(db_setting);
-    const sql = "insert into users values (?, ?);";
+    const sql = "insert into users values (DEFAULT, ?, ?);";
     const [rows, fields] = await con.query(sql, [username, hashedPassword]);
     return rows;
   }
