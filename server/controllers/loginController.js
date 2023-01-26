@@ -19,12 +19,16 @@ class LoginController {
   }
 
   async login(req, res) {
+    let session;
     const username = req.body.username;
     const password = req.body.password;
     const response = await new LoginManager().login(username, password);
     if (response === 'Incorrect username or password') {
       res.status(400).send('Incorrect username or password');
     } else {
+      session = req.session;
+      session.userid = username;
+      console.log(req.session);
       res.status(200).send(response);
     }
   }
