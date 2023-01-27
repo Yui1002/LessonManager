@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import './Register.css';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -30,22 +31,22 @@ const Register = () => {
   }
 
   return (
-    <div>
-      <h1>Register</h1>
-      <form onSubmit={submitRegister}>
-        <section>
-          <label htmlFor="username">Username</label>
-          <input id="username" name="username" type="text" autoComplete="username" required autoFocus />
+    <div className='register_container'>
+      <form onSubmit={submitRegister} className="register_form">
+        <h1 className='register_title'>Register</h1>
+        <section className='register_section_username'>
+          <label htmlFor="username">Username</label><br/>
+          <input id="username" name="username" type="text" autoComplete="username" required autoFocus className='register_input_username'/>
         </section>
-        <section>
-          <label htmlFor="current-password">Password</label>
-          <input id="current-password" name="password" type="password" autoComplete="current-password" required />
+        <section className='register_section_password'>
+          <label htmlFor="current-password">Password</label><br/>
+          <input id="current-password" name="password" type="password" autoComplete="current-password" required className='register_input_password'/>
         </section>
-        <button type="submit" value="Register">Register</button>
+        <button type="submit" value="Register" className='register_button'>Register</button>
+        {isRegistered && navigate('/login')}
+        {registerError && <p>User already exists</p>}
+        Already have an account? <button onClick={() => navigate('/login')} className="login_navigate_button">Login</button>
       </form>
-      {isRegistered && navigate('/login')}
-      {registerError && <p>User already exists</p>}
-      Already have an account? <button onClick={() => navigate('/login')}>Login</button>
     </div>
   )
 }

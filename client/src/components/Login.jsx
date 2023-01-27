@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import './Login.css';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -32,22 +33,22 @@ const Login = () => {
   }
 
   return (
-    <div>
-      <h1>Log in</h1>
-      <form onSubmit={submitLogin}>
-        <section>
-          <label htmlFor="username">Username</label>
-          <input id="username" name="username" type="text" autoComplete="username" required autoFocus />
+    <div className='login_container'>
+      <form onSubmit={submitLogin} className="login_form">
+      <h1 className='login_title'>Log in</h1>
+        <section className='login_section_username'>
+          <label htmlFor="username">Username</label><br/>
+          <input id="username" name="username" type="text" autoComplete="username" required autoFocus className='login_input_username'/>
         </section>
-        <section>
-          <label htmlFor="current-password">Password</label>
-          <input id="current-password" name="password" type="password" autoComplete="current-password" required />
+        <section className='login_section_password'>
+          <label htmlFor="current-password">Password</label><br/>
+          <input id="current-password" name="password" type="password" autoComplete="current-password" required className='login_input_password'/>
         </section>
-        <button type="submit" value="Sign in">Log in</button>
+        <button type="submit" value="Sign in" className='login_button'>Log in</button>
+        {isLogined && navigate('/home')}
+        {loginError && <p>We cannot find an account with that information</p>}
+        New user? <button onClick={() => navigate('/register')} className="register_navigate_button">Register</button>
       </form>
-      {isLogined && navigate('/home')}
-      {loginError && <p>We cannot find an account with that information</p>}
-      New user? <button onClick={() => navigate('/register')}>Register</button>
     </div>
   )
 }

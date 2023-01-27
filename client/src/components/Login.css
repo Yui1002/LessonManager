@@ -1,0 +1,59 @@
+.login_container {
+    width: 100%;
+    height: 100%;
+    background-color: #F0F8FF;
+    position: relative;
+}
+
+.login_title {
+    margin-top: 0;
+    text-align: center;
+}
+
+.login_form {
+    width: 30%;
+    height: 40%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    padding: 20px;
+    position: absolute;
+    top: 10%;
+    left: 33%;
+}
+
+.login_section_username, .login_section_password {
+    height: 20%;
+}
+
+.login_input_username, .login_input_password {
+    width: 60%;
+    height: 40%;
+}
+
+.login_button {
+    position: relative;
+    background-color: #04AA6D;
+    color: #fff;
+    border: none;
+    padding: 4px 8px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 8px 2px 32px 2px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    height: 14%;
+}
+
+
+.register_navigate_button {
+    margin-top: 5px;
+    width: 40%;
+    height: 10%;
+    background-color: #f6653c;
+    color: #fff;
+    border: none;
+}
