@@ -1,3 +1,4 @@
+import e from 'express';
 import ScheduleManager from '../managers/scheduleManager.js';
 
 class ScheduleController {
@@ -17,6 +18,15 @@ class ScheduleController {
   async createNewClass(req, res) {
     const response = await new ScheduleManager().createNewClass(req.body)
     res.status(200).send(response);
+  }
+
+  async deleteClass(req, res) {
+    const response = await new ScheduleManager().deleteClass(req.body);
+    if (response === 'class deleted') {
+      res.status(200).send('class deleted successfully');
+    } else {
+      res.status(500).send('failed to delete class');
+    }
   }
 }
 

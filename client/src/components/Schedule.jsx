@@ -137,6 +137,7 @@ const Schedule = (props) => {
   const getSchedule = async () => {
     const response = await axios.get("/schedule");
     const data = response.data;
+    if (!data || !data.length) return;
     data.map((d) => {
       d["start_date"] = new Date(d["start_date"]).toString();
       d["end_date"] = new Date(d["end_date"]).toString();
@@ -148,6 +149,22 @@ const Schedule = (props) => {
   const closeClassDetail = () => {
     setClassDetailShown(false);
   };
+
+  const deleteClass = (startDate, endDate) => {
+    const warning = window.confirm('Are you sure you want to delete the scheduled class?');
+    if (warning) {
+      axios.delete('/schedule', {
+        data: {
+          startDate: moment(startDate).format('YYYY-MM-DD HH:mm:ss'),
+          endDate: moment(endDate).format('YYYY-MM-DD HH:mm:ss')
+        }
+      })
+      .then(data => {
+        // console.log('data: ', data)
+        // getSchedule();
+      })
+    }
+  }
 
   return (
     <div className="schedule_container">
@@ -206,18 +223,20 @@ const Schedule = (props) => {
                             className="class_detail"
                             onClick={() => showClassDetail(day.date)}
                           >
-                            {`${t["student_name"]} ${startDate.getHours()}:${startDate.getMinutes()} - ${endDate.getHours()}:${endDate.getMinutes()}`}
+                            {`${t["name"]} ${startDate.getHours()}:${startDate.getMinutes()} - ${endDate.getHours()}:${endDate.getMinutes()}`}
                             {classDetailShown &&
                               className === "class_detail" &&
                               classDate === day.date && (
                                 <div className={duringPopUp2}>
                                   <ClassDetail
                                     closeClassDetail={closeClassDetail}
-                                    name={t['student_name']}
+                                    name={t['name']}
                                     date={day.date}
                                     description={t['description']}
                                     startDate={startDate}
                                     endDate={endDate}
+                                    getSchedule={getSchedule}
+                                    deleteClass={deleteClass}
                                   />
                                  </div>
                               )}

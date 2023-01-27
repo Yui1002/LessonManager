@@ -27,6 +27,8 @@ class Routes {
 
     app.delete('/student', this.StudentController.deleteStudent);
 
+    app.delete('/schedule', this.ScheduleController.deleteClass)
+
     app.put('/student', this.StudentController.updateStudent);
   }
 }

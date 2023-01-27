@@ -20,6 +20,12 @@ class ScheduleManager {
     }
     await this.Repository.createNewClass(req, studentId);
   }
+
+  async deleteClass(req) {
+    const classId = await this.Repository.findClassId(req);
+    const response = await this.Repository.deleteClass(classId);
+    return response;
+  }
 }
 
 export default ScheduleManager;
