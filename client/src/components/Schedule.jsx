@@ -61,7 +61,6 @@ const Schedule = (props) => {
         year: year,
       });
     }
-    // console.log('head dates:', dates)
     return dates;
   };
 
@@ -76,7 +75,6 @@ const Schedule = (props) => {
         year: year,
       });
     }
-    // console.log('body dates: ', dates)
     return dates;
   };
 
@@ -91,7 +89,6 @@ const Schedule = (props) => {
         year: year,
       });
     }
-    // console.log('tail dates: ', dates)
     return dates;
   };
 
@@ -101,7 +98,6 @@ const Schedule = (props) => {
       year--;
       month = 11;
     }
-    // setCurrentShownMonth(month);
     showCalendar();
   };
 
@@ -135,15 +131,19 @@ const Schedule = (props) => {
   };
 
   const getSchedule = async () => {
-    const response = await axios.get("/schedule");
-    const data = response.data;
-    if (!data || !data.length) return;
-    data.map((d) => {
-      d["start_date"] = new Date(d["start_date"]).toString();
-      d["end_date"] = new Date(d["end_date"]).toString();
-    });
-
-    setClasses(data);
+    axios.get("/schedule")
+    .then(res => {
+      if (!res.data || !res.data.length) {
+        setClasses([]);
+      } else {
+        res.data.map((d) => {
+          d["start_date"] = new Date(d["start_date"]).toString();
+          d["end_date"] = new Date(d["end_date"]).toString();
+        });
+        setClasses(res.data);
+      }
+    })
+    .catch(err => console.log('error: ', err));
   };
 
   const closeClassDetail = () => {
@@ -159,9 +159,8 @@ const Schedule = (props) => {
           endDate: moment(endDate).format('YYYY-MM-DD HH:mm:ss')
         }
       })
-      .then(data => {
-        // console.log('data: ', data)
-        // getSchedule();
+      .then(async data => {
+        await getSchedule();
       })
     }
   }

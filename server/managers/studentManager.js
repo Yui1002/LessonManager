@@ -129,7 +129,6 @@ class StudentManager {
   //fileName -> gorilla{randomeNum}.jpeg
   //return ./images/gorilla{namdomNum}.jpeg
   generateNameAndPath(fileName) {
-    console.log(fileName)
     let name = fileName.substring(0, fileName.lastIndexOf('.'));
     if (name.length > 15) name = name.substring(0, 15);
     name = name.replace(/\s/g, '');
@@ -137,7 +136,6 @@ class StudentManager {
     let timestampSec = Math.floor(Date.now()/1000) + "";
     let path = process.env.IMAGE_PATH;
     name += (timestampSec + nameMime);
-    console.log('path: ', path + name)
     return path + name;
   }
 

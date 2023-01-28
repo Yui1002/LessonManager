@@ -13,8 +13,6 @@ const NewStudent = (props) => {
     e.preventDefault();
     props.setShowForm(false);
 
-    console.log(selectedFile)
-
     const formData = new FormData();
     formData.append("file", selectedFile);
     formData.append("firstName", e.target[1].value);

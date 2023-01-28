@@ -8,22 +8,9 @@ import {BiTimeFive} from "react-icons/bi";
 import moment from 'moment'
 
 const ClassDetail = (props) => {
-  console.log(props)
 
   const deleteClass = () => {
-    props.deleteClass(props.startDate, props.endDate)
-    // const warning = window.confirm('Are you sure you want to delete the scheduled class?');
-    // if (warning) {
-    //   axios.delete('/schedule', {
-    //     data: {
-    //       startDate: moment(props.startDate).format('YYYY-MM-DD HH:mm:ss'),
-    //       endDate: moment(props.endDate).format('YYYY-MM-DD HH:mm:ss')
-    //     }
-    //   })
-    //   .then(data => {
-        
-    //   })
-    // }
+    props.deleteClass(props.startDate, props.endDate);
   }
 
   return (
