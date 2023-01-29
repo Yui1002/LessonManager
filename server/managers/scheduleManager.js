@@ -26,6 +26,10 @@ class ScheduleManager {
     const response = await this.Repository.deleteClass(classId);
     return response;
   }
+
+  async getClassNotification() {
+    return await this.Repository.getClassNotification();
+  }
 }
 
 export default ScheduleManager;

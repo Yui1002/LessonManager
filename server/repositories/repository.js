@@ -174,6 +174,18 @@ class Repository {
       return err;
     }
   }
+
+  async getClassNotification() {
+    try {
+      const sql = 'SELECT * FROM schedules WHERE start_date >= NOW() + INTERVAL 1 MINUTE AND start_date <= NOW() + INTERVAL 1 HOUR;';
+      const con = await mysql.createConnection(db_setting);
+      const [rows, fields] = await con.query(sql);
+      return rows;
+    } catch (err) {
+      console.log(err);
+      return err;
+    }
+  }
 }
 
 export default Repository;
