@@ -38,18 +38,6 @@ class LoginController {
     req.session.destroy();
     res.redirect('/');
   }
-
-//   app.post('/user',(req,res) => {
-//     if(req.body.username == myusername && req.body.password == mypassword){
-//         session=req.session;
-//         session.userid=req.body.username;
-//         console.log(req.session)
-//         res.send(`Hey there, welcome <a href=\'/logout'>click to logout</a>`);
-//     }
-//     else{
-//         res.send('Invalid username or password');
-//     }
-// })
 }
 
 export default LoginController;
