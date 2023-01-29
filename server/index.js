@@ -8,10 +8,12 @@ import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import Routes from './routes/routes.js';
 import fileUpload from 'express-fileupload';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const fiveMinutes = 300000;
 app.use(session({
-    secret: 'miuraharuma0718',
+    secret: process.env.SESSION_SECRET,
     saveUninitialized: true,
     cookie: { maxAge: fiveMinutes },
     resave: false

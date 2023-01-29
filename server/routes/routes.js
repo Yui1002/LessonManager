@@ -14,6 +14,8 @@ class Routes {
     app.post('/register', this.LoginController.register); // ok
 
     app.post('/login', this.LoginController.login); // ok
+
+    app.get('/logout', this.LoginController.logout);
     
     app.get('/students', this.StudentController.getStudents); //ok
 
