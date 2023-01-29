@@ -1,13 +1,31 @@
+import axios from 'axios';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import './Home.css';
+
+/**
+ * current datetime
+ * schedule 
+ */
 
 const Home = () => {
-  const navigate = useNavigate();
+  const logout = () => {
+    axios.get('/logout')
+  }
+
+
   return (
     <div>
-      <h1>Hello Guillermo!</h1>
-      <button onClick={() => navigate('/profile')}>Students' profiles</button>
-      <button onClick={() => navigate('/schedule')}>Schedule</button>
+      <div className='side_nav'>
+        <Link to='/profile'>Profile</Link>
+        <Link to='/schedule'>Schedule</Link>
+        <Link to='/' onClick={logout}>Logout</Link>
+      </div>
+      <h1 className='home_title'>Hello Guillermo!</h1>
+      <div>
+        <h3>Upcoming Events</h3>
+        
+      </div>
     </div>
   )
 }

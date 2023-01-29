@@ -61,7 +61,6 @@ const Schedule = (props) => {
         year: year,
       });
     }
-    // console.log('head dates:', dates)
     return dates;
   };
 
@@ -76,7 +75,6 @@ const Schedule = (props) => {
         year: year,
       });
     }
-    // console.log('body dates: ', dates)
     return dates;
   };
 
@@ -91,7 +89,6 @@ const Schedule = (props) => {
         year: year,
       });
     }
-    // console.log('tail dates: ', dates)
     return dates;
   };
 
@@ -101,7 +98,6 @@ const Schedule = (props) => {
       year--;
       month = 11;
     }
-    // setCurrentShownMonth(month);
     showCalendar();
   };
 
@@ -135,19 +131,39 @@ const Schedule = (props) => {
   };
 
   const getSchedule = async () => {
-    const response = await axios.get("/schedule");
-    const data = response.data;
-    data.map((d) => {
-      d["start_date"] = new Date(d["start_date"]).toString();
-      d["end_date"] = new Date(d["end_date"]).toString();
-    });
-
-    setClasses(data);
+    axios.get("/schedule")
+    .then(res => {
+      if (!res.data || !res.data.length) {
+        setClasses([]);
+      } else {
+        res.data.map((d) => {
+          d["start_date"] = new Date(d["start_date"]).toString();
+          d["end_date"] = new Date(d["end_date"]).toString();
+        });
+        setClasses(res.data);
+      }
+    })
+    .catch(err => console.log('error: ', err));
   };
 
   const closeClassDetail = () => {
     setClassDetailShown(false);
   };
+
+  const deleteClass = (startDate, endDate) => {
+    const warning = window.confirm('Are you sure you want to delete the scheduled class?');
+    if (warning) {
+      axios.delete('/schedule', {
+        data: {
+          startDate: moment(startDate).format('YYYY-MM-DD HH:mm:ss'),
+          endDate: moment(endDate).format('YYYY-MM-DD HH:mm:ss')
+        }
+      })
+      .then(async data => {
+        await getSchedule();
+      })
+    }
+  }
 
   return (
     <div className="schedule_container">
@@ -206,18 +222,20 @@ const Schedule = (props) => {
                             className="class_detail"
                             onClick={() => showClassDetail(day.date)}
                           >
-                            {`${t["student_name"]} ${startDate.getHours()}:${startDate.getMinutes()} - ${endDate.getHours()}:${endDate.getMinutes()}`}
+                            {`${t["name"]} ${startDate.getHours()}:${startDate.getMinutes()} - ${endDate.getHours()}:${endDate.getMinutes()}`}
                             {classDetailShown &&
                               className === "class_detail" &&
                               classDate === day.date && (
                                 <div className={duringPopUp2}>
                                   <ClassDetail
                                     closeClassDetail={closeClassDetail}
-                                    name={t['student_name']}
+                                    name={t['name']}
                                     date={day.date}
                                     description={t['description']}
                                     startDate={startDate}
                                     endDate={endDate}
+                                    getSchedule={getSchedule}
+                                    deleteClass={deleteClass}
                                   />
                                  </div>
                               )}

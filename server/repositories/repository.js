@@ -1,5 +1,5 @@
-import mysql from "mysql2/promise";
-import dotenv from "dotenv";
+import mysql from 'mysql2/promise';
+import dotenv from 'dotenv';
 dotenv.config();
 
 const db_setting = {
@@ -26,7 +26,7 @@ class Repository {
 
   async registerUser(username, hashedPassword) {
     const con = await mysql.createConnection(db_setting);
-    const sql = "insert into users values (?, ?);";
+    const sql = "insert into users values (DEFAULT, ?, ?);";
     const [rows, fields] = await con.query(sql, [username, hashedPassword]);
     return rows;
   }
@@ -118,7 +118,7 @@ class Repository {
   async getSchedule() {
     const con = await mysql.createConnection(db_setting);
     const sql =
-      "select student_id, student_name, start_date, end_date, description from schedules;";
+      "select student_id, name, start_date, end_date, description from schedules;";
     const [rows, fields] = await con.query(sql);
     return rows;
   }
@@ -154,6 +154,25 @@ class Repository {
       req.filePath,
       req.hours,
     ]);
+  }
+
+  async findClassId(req) {
+    const sql = 'select id from schedules where start_date = ? and end_date = ?;';
+    const con = await mysql.createConnection(db_setting);
+    const [rows, fields] = await con.query(sql, [req.startDate, req.endDate]);
+    return rows[0].id;
+  }
+
+  async deleteClass(id) {
+    try {
+      const sql = 'delete from schedules where id = ?';
+      const con = await mysql.createConnection(db_setting);
+      const [rows, fields] = await con.query(sql, [id]);
+      return 'class deleted';
+    } catch (err) {
+      console.log(err);
+      return err;
+    }
   }
 }
 

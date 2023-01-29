@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {useNavigate} from "react-router-dom"
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './ClassDetail.css';
 import { BsFillPeopleFill } from 'react-icons/bs';
 import {AiFillCalendar} from 'react-icons/ai';
@@ -8,7 +8,18 @@ import {BiTimeFive} from "react-icons/bi";
 import moment from 'moment'
 
 const ClassDetail = (props) => {
-  const navigate = useNavigate();
+
+  const deleteClass = () => {
+    props.deleteClass(props.startDate, props.endDate);
+  }
+
+  const editClass = (e) => {
+    e.preventDefault();
+    // button changes to save changes
+    // turn to save mode
+    // enable input mode 
+    // when save change button clicked, send changes to db 
+  }
 
   return (
     <div className="class_detail_container">
@@ -18,7 +29,7 @@ const ClassDetail = (props) => {
         {props.name}
       </h2>
       <div><span className="class_calendar_icon"><AiFillCalendar /></span>
-        {moment(props.startDate).format('MMMM Do YYYY')}
+        {moment(props.startDate).format('MMMM Do,  YYYY')}
       </div>
       <div>
         <span className="class_time_icon"><BiTimeFive /></span>
@@ -27,6 +38,8 @@ const ClassDetail = (props) => {
       <p><span className="class_description_icon"><FaStickyNote /></span>
         {props.description}
       </p>
+      <button onClick={(e) => editClass(e)}>Edit this schedule</button>
+      <button onClick={deleteClass}>Delete this schedule</button>
     </div>
   )
 }

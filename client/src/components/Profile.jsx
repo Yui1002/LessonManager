@@ -15,7 +15,7 @@ const Profile = (props) => {
   };
 
   const deleteStudent = async (email) => {
-    if (confirm('Are you sure you want to delete the photo?')) {
+    if (confirm('Are you sure you want to delete the student?')) {
       const res = await axios.delete("/student", {
         data: {
           email: email
