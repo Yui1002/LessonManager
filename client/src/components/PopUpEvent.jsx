@@ -35,9 +35,12 @@ const PopUpEvent = (props) => {
         description: e.target[3].value
       })
       .then((res) => {
-        if (res.status === 200) {
+        if (res.data === 'overlap error') {
+          props.setIsOverlapped(true);
+        } else if (res.status === 200) {
           props.closeEvent();
           console.log(`class scheduled with ${name}`);
+          props.setIsScheduled(true);
           props.getSchedule();
         }
       })
@@ -47,7 +50,7 @@ const PopUpEvent = (props) => {
   };
 
   const checkDateError = (start, end) => {
-    let currentTime = moment().format('YYYY-MM-DD hh:mm:ss');
+    let currentTime = moment().format('YYYY-MM-DD HH:mm:ss');
     return start > end || start < currentTime || end < currentTime;
   }
 

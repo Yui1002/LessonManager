@@ -6,6 +6,9 @@ import PopUpEvent from "./PopUpEvent.jsx";
 import moment from "moment";
 import ClassDetail from "./ClassDetail.jsx";
 import { NUMBER_MONTHS } from "../CONSTANT.js";
+import Alert from "@mui/material/Alert";
+import CloseIcon from '@mui/icons-material/Close';
+import IconButton from '@mui/material/IconButton';
 
 const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const today = new Date();
@@ -24,6 +27,9 @@ const Schedule = (props) => {
   const duringPopUp2 = classDetailShown ? "during-popup_2" : "";
   const [className, setClassName] = useState("");
   const [classDate, setClassDate] = useState();
+  const [isOverlapped, setIsOverlapped] = useState(false);
+  const [isScheduled, setIsScheduled] = useState(false);
+  const [open, setOpen] = useState(true);
 
   const navigate = useNavigate();
 
@@ -131,19 +137,20 @@ const Schedule = (props) => {
   };
 
   const getSchedule = async () => {
-    axios.get("/schedule")
-    .then(res => {
-      if (!res.data || !res.data.length) {
-        setClasses([]);
-      } else {
-        res.data.map((d) => {
-          d["start_date"] = new Date(d["start_date"]).toString();
-          d["end_date"] = new Date(d["end_date"]).toString();
-        });
-        setClasses(res.data);
-      }
-    })
-    .catch(err => console.log('error: ', err));
+    axios
+      .get("/schedule")
+      .then((res) => {
+        if (!res.data || !res.data.length) {
+          setClasses([]);
+        } else {
+          res.data.map((d) => {
+            d["start_date"] = new Date(d["start_date"]).toString();
+            d["end_date"] = new Date(d["end_date"]).toString();
+          });
+          setClasses(res.data);
+        }
+      })
+      .catch((err) => console.log("error: ", err));
   };
 
   const closeClassDetail = () => {
@@ -151,22 +158,49 @@ const Schedule = (props) => {
   };
 
   const deleteClass = (startDate, endDate) => {
-    const warning = window.confirm('Are you sure you want to delete the scheduled class?');
+    const warning = window.confirm(
+      "Are you sure you want to delete the scheduled class?"
+    );
     if (warning) {
-      axios.delete('/schedule', {
-        data: {
-          startDate: moment(startDate).format('YYYY-MM-DD HH:mm:ss'),
-          endDate: moment(endDate).format('YYYY-MM-DD HH:mm:ss')
-        }
-      })
-      .then(async data => {
-        await getSchedule();
-      })
+      axios
+        .delete("/schedule", {
+          data: {
+            startDate: moment(startDate).format("YYYY-MM-DD HH:mm:ss"),
+            endDate: moment(endDate).format("YYYY-MM-DD HH:mm:ss"),
+          },
+        })
+        .then(async (data) => {
+          await getSchedule();
+        });
     }
-  }
+  };
 
   return (
     <div className="schedule_container">
+      {isOverlapped && (
+        <Alert
+          severity="error"
+          action={
+            <IconButton
+              aria-label="close"
+              color="inherit"
+              size="small"
+              onClick={() => {
+                setOpen(false);
+              }}
+            >
+              <CloseIcon fontSize="inherit" />
+            </IconButton>
+          }
+        >
+          Class duplicated
+        </Alert>
+      )}
+      {isScheduled && (
+        <Alert severity="success" onClose={() => {}}>
+          Class scheduled successfully
+        </Alert>
+      )}
       <button
         className="schedule_go_back_button"
         onClick={() => navigate("/home")}
@@ -222,22 +256,24 @@ const Schedule = (props) => {
                             className="class_detail"
                             onClick={() => showClassDetail(day.date)}
                           >
-                            {`${t["name"]} ${startDate.getHours()}:${startDate.getMinutes()} - ${endDate.getHours()}:${endDate.getMinutes()}`}
+                            {`${
+                              t["name"]
+                            } ${startDate.getHours()}:${startDate.getMinutes()} - ${endDate.getHours()}:${endDate.getMinutes()}`}
                             {classDetailShown &&
                               className === "class_detail" &&
                               classDate === day.date && (
                                 <div className={duringPopUp2}>
                                   <ClassDetail
                                     closeClassDetail={closeClassDetail}
-                                    name={t['name']}
+                                    name={t["name"]}
                                     date={day.date}
-                                    description={t['description']}
+                                    description={t["description"]}
                                     startDate={startDate}
                                     endDate={endDate}
                                     getSchedule={getSchedule}
                                     deleteClass={deleteClass}
                                   />
-                                 </div>
+                                </div>
                               )}
                           </div>
                         );
@@ -250,17 +286,19 @@ const Schedule = (props) => {
           })}
         </tbody>
       </table>
-        {scheduleClassShown && className === "schedule_date" && (
-          <div className={duringPopUp}>
-            <PopUpEvent
-              currentShownSchedule={currentShownSchedule}
-              closeEvent={closeEvent}
-              getSchedule={getSchedule}
-              students={props.students}
-            />
-          </div>
-        )}
-      </div>
+      {scheduleClassShown && className === "schedule_date" && (
+        <div className={duringPopUp}>
+          <PopUpEvent
+            currentShownSchedule={currentShownSchedule}
+            closeEvent={closeEvent}
+            getSchedule={getSchedule}
+            students={props.students}
+            setIsOverlapped={setIsOverlapped}
+            setIsScheduled={setIsScheduled}
+          />
+        </div>
+      )}
+    </div>
   );
 };
 
