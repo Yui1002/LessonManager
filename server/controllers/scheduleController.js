@@ -16,8 +16,12 @@ class ScheduleController {
   }
 
   async createNewClass(req, res) {
-    const response = await new ScheduleManager().createNewClass(req.body)
-    res.status(200).send(response);
+    const response = await new ScheduleManager().createNewClass(req.body);
+    if (response === 'overlap error') {
+      res.status(200).send('overlap error');
+    } else {
+      res.status(200).send(response);
+    }
   }
 
   async deleteClass(req, res) {
@@ -38,6 +42,7 @@ class ScheduleController {
       res.status(200).send(response);
     }
   }
+
 }
 
 export default ScheduleController;

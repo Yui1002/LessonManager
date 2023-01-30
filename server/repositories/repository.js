@@ -142,6 +142,14 @@ class Repository {
     return rows;
   }
 
+  async isClassOverlap(req) {
+    console.log(req.startDate, req.endDate)
+    const con = await mysql.createConnection(db_setting);
+    const sql = 'select * from schedules where (start_date <= ? and ? <= end_date) or (start_date <= ? and ? <= end_date);'
+    const [rows, fields] = await con.query(sql, [req.startDate, req.startDate, req.endDate, req.endDate]);
+    return rows;
+  }
+
   async saveStudent(req) {
     const sql = "INSERT INTO students VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?);";
     const con = await mysql.createConnection(db_setting);
@@ -186,6 +194,7 @@ class Repository {
       return err;
     }
   }
+
 }
 
 export default Repository;

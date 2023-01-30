@@ -23,36 +23,13 @@ const Home = () => {
     axios.get("/logout");
   };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   const hasClassSoon = () => {
-    // get all the schedule where class is going to start in 5 hours
     axios.get("/schedule/notification").then((data) => {
       console.log(data);
       setClassScheduledIn1hour(data.data);
     });
-
-    // get current time
-
-    // if class is going to start in 1 hour, color red
-
-    // if class is going to start in 3 hours, color yellow
   };
 
-  const action = (
-    <React.Fragment>
-      <IconButton
-        size="small"
-        aria-label="close"
-        color="inherit"
-        onClick={handleClose}
-      >
-        <CloseIcon fontSize="small" />
-      </IconButton>
-    </React.Fragment>
-  );
 
   return (
     <div>
@@ -83,9 +60,6 @@ const Home = () => {
         </Alert>
       )}
       <h1 className="home_title">Hello Guillermo!</h1>
-      <div>
-        <h3>Upcoming Events</h3>
-      </div>
     </div>
   );
 };

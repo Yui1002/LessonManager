@@ -18,7 +18,13 @@ class ScheduleManager {
     if (!studentId) {
       return 'student does not exist';
     }
-    await this.Repository.createNewClass(req, studentId);
+    const isClassOverlap = await this.Repository.isClassOverlap(req);
+    console.log('isClassOverlap: ', isClassOverlap)
+    if (isClassOverlap.length > 0) {
+      return 'overlap error';
+    } else {
+      await this.Repository.createNewClass(req, studentId);
+    }
   }
 
   async deleteClass(req) {
@@ -30,6 +36,7 @@ class ScheduleManager {
   async getClassNotification() {
     return await this.Repository.getClassNotification();
   }
+
 }
 
 export default ScheduleManager;
