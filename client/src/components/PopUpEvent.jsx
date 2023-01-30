@@ -35,12 +35,17 @@ const PopUpEvent = (props) => {
         description: e.target[3].value
       })
       .then((res) => {
+        console.log(res)
         if (res.data === 'overlap error') {
+          console.log('overlap happened')
           props.setIsOverlapped(true);
+          props.setOpen(true);
+          props.closeEvent();
         } else if (res.status === 200) {
           props.closeEvent();
           console.log(`class scheduled with ${name}`);
           props.setIsScheduled(true);
+          props.setOpen(true);
           props.getSchedule();
         }
       })

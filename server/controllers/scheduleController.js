@@ -18,7 +18,7 @@ class ScheduleController {
   async createNewClass(req, res) {
     const response = await new ScheduleManager().createNewClass(req.body);
     if (response === 'overlap error') {
-      res.status(200).send('class overlaped. you cannot schedule this time');
+      res.status(200).send('overlap error');
     } else {
       res.status(200).send(response);
     }

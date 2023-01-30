@@ -29,7 +29,9 @@ const Schedule = (props) => {
   const [classDate, setClassDate] = useState();
   const [isOverlapped, setIsOverlapped] = useState(false);
   const [isScheduled, setIsScheduled] = useState(false);
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
+
+  console.log('is overlapped', isOverlapped)
 
   const navigate = useNavigate();
 
@@ -177,7 +179,7 @@ const Schedule = (props) => {
 
   return (
     <div className="schedule_container">
-      {isOverlapped && (
+      {isOverlapped && open && (
         <Alert
           severity="error"
           action={
@@ -185,19 +187,17 @@ const Schedule = (props) => {
               aria-label="close"
               color="inherit"
               size="small"
-              onClick={() => {
-                setOpen(false);
-              }}
+              onClick={() => setOpen(false)}
             >
               <CloseIcon fontSize="inherit" />
             </IconButton>
           }
         >
-          Class duplicated
+          This class is duplicated to another class. Try it different time. 
         </Alert>
       )}
       {isScheduled && (
-        <Alert severity="success" onClose={() => {}}>
+        <Alert severity="success" >
           Class scheduled successfully
         </Alert>
       )}
@@ -295,6 +295,7 @@ const Schedule = (props) => {
             students={props.students}
             setIsOverlapped={setIsOverlapped}
             setIsScheduled={setIsScheduled}
+            setOpen={setOpen}
           />
         </div>
       )}
