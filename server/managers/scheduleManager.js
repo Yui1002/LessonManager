@@ -37,6 +37,10 @@ class ScheduleManager {
     return await this.Repository.getClassNotification();
   }
 
+  async getPastClasses() {
+    return await this.Repository.getPastClasses();
+  }
+
 }
 
 export default ScheduleManager;

@@ -19,7 +19,6 @@ class LoginController {
   }
 
   async login(req, res) {
-    console.log('req.session: ', req.session)
     let session;
     const username = req.body.username;
     const password = req.body.password;
@@ -29,7 +28,6 @@ class LoginController {
     } else {
       session = req.session;
       session.userid = username;
-      console.log(req.session);
       res.status(200).send(response);
     }
   }

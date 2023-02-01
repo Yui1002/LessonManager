@@ -43,6 +43,15 @@ class ScheduleController {
     }
   }
 
+  async getPastClasses(req, res) {
+    const response = await new ScheduleManager().getPastClasses();
+    if (!response || response.length === 0) {
+      res.status(204).send('there is no class done in the past')
+    } else {
+      res.status(200).send(response);
+    }
+  }
+
 }
 
 export default ScheduleController;

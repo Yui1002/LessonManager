@@ -23,6 +23,8 @@ class Routes {
 
     app.get('/schedule/notification', this.ScheduleController.getClassNotification);
 
+    app.get('/schedule/past', this.ScheduleController.getPastClasses)
+
     app.post('/students', this.StudentController.saveStudent);
 
     app.get('/profile', this.StudentController.getStudentProfile);

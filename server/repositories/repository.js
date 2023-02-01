@@ -94,7 +94,6 @@ class Repository {
     const sql = "select profile_photo from students where email = ?";
     const con = await mysql.createConnection(db_setting);
     const [rows, fields] = await con.query(sql, [email]);
-    console.log('rowssssss: ', rows)
     return rows[0].profile_photo;
   }
 
@@ -186,6 +185,18 @@ class Repository {
   async getClassNotification() {
     try {
       const sql = 'SELECT * FROM schedules WHERE start_date >= NOW() + INTERVAL 1 MINUTE AND start_date <= NOW() + INTERVAL 1 HOUR;';
+      const con = await mysql.createConnection(db_setting);
+      const [rows, fields] = await con.query(sql);
+      return rows;
+    } catch (err) {
+      console.log(err);
+      return err;
+    }
+  }
+
+  async getPastClasses() {
+    try {
+      const sql = 'select * from schedules where end_date < NOW();';
       const con = await mysql.createConnection(db_setting);
       const [rows, fields] = await con.query(sql);
       return rows;

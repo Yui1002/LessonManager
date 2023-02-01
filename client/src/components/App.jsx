@@ -7,6 +7,7 @@ import Login from "./Login.jsx";
 import Register from "./Register.jsx";
 import Home from "./Home.jsx";
 import Entry from "./Entry.jsx";
+import PastClass from './PastClass.jsx';
 import "./App.css";
 
 const App = () => {
@@ -40,6 +41,7 @@ const App = () => {
             path="/schedule"
             element={<Schedule students={students} />}
           />
+          <Route exact path="/pastClass" element={<PastClass />} />
         </Routes>
       </HashRouter>
     </>

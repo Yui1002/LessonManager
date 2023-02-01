@@ -25,7 +25,6 @@ const Home = () => {
 
   const hasClassSoon = () => {
     axios.get("/schedule/notification").then((data) => {
-      console.log(data);
       setClassScheduledIn1hour(data.data);
     });
   };
@@ -39,6 +38,7 @@ const Home = () => {
         <Link to="/" onClick={logout}>
           Logout
         </Link>
+        <Link to="/pastClass">Past Class</Link>
       </div>
       {open && classScheduledIn1hour.length > 0 && (
         <Alert

@@ -35,9 +35,7 @@ const PopUpEvent = (props) => {
         description: e.target[3].value
       })
       .then((res) => {
-        console.log(res)
         if (res.data === 'overlap error') {
-          console.log('overlap happened')
           props.setIsOverlapped(true);
           props.setOpen(true);
           props.closeEvent();
