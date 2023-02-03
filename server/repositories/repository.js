@@ -194,11 +194,11 @@ class Repository {
     }
   }
 
-  async getPastClasses() {
+  async getPastClasses(req) {
     try {
-      const sql = 'select * from schedules where end_date < NOW();';
+      const sql = 'select * from schedules where month(start_date) = ? and year(start_date) = ?;';
       const con = await mysql.createConnection(db_setting);
-      const [rows, fields] = await con.query(sql);
+      const [rows, fields] = await con.query(sql, [req.month, req.year]);
       return rows;
     } catch (err) {
       console.log(err);

@@ -44,7 +44,7 @@ class ScheduleController {
   }
 
   async getPastClasses(req, res) {
-    const response = await new ScheduleManager().getPastClasses();
+    const response = await new ScheduleManager().getPastClasses(req.query);
     if (!response || response.length === 0) {
       res.status(204).send('there is no class done in the past')
     } else {

@@ -37,8 +37,8 @@ class ScheduleManager {
     return await this.Repository.getClassNotification();
   }
 
-  async getPastClasses() {
-    return await this.Repository.getPastClasses();
+  async getPastClasses(req) {
+    return await this.Repository.getPastClasses(req);
   }
 
 }
