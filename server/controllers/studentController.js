@@ -6,6 +6,7 @@ class StudentController {
   }
 
   async getStudents(req, res) {
+    console.log('req.user: ', req.user)
     const response = await new StudentManager().getStudents();
     res.status(200).send(response);
   }

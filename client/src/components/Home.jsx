@@ -9,18 +9,26 @@ import CloseIcon from "@mui/icons-material/Close";
 import Alert from "@mui/material/Alert";
 import Slide from "@mui/material/Slide";
 import Box from "@mui/material/Box";
+import { logOut } from "../helpers/cookie.js";
 
-const Home = () => {
+const Home = (props) => {
   const [open, setOpen] = useState(false);
   const [classScheduledIn1hour, setClassScheduledIn1hour] = useState([]);
 
   useEffect(() => {
+    
     setOpen(true);
     hasClassSoon();
   }, []);
 
   const logout = () => {
-    axios.get("/logout");
+    logOut();
+  };
+
+  const getStudents = async () => {
+    axios.get('/students')
+    .then(res => props.setStudents(res.data))
+    .catch(err => console.log(err));
   };
 
   const hasClassSoon = () => {

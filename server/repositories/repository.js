@@ -12,7 +12,7 @@ const db_setting = {
 class Repository {
   async findUser(username) {
     const con = await mysql.createConnection(db_setting);
-    const sql = "select username from users where username = ?";
+    const sql = "select * from users where username = ?";
     const [rows, fields] = await con.query(sql, [username]);
     return rows;
   }
@@ -24,6 +24,14 @@ class Repository {
     return rows[0]["password"];
   }
 
+  async findId(id) {
+    const con = await mysql.createConnection(db_setting);
+    const sql = "select id from users where id = ?";
+    const [rows, fields] = await con.query(sql, [id]);
+    return rows;
+  }
+
+  // sign up
   async registerUser(username, hashedPassword) {
     const con = await mysql.createConnection(db_setting);
     const sql = "insert into users values (DEFAULT, ?, ?);";

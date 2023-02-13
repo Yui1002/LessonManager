@@ -13,14 +13,6 @@ const ClassDetail = (props) => {
     props.deleteClass(props.startDate, props.endDate);
   }
 
-  const editClass = (e) => {
-    e.preventDefault();
-    // button changes to save changes
-    // turn to save mode
-    // enable input mode 
-    // when save change button clicked, send changes to db 
-  }
-
   return (
     <div className="class_detail_container">
       <span className="class_detail_close" onClick={props.closeClassDetail}>&times;</span>
@@ -38,7 +30,6 @@ const ClassDetail = (props) => {
       <p><span className="class_description_icon"><FaStickyNote /></span>
         {props.description}
       </p>
-      <button onClick={(e) => editClass(e)}>Edit this schedule</button>
       <button onClick={deleteClass}>Delete this schedule</button>
     </div>
   )

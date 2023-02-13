@@ -3,3 +3,4 @@ node_modules
 client/dist/main.js
 client/dist/images
 .DS_Store
+config.js
