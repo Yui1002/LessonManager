@@ -35,7 +35,6 @@ class ScheduleController {
 
   async getClassNotification(req, res) {
     const response = await new ScheduleManager().getClassNotification();
-    console.log('response: ', response)
     if (!response || response.length === 0) {
       res.status(204).send('There is no class scheduled in 1 hour');
     } else {

@@ -5,7 +5,7 @@ import "./Schedule.css";
 import PopUpEvent from "./PopUpEvent.jsx";
 import moment from "moment";
 import ClassDetail from "./ClassDetail.jsx";
-import { NUMBER_MONTHS } from "../CONSTANT.js";
+import { NUMBER_MONTHS } from "../helpers/CONSTANT.js";
 import Alert from "@mui/material/Alert";
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';

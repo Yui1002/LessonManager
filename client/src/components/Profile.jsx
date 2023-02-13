@@ -21,7 +21,7 @@ const Profile = (props) => {
           email: email
         },
       });
-      props.getStudents();
+      // props.getStudents();
     }
   };
 

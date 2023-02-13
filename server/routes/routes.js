@@ -2,7 +2,6 @@ import LoginController from '../controllers/loginController.js';
 import StudentController from '../controllers/studentController.js';
 import ScheduleController from '../controllers/scheduleController.js';
 
-
 class Routes {
   constructor() {
     this.LoginController = new LoginController();
@@ -13,10 +12,8 @@ class Routes {
   applyRouting(app) {
     app.post('/register', this.LoginController.register); // ok
 
-    app.post('/login', this.LoginController.login); // ok
+    app.post('/login', this.LoginController.login)
 
-    app.get('/logout', this.LoginController.logout);
-    
     app.get('/students', this.StudentController.getStudents); //ok
 
     app.get('/schedule', this.ScheduleController.getSchedule); //ok
