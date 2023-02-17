@@ -25,11 +25,11 @@ const Home = (props) => {
     logOut();
   };
 
-  const getStudents = async () => {
-    axios.get('/students')
-    .then(res => props.setStudents(res.data))
-    .catch(err => console.log(err));
-  };
+  // const getStudents = async () => {
+  //   axios.get('/students')
+  //   .then(res => props.setStudents(res.data))
+  //   .catch(err => console.log(err));
+  // };
 
   const hasClassSoon = () => {
     axios.get("/schedule/notification").then((data) => {

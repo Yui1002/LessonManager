@@ -25,7 +25,7 @@ const NewStudent = (props) => {
     await axios.post("/students", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
-    await axios.get("/profile", { params: { email: e.target[5].value } });
+    await axios.get("/profiles", { params: { email: e.target[5].value } });
     props.getStudents();
   };
 
