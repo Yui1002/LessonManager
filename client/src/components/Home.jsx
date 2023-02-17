@@ -33,6 +33,7 @@ const Home = (props) => {
 
   const hasClassSoon = () => {
     axios.get("/schedule/notification").then((data) => {
+      console.log(data)
       setClassScheduledIn1hour(data.data);
     });
   };

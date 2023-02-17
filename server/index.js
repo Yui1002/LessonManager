@@ -30,11 +30,12 @@ const __dirname = path.dirname(__filename);
 
 app.use(express.static(path.join(__dirname, '../client/dist')));
 
+
+new Routes().applyRouting(app);
+
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/dist/index.html'));
 });
-
-new Routes().applyRouting(app);
 
 app.listen(port, () => console.log(`Listening on ${port}`));
 

@@ -20,7 +20,6 @@ const Login = () => {
       password: password
     })
       .then((data) => {
-        console.log('data: ', data)
         if (data.data.auth) {
           setSession(data.data.token)
           setIsLoggedIn(true);
