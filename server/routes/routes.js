@@ -24,7 +24,7 @@ class Routes {
 
     app.post('/students', this.StudentController.saveStudent);
 
-    app.get('/profile', this.StudentController.getStudentProfile);
+    app.get('/profiles', this.StudentController.getStudentProfile);
 
     app.post('/schedule', this.ScheduleController.createNewClass);
 

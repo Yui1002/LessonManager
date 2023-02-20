@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./PopUpEvent.css";
 import moment from "moment";
@@ -13,7 +13,6 @@ const PopUpEvent = (props) => {
     const startTime = e.target[1].value;
     const endTime = e.target[2].value;
 
-    
     const year = props.currentShownSchedule.year;
     const month = (props.currentShownSchedule.month < 10) ? '0' + props.currentShownSchedule.month : props.currentShownSchedule.month;
     const date = (props.currentShownSchedule.date < 10) ? '0' + props.currentShownSchedule.date : props.currentShownSchedule.date;
@@ -22,7 +21,7 @@ const PopUpEvent = (props) => {
     const endDateInTimeStamp = `${year}-${month}-${date} ${endTime}:00`;
 
     if (checkDateError(startDateInTimeStamp, endDateInTimeStamp)) {
-      setScheduleError('Error in date');
+      setScheduleError('Please select a future data and time');
       return;
     }
 
@@ -72,8 +71,7 @@ const PopUpEvent = (props) => {
           <label htmlFor="name">Student name</label>
           <select name="name" id="name">
             <option>select</option>
-            {props.students.map((student, index) => (
-              // <option key={index}>{student.firstName} {student.lastName} {`(${student.email})`}</option>
+            {props.students.length && props.students.map((student, index) => (
               <option key={index}>{`${student.firstName} ${student.lastName} (${student.email})`}</option>
             ))}
           </select>

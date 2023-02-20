@@ -21,6 +21,7 @@ class StudentController {
   }
 
   async updateStudent(req, res) {
+    console.log(req.body)
     let file = req.files.file;
     if (!file) {
       res.status(204).send('No file uploaded');

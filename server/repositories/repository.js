@@ -114,7 +114,7 @@ class Repository {
       req.lastName,
       req.countryCode,
       req.phone,
-      req.email,
+      req.newEmail,
       req.filePath,
       req.hours,
       req.id

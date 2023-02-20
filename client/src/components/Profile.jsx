@@ -6,9 +6,20 @@ import "./Profile.css";
 import NewStudent from "./NewStudent.jsx";
 
 const Profile = (props) => {
+  const [students, setStudents] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const duringPopUp3 = showForm ? "during-popup_3" : "";
   const navigate = useNavigate();
+
+  useEffect(() => {
+    getStudents();
+  }, [])
+
+  const getStudents = async () => {
+    axios.get('/students')
+    .then(res => setStudents(res.data))
+    .catch(err => console.log(err));
+  };
 
   const closeForm = () => {
     setShowForm(false);
@@ -16,12 +27,12 @@ const Profile = (props) => {
 
   const deleteStudent = async (email) => {
     if (confirm('Are you sure you want to delete the student?')) {
-      const res = await axios.delete("/student", {
+      await axios.delete("/student", {
         data: {
           email: email
         },
       });
-      // props.getStudents();
+      getStudents();
     }
   };
 
@@ -45,16 +56,16 @@ const Profile = (props) => {
       </div>
       {showForm && (
         <div className={duringPopUp3}>
-          <NewStudent closeForm={closeForm} setShowForm={setShowForm} getStudents={props.getStudents} />
+          <NewStudent closeForm={closeForm} setShowForm={setShowForm} getStudents={getStudents} />
         </div>
       )}
       <div className="students_list">
-        {props.students.map((student) => (
+        {students.map((student) => (
           <div key={student.id} className="student">
             <Student
               student={student}
               deleteStudent={deleteStudent}
-              getStudents={props.getStudents}
+              getStudents={getStudents}
             />
           </div>
         ))}
