@@ -18,6 +18,7 @@ let month = today.getMonth();
 
 const Schedule = (props) => {
   const [calendar, setCalendar] = useState([]);
+  const [students, setStudents] = useState([]);
   const [classes, setClasses] = useState([]);
   const [scheduleClassShown, setScheduleClassShown] = useState(false);
   const [noClassScheduled, setNoClassScheduled] = useState(false);
@@ -36,9 +37,16 @@ const Schedule = (props) => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    getStudents();
     showCalendar();
     getSchedule();
   }, []);
+
+  const getStudents = async () => {
+    axios.get('/students')
+    .then(res => setStudents(res.data))
+    .catch(err => console.log(err));
+  };
 
   const showCalendar = () => {
     let dates = [
@@ -292,7 +300,7 @@ const Schedule = (props) => {
             currentShownSchedule={currentShownSchedule}
             closeEvent={closeEvent}
             getSchedule={getSchedule}
-            students={props.students}
+            students={students}
             setIsOverlapped={setIsOverlapped}
             setIsScheduled={setIsScheduled}
             setOpen={setOpen}

@@ -27,7 +27,7 @@ const Profile = (props) => {
 
   const deleteStudent = async (email) => {
     if (confirm('Are you sure you want to delete the student?')) {
-      const res = await axios.delete("/student", {
+      await axios.delete("/student", {
         data: {
           email: email
         },
@@ -65,7 +65,7 @@ const Profile = (props) => {
             <Student
               student={student}
               deleteStudent={deleteStudent}
-              getStudents={props.getStudents}
+              getStudents={getStudents}
             />
           </div>
         ))}

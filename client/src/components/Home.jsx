@@ -16,7 +16,6 @@ const Home = (props) => {
   const [classScheduledIn1hour, setClassScheduledIn1hour] = useState([]);
 
   useEffect(() => {
-    
     setOpen(true);
     hasClassSoon();
   }, []);
@@ -25,15 +24,8 @@ const Home = (props) => {
     logOut();
   };
 
-  // const getStudents = async () => {
-  //   axios.get('/students')
-  //   .then(res => props.setStudents(res.data))
-  //   .catch(err => console.log(err));
-  // };
-
   const hasClassSoon = () => {
     axios.get("/schedule/notification").then((data) => {
-      console.log(data)
       setClassScheduledIn1hour(data.data);
     });
   };

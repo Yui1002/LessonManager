@@ -44,6 +44,7 @@ const Student = (props) => {
             getStudents={props.getStudents}
             setPopUp={setPopUp}
             closePopUp={closePopUp}
+            profile_photo={props.student.profile_photo}
           />
         )}
       </div>
