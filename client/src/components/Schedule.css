@@ -49,8 +49,10 @@
 
 .schedule_date {
   position: relative;
-  width: 10%;
-  height: 10%;
+  width: 120px;
+  height: 120px;
+  max-width: 120px;
+  max-height: 120px;
   padding: 0px;
   border-right: 1px solid #000;
   border-bottom: 1px solid #000;
@@ -139,6 +141,10 @@
 }
 
 .class_detail {
+  width: 120px;
+  overflow:hidden; 
+  white-space:nowrap; 
+  text-overflow: ellipsis;
   cursor: pointer;
   transition-duration: 0.4s;
 }
