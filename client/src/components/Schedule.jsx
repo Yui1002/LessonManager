@@ -7,8 +7,8 @@ import moment from "moment";
 import ClassDetail from "./ClassDetail.jsx";
 import { NUMBER_MONTHS } from "../helpers/CONSTANT.js";
 import Alert from "@mui/material/Alert";
-import CloseIcon from '@mui/icons-material/Close';
-import IconButton from '@mui/material/IconButton';
+import CloseIcon from "@mui/icons-material/Close";
+import IconButton from "@mui/material/IconButton";
 
 const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const today = new Date();
@@ -32,7 +32,7 @@ const Schedule = (props) => {
   const [isScheduled, setIsScheduled] = useState(false);
   const [open, setOpen] = useState(false);
 
-  console.log('is overlapped', isOverlapped)
+  console.log("is overlapped", isOverlapped);
 
   const navigate = useNavigate();
 
@@ -43,9 +43,10 @@ const Schedule = (props) => {
   }, []);
 
   const getStudents = async () => {
-    axios.get('/students')
-    .then(res => setStudents(res.data))
-    .catch(err => console.log(err));
+    axios
+      .get("/students")
+      .then((res) => setStudents(res.data))
+      .catch((err) => console.log(err));
   };
 
   const showCalendar = () => {
@@ -201,11 +202,22 @@ const Schedule = (props) => {
             </IconButton>
           }
         >
-          This class is duplicated to another class. Try it different time. 
+          This class is duplicated to another class. Try it different time.
         </Alert>
       )}
-      {isScheduled && (
-        <Alert severity="success" >
+      {isScheduled && open && (
+        <Alert
+          action={
+            <IconButton
+              aria-label="close"
+              color="inherit"
+              size="small"
+              onClick={() => setOpen(false)}
+            >
+              <CloseIcon fontSize="inherit" />
+            </IconButton>
+          }
+        >
           Class scheduled successfully
         </Alert>
       )}
