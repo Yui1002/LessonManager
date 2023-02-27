@@ -3,28 +3,6 @@ body, html, #root {
     margin: 0;
 }
 
-/* .entry_container {
-    position: relative; 
-    height: 100%;
-}
-
-
-.entry_container::after {
-    content: "";
-    background-image: url('../../dist/images/pexels-tirachard-kumtanom-733857.jpg');
-    height: 100%;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    bottom: 0px;
-    left: 0px;
-    z-index: -1;
-    opacity: 0.5;
-} */
-
 .entry_container {
     height: 100%;
     position: relative;
@@ -32,7 +10,6 @@ body, html, #root {
 
 .entry_container::before {
     content: "";
-    background-image: url('../../dist/images/pexels-tirachard-kumtanom-733857.jpg');
     background-size: cover;
     position: absolute;
     top: 0px;
