@@ -64,7 +64,7 @@ const Student = (props) => {
       </Card>
 
       <Modal open={open} onClose={handleClose}>
-          <EditProfile student={props.student}/>
+          <EditProfile student={props.student} setOpen={setOpen} getStudents={props.getStudents} />
       </Modal>
       {/* <div className={duringPopUp}>
         {popUp && (
