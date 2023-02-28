@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import EditProfile from "./EditProfile.jsx";
-import "./Student.css";
 import {
   Card,
   CardHeader,
@@ -66,18 +65,6 @@ const Student = (props) => {
       <Modal open={open} onClose={handleClose}>
           <EditProfile student={props.student} setOpen={setOpen} getStudents={props.getStudents} />
       </Modal>
-      {/* <div className={duringPopUp}>
-        {popUp && (
-          <PopUp
-            student={props.student}
-            lessonHours={props.student.lesson_hours}
-            getStudents={props.getStudents}
-            setPopUp={setPopUp}
-            closePopUp={closePopUp}
-            profile_photo={props.student.profile_photo}
-          />
-        )}
-      </div> */}
     </div>
   );
 };
