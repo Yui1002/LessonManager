@@ -6,3 +6,4 @@ Lesson Manager is a lesson planning app for teachers.
 
 ## Getting Started 
 
+## Installation
