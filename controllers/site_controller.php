@@ -32,6 +32,8 @@ class RootController {
             case 'login'://HOST/lessonManager?action=login 
                 $this->login();
                 break;
+            case 'students': //HOST/lessonManager?action=students
+                $this->students();
         }
     }
 
@@ -62,4 +64,10 @@ class RootController {
         }
         $_SESSION["UserLoggedIn"] = true; 
     }
+
+    public function students() {
+        
+    }
+
+
 }

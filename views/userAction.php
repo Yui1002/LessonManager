@@ -1,20 +1,7 @@
 <?php
-//check if MySQLi is installed
-// phpinfo();
 
-//todo initiate connection to db
 include_once SYSTEM_PATH . "/database.php";
 
-
-/*
-0) Define our body (username, password)
-1) Check if user exixts already -> 400
-2) If not exist, create user -> 200
-
-
-*/
-
-//write class register
 class UserAction
 {
 
@@ -55,10 +42,11 @@ class UserAction
         return $this->verifyLogin($username, $password);
     }
 
-    public function getHashedPassword($password) {
+    public function getHashedPassword($password)
+    {
         return hash("sha256", $password);
     }
-    
+
 
     public function verifyLogin($username, $password)
     {
