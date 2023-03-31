@@ -1,6 +1,7 @@
 <?php
 include_once SYSTEM_PATH."/global.php";
 include_once SYSTEM_PATH.'/views/userAction.php';
+include_once SYSTEM_PATH."/views/students.php";
 
 //Get the action from the url. This assumes every request has a action param passed in
 $action = "default";
@@ -32,8 +33,18 @@ class RootController {
             case 'login'://HOST/lessonManager?action=login 
                 $this->login();
                 break;
-            case 'students': //HOST/lessonManager?action=students
-                $this->students();
+            case 'getAllStudents': //HOST/lessonManager?action=students
+                $this->getAllStudents();
+                break;
+            case 'getStudentByEmail': //HOST/lessonManager?action=getStudentByEmail
+                $this->getStudentByEmail();
+                break;
+            case 'getStudentId': 
+                $this->getStudentId();
+                break;
+            case 'createNewStudent': 
+                $this->createNewStudent();
+                break;
         }
     }
 
@@ -65,8 +76,27 @@ class RootController {
         $_SESSION["UserLoggedIn"] = true; 
     }
 
-    public function students() {
-        
+    public function getAllStudents() {
+        $students = new Students();
+        return $students->getAllStudents();
+    }
+
+    public function getStudentByEmail() {
+        $students = new Students();
+        $data = json_decode(file_get_contents("php://input"), true);
+        return $students->getStudentByEmail($data["email"]);  
+    }
+
+    public function getStudentId() {
+        $students = new Students();
+        $data = json_decode(file_get_contents("php://input"), true);
+        return $students->getStudentId($data["email"]);   
+    }
+
+    public function createNewStudent() {
+        $students = new Students();
+        $data = json_decode(file_get_contents("php://input"), true);
+        return $students->createNewStudent($data["req"], $data["file"]);  
     }
 
 
