@@ -19,7 +19,7 @@ class UserAction
     {
 
         if ($this->doesUserExist($username)) {
-            return false;
+            throw new HttpException(400, "User already exists", NULL);
         }
 
         $hashedPassword = $this->getHashedPassword($password);

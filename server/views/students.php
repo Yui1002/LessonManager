@@ -9,7 +9,7 @@ class Students
     private $getStudentsSql = "SELECT * FROM students";
     private $getStudentByEmailSql = "SELECT * FROM students WHERE email = ?";
     private $getStudentIdSql = "SELECT id FROM students WHERE email = ?";
-    private $createNewStudentSql = "INSERT INTO students VALUES (?, ?, ?, ?, ?, ?, ?)";
+    private $createNewStudentSql = "INSERT INTO students VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?)";
     private $deleteStudentSql = "DELETE FROM students WHERE email = ?";
 
     private $data;
@@ -51,12 +51,11 @@ class Students
         return $user;
     }
 
-    public function createNewStudent($req, $file)
+    public function createNewStudent($firstName, $lastName, $country, $phoneNumber, $email, $file, $lessonHours)
     {
         $stmt = mysqli_prepare($this->db->getConnection(), $this->createNewStudentSql);
-        mysqli_stmt_bind_param($stmt, "ssssssi", $req->firstName, $req->lastName, $req->country, $req->phone, $file->file, $req->hours);
-        mysqli_stmt_execute($stmt);
-
+        mysqli_stmt_bind_param($stmt, "ssssssi", $firstName, $lastName, $country, $phoneNumber, $email, $file, $lessonHours);
+        return mysqli_stmt_execute($stmt);
     }
 
     public function getEncoded() {

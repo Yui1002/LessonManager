@@ -4,6 +4,7 @@ include_once SYSTEM_PATH . '/views/userAction.php';
 include_once SYSTEM_PATH . "/views/students.php";
 include_once SYSTEM_PATH . "/views/notification.php";
 
+
 //Get the action from the url. This assumes every request has a action param passed in
 //function or class (action) returns string
 $action = "default";
@@ -20,7 +21,7 @@ $controller->route($action);
 
 class RootController
 {
-    
+
     private $data;
     private $student;
     private $userActions;
@@ -35,35 +36,42 @@ class RootController
     }
     public function route($action)
     {
-        $this->data = json_decode(file_get_contents("php://input"), true);
-        switch ($action) {
-            case 'index': 
-                $this->index();
-                break;
-            case 'register':
-                $this->register();
-                break;
-            case 'login':
-                $this->login();
-                break;
-            case 'getAllStudents':
-                $this->getAllStudents();
-                break;
-            case 'getStudentByEmail':
-                $this->getStudentByEmail();
-                break;
-            case 'getStudentId':
-                $this->getStudentId();
-                break;
-            case 'createNewStudent':
-                $this->createNewStudent();
-                break;
-            case 'notification':
-                $this->getNotification();
-                break;
-            case 'editProfile':
-                $this->editProfile();
-                break;
+        //global middleware to handle exceptions
+        try {
+            $this->data = json_decode(file_get_contents("php://input"), true);
+            switch ($action) {
+                case 'index':
+                    $this->index();
+                    break;
+                case 'register':
+                    $this->register();
+                    break;
+                case 'login':
+                    $this->login();
+                    break;
+                case 'getAllStudents':
+                    $this->getAllStudents();
+                    break;
+                case 'getStudentByEmail':
+                    $this->getStudentByEmail();
+                    break;
+                case 'getStudentId':
+                    $this->getStudentId();
+                    break;
+                case 'createNewStudent':
+                    $this->createNewStudent();
+                    break;
+                case 'notification':
+                    $this->getNotification();
+                    break;
+                case 'editProfile':
+                    $this->editProfile();
+                    break;
+            }
+        } catch (HttpException $ex) {
+            $ex->get();
+        } catch (Exception $ex) {
+            http_response_code(500);
         }
     }
 
@@ -76,9 +84,7 @@ class RootController
     //if the path intends to go to register, get the register file
     public function register()
     {
-        if (!$this->userActions->registerUser($this->data["username"], $this->data["password"])) {
-            http_response_code(400);
-        }
+        $this->userActions->registerUser($this->data["username"], $this->data["password"]);
     }
 
     public function login()
@@ -108,7 +114,37 @@ class RootController
 
     public function createNewStudent()
     {
-        echo $this->student->createNewStudent($this->data["req"], $data["file"])->getEncoded();
+        // upload file to server
+        $uploaddir = "server/uploads/";
+        $name = $this->generateName($_FILES['file']['name']);
+        $uploadfile = $uploaddir.basename($name);
+
+        if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
+            echo "The file has been uploaded successfully";
+        } else {
+            echo $_FILES["file"]["error"];
+        }
+
+        $result = $this->student->createNewStudent(
+            $_POST["firstName"],
+            $_POST["lastName"],
+            $_POST["country"],
+            $_POST["phoneNumber"],
+            $_POST["email"],
+            $uploadfile,
+            $_POST["lessonHours"],
+        );
+        
+    }
+
+    public function generateName($fileName) 
+    {
+        $name = substr($fileName, 0, strrpos($fileName, '.'));
+        if (strlen($name) > 15) $name = substr($name, 0, 15);
+        $name = trim($name);
+        $nameMime = substr($fileName, strrpos($fileName, '.'));
+        $timestampSec = strval(time());
+        return $name.$timestampSec.$nameMime;
     }
 
     public function getNotification()

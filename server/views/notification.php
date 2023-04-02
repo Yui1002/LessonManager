@@ -18,11 +18,12 @@ class Notification {
         $stmt = mysqli_query($this->db->getConnection(), $this->getNotificationSql);
         $rows = $stmt->fetch_all(MYSQLI_ASSOC);
         $this->data = $rows;
-        return $this->data ? $this : NULL;
+        return $this;
 
     }
 
     public function getEncoded() {
+        // handle null
         return json_encode($this->data);
     }
 }
