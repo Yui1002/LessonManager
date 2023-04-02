@@ -19,7 +19,6 @@ const Profile = (props) => {
   const getStudents = async () => {
     axios.get(`${config.BASE_PATH}getAllStudents`)
     .then(res => {
-      console.log('res: ', res);
       setStudents(res.data)
     })
     .catch(err => console.log(err));
@@ -31,7 +30,7 @@ const Profile = (props) => {
 
   const deleteStudent = async (email) => {
     if (confirm('Are you sure you want to delete the student?')) {
-      await axios.delete("/student", {
+      await axios.delete(`${config.BASE_PATH}deleteStudent`, {
         data: {
           email: email
         },

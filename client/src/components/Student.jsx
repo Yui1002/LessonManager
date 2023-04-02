@@ -7,14 +7,12 @@ import {
   CardContent,
   Avatar,
   Typography,
-  IconButton,
   Modal,
 } from "@mui/material";
 import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
 import EditSharpIcon from "@mui/icons-material/EditSharp";
 
 const Student = (props) => {
-  console.log(props)
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(true);
@@ -28,9 +26,7 @@ const Student = (props) => {
             props.student.profile_photo === null ? (
               <Avatar>H</Avatar>
             ) : (
-              <Avatar
-                src={`data:image/png;base64, ${props.student.profile_photo}`}
-              />
+              <Avatar src={props.student.profile_photo} />
             )
           }
         />
@@ -52,19 +48,19 @@ const Student = (props) => {
           </Typography>
         </CardContent>
         <CardActions>
-          <IconButton>
-            <DeleteSharpIcon
-              onClick={() => props.deleteStudent(props.student.email)}
-            />
-          </IconButton>
-          <IconButton>
-            <EditSharpIcon onClick={handleOpen} />
-          </IconButton>
+          <DeleteSharpIcon
+            onClick={() => props.deleteStudent(props.student.email)}
+          />
+          <EditSharpIcon onClick={handleOpen} />
         </CardActions>
       </Card>
 
       <Modal open={open} onClose={handleClose}>
-          <EditProfile student={props.student} setOpen={setOpen} getStudents={props.getStudents} />
+        <EditProfile
+          student={props.student}
+          setOpen={setOpen}
+          getStudents={props.getStudents}
+        />
       </Modal>
     </div>
   );

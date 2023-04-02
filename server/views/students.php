@@ -65,4 +65,10 @@ class Students
     public function editStudent() {
 
     }
+
+    public function deleteStudent($email) {
+        $stmt = mysqli_prepare($this->db->getConnection(), $this->deleteStudentSql);
+        mysqli_stmt_bind_param($stmt, "s", $email);
+        return mysqli_stmt_execute($stmt);
+    }
 }

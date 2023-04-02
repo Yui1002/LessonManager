@@ -12,8 +12,10 @@ if (isset($_GET['action'])) {
     $action = $_GET['action'];
 } else if (isset($_POST['action'])) {
     $action = $_POST['action'];
-} else if (isset($_PUT['action'])) {
-    $action = $_PUT['action'];
+} else if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+    $action = $_SERVER['REQUEST_METHOD'];
+} else if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+    $action = $_SERVER['REQUEST_METHOD'];
 }
 //$action = Action::GetActionName();
 $controller = new RootController();
@@ -66,6 +68,9 @@ class RootController
                     break;
                 case 'editProfile':
                     $this->editProfile();
+                    break;
+                case 'deleteStudent': 
+                    $this->deleteStudent();
                     break;
             }
         } catch (HttpException $ex) {
@@ -125,7 +130,7 @@ class RootController
             echo $_FILES["file"]["error"];
         }
 
-        $result = $this->student->createNewStudent(
+        echo $this->student->createNewStudent(
             $_POST["firstName"],
             $_POST["lastName"],
             $_POST["country"],
@@ -134,7 +139,6 @@ class RootController
             $uploadfile,
             $_POST["lessonHours"],
         );
-        
     }
 
     public function generateName($fileName) 
@@ -165,5 +169,9 @@ class RootController
         } else {
             echo $_FILES["file"]["error"];
         }
+    }
+
+    public function deleteStudent() {
+        echo $this->student->deleteStudent($this->data["email"]);
     }
 }

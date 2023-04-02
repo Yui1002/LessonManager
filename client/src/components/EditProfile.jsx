@@ -94,7 +94,7 @@ const EditProfile = (props) => {
           ) : (
             <img
               className="popup_img_photo"
-              src={`data:image/png;base64, ${props.student.profile_photo}`}
+              src={props.student.profile_photo}
             />
           )}
         </label>
