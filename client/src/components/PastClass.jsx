@@ -55,7 +55,7 @@ const PastClass = () => {
     <div>
       <button
         className="profile_go_back_button"
-        onClick={() => navigate("/home")}
+        onClick={() => navigate("/mainPage")}
       >
         Go Back
       </button>

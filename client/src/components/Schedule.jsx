@@ -211,7 +211,7 @@ const Schedule = (props) => {
       )}
       <button
         className="schedule_go_back_button"
-        onClick={() => navigate("/home")}
+        onClick={() => navigate("/mainPage")}
       >
         Go Back
       </button>

@@ -55,6 +55,7 @@ class UserAction
         mysqli_stmt_bind_param($stmt, "ss", $username, $hashPassword);
         mysqli_stmt_execute($stmt);
         $row = mysqli_stmt_fetch($stmt);
+        var_dump($row);
         return $row;
     }
 }

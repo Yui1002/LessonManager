@@ -20,8 +20,8 @@ class Students
     public function getAllStudents()
     {
         $stmt = mysqli_query($this->db->getConnection(), $this->getStudentsSql);
-        $row = $stmt->fetch_assoc();
-        return $row;
+        $rows = $stmt->fetch_all(MYSQLI_ASSOC);
+        return $rows;
     }
 
     public function getStudentByEmail($email)

@@ -2,6 +2,8 @@
 include_once SYSTEM_PATH."/global.php";
 include_once SYSTEM_PATH.'/views/userAction.php';
 include_once SYSTEM_PATH."/views/students.php";
+include_once SYSTEM_PATH."/views/notification.php";
+
 
 //Get the action from the url. This assumes every request has a action param passed in
 $action = "default";
@@ -45,6 +47,8 @@ class RootController {
             case 'createNewStudent': 
                 $this->createNewStudent();
                 break;
+            case 'notification':
+                $this->notification();
         }
     }
 
@@ -78,7 +82,8 @@ class RootController {
 
     public function getAllStudents() {
         $students = new Students();
-        return $students->getAllStudents();
+        $result = $students->getAllStudents();
+        echo json_encode($result);
     }
 
     public function getStudentByEmail() {
@@ -97,6 +102,10 @@ class RootController {
         $students = new Students();
         $data = json_decode(file_get_contents("php://input"), true);
         return $students->createNewStudent($data["req"], $data["file"]);  
+    }
+
+    public function notification() {
+        $data = json_decode(file_get_contents("php://input"), true);
     }
 
 

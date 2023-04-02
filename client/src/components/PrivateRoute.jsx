@@ -8,7 +8,7 @@ const PrivateRoute = () => {
     if (!user) {
         return <Navigate to="/login" replace />
     } else {
-        return <Outlet context={{user}} />
+       
     }
 }
 

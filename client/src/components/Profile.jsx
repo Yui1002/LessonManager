@@ -4,6 +4,7 @@ import Student from "./Student.jsx";
 import axios from "axios";
 import "./Profile.css";
 import NewStudent from "./NewStudent.jsx";
+import { config } from './../../../config';
 
 const Profile = (props) => {
   const [students, setStudents] = useState([]);
@@ -16,8 +17,11 @@ const Profile = (props) => {
   }, [])
 
   const getStudents = async () => {
-    axios.get('/students')
-    .then(res => setStudents(res.data))
+    axios.get(`${config.BASE_PATH}getAllStudents`)
+    .then(res => {
+      console.log('res: ', res);
+      setStudents(res.data)
+    })
     .catch(err => console.log(err));
   };
 
@@ -40,7 +44,7 @@ const Profile = (props) => {
     <div>
       <button
         className="profile_go_back_button"
-        onClick={() => navigate("/home")}
+        onClick={() => navigate("/mainPage")}
       >
         Go Back
       </button>

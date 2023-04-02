@@ -10,6 +10,9 @@ import Entry from "./Entry.jsx";
 import PastClass from './PastClass.jsx';
 import PrivateRoute from './PrivateRoute.jsx';
 import "./App.css";
+import * as Config from '../../../config';
+
+axios.defaults.baseURL = Config.BASE_PATH;
 
 
 const App = () => {
@@ -30,8 +33,7 @@ const App = () => {
       <Route path="/" element={<Entry />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      <Route element={<PrivateRoute />}>
-        <Route path="/home" element={<Home setStudents={setStudents} />} />
+      <Route path="/mainPage" element={<Home setStudents={setStudents} />} />
         <Route
           path="/profile"
           // element={<Profile getStudents={getStudents} students={students} />}
@@ -42,6 +44,8 @@ const App = () => {
           element={<Schedule students={students} />}
         />
         <Route path="/pastClass" element={<PastClass />} />
+      <Route element={<PrivateRoute />}>
+  
       </Route>
     </Routes>
   );
