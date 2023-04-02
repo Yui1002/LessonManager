@@ -30,7 +30,7 @@ class RootController {
             case 'register': //HOST/lessonManager?action=register
                 $this->register();
                 break;
-            case 'login'://HOST/lessonManager?action=login 
+            case 'login'://HOST/lessonManager?action=login
                 $this->login();
                 break;
             case 'getAllStudents': //HOST/lessonManager?action=students

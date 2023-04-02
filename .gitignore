@@ -1,2 +1,10 @@
+node_modules
+.env
+client/dist/main.js
+client/dist/images
+config.js
 .DS_Store
-config.php
+server/config.php
+server_nodejs
+.htaccess
+

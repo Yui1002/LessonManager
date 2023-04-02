@@ -1,0 +1,26 @@
+.popup_event_container {
+  position: relative;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 50%;
+}
+
+.popup_event_close {
+  color: #aaaaaa;
+  font-size: 28px;
+  font-weight: bold;
+  position: absolute;
+  top: 2%;
+  right: 2%;
+  cursor: pointer;
+}
+
+.popup_event_title {
+  text-align: center;
+}
+
+.popup_event_date, .popup_event_section {
+  margin-bottom: 10px;
+}
