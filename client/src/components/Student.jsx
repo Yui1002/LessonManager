@@ -14,6 +14,7 @@ import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
 import EditSharpIcon from "@mui/icons-material/EditSharp";
 
 const Student = (props) => {
+  console.log(props)
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(true);
@@ -35,10 +36,10 @@ const Student = (props) => {
         />
         <CardContent>
           <Typography variant="body1" component="div">
-            {props.student.firstName} {props.student.lastName}
+            {props.student.first_name} {props.student.last_name}
           </Typography>
           <Typography variant="body2" component="div">
-            {props.student.lessonHours} hours
+            {props.student.lesson_hours} hours
           </Typography>
           <Typography variant="body2" component="div">
             {props.student.country}
