@@ -12,16 +12,20 @@ class Students
     private $createNewStudentSql = "INSERT INTO students VALUES (?, ?, ?, ?, ?, ?, ?)";
     private $deleteStudentSql = "DELETE FROM students WHERE email = ?";
 
+    private $data;
+
     function __construct()
     {
         $this->db = Database::getInstance();
+        $this->data = NULL;
     }
 
     public function getAllStudents()
     {
         $stmt = mysqli_query($this->db->getConnection(), $this->getStudentsSql);
         $rows = $stmt->fetch_all(MYSQLI_ASSOC);
-        return $rows;
+        $this->data = $rows;
+        return $this;
     }
 
     public function getStudentByEmail($email)
@@ -30,8 +34,9 @@ class Students
         mysqli_stmt_bind_param($stmt, "s", $email);
         mysqli_stmt_execute($stmt);
         $result = $stmt->get_result(); 
-        $user = $result->fetch_assoc(); 
-        return $user;
+        $user = $result->fetch_assoc();
+        $this->data = $user;
+        return $this;
     }
 
     public function getStudentId($email)
@@ -42,15 +47,23 @@ class Students
         $result = $stmt->get_result(); 
         $user = $result->fetch_assoc(); 
         var_dump($user);
+        $this->data =$user; 
         return $user;
     }
-
 
     public function createNewStudent($req, $file)
     {
         $stmt = mysqli_prepare($this->db->getConnection(), $this->createNewStudentSql);
         mysqli_stmt_bind_param($stmt, "ssssssi", $req->firstName, $req->lastName, $req->country, $req->phone, $file->file, $req->hours);
         mysqli_stmt_execute($stmt);
+
+    }
+
+    public function getEncoded() {
+        return json_encode($this->data);
+    }
+
+    public function editStudent() {
 
     }
 }

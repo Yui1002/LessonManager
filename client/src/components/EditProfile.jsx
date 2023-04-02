@@ -3,9 +3,9 @@ import axios from "axios";
 import "./EditProfile.css";
 import COUNTRY_LIST from "./COUNTRY.js";
 import { Box, Typography, TextField, MenuItem, Button } from "@mui/material";
+import { config } from './../../../config';
 
 const EditProfile = (props) => {
-  console.log(props);
 
   const style = {
     position: "absolute",
@@ -73,7 +73,7 @@ const EditProfile = (props) => {
     formData.append("newEmail", email);
     formData.append("lessonHours", hours);
 
-    const res = await axios.put("/student", formData, {
+    const res = await axios.post(`${config.BASE_PATH}editProfile`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
 

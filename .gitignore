@@ -7,4 +7,5 @@ config.js
 server/config.php
 server_nodejs
 .htaccess
+server/uploads
 
