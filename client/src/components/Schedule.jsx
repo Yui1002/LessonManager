@@ -147,7 +147,7 @@ const Schedule = (props) => {
 
   const getSchedule = async () => {
     axios
-      .get(`${config.BASE_PATH}getSchedules`)
+      .get(`${config.BASE_PATH}getClasses`)
       .then((res) => {
         if (!res.data || !res.data.length) {
           setClasses([]);
@@ -172,7 +172,7 @@ const Schedule = (props) => {
     );
     if (warning) {
       axios
-        .delete("/schedule", {
+        .delete(`${config.BASE_PATH}deleteClass`, {
           data: {
             startDate: moment(startDate).format("YYYY-MM-DD HH:mm:ss"),
             endDate: moment(endDate).format("YYYY-MM-DD HH:mm:ss"),

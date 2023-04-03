@@ -3,7 +3,7 @@ include_once SYSTEM_PATH . "/global.php";
 include_once SYSTEM_PATH . '/views/userAction.php';
 include_once SYSTEM_PATH . "/views/students.php";
 include_once SYSTEM_PATH . "/views/notification.php";
-include_once SYSTEM_PATH . "/views/schedules.php";
+include_once SYSTEM_PATH . "/views/classes.php";
 
 
 //Get the action from the url. This assumes every request has a action param passed in
@@ -29,7 +29,7 @@ class RootController
     private $student;
     private $userActions;
     private $notification;
-    private $schedules;
+    private $classes;
 
     public function __construct()
     {
@@ -37,7 +37,7 @@ class RootController
         $this->student = new Students();
         $this->userActions = new UserAction();
         $this->notification = new Notification();
-        $this->schedules = new Schedules();
+        $this->classes = new Classes();
     }
     public function route($action)
     {
@@ -75,11 +75,14 @@ class RootController
                 case 'deleteStudent': 
                     $this->deleteStudent();
                     break;
-                case 'getSchedules':
-                    $this->getSchedules();
+                case 'getClasses':
+                    $this->getClasses();
                     break;
-                case 'createSchedule':
-                    $this->createSchedule();
+                case 'createClass':
+                    $this->createClass();
+                    break;
+                case 'deleteClass':
+                    $this->deleteClass();
                     break;
             }
         } catch (HttpException $ex) {
@@ -206,17 +209,22 @@ class RootController
         }
     } 
 
-    public function getSchedules() {
-        echo $this->schedules->getSchedules()->getEncoded();
+    public function getClasses() {
+        echo $this->classes->getClasses()->getEncoded();
     }
 
-    public function createSchedule() {
-        echo $this->schedules->createSchedule(
+    public function createClass() {
+        $this->classes->createClass(
             $this->data["student_id"], 
             $this->data["name"], 
             $this->data["start_date"], 
             $this->data["end_date"], 
             $this->data["description"], 
         );
+    }
+
+    public function deleteClass() {
+        $id = $this->classes->getClassId($this->data["start_date"], $this->data["end_date"])->getData()["id"];
+        echo $this->classes->deleteClass($id);
     }
 }

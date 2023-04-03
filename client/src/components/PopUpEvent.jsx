@@ -27,7 +27,7 @@ const PopUpEvent = (props) => {
     }
 
     axios
-      .post(`${config.BASE_PATH}createSchedule`, {
+      .post(`${config.BASE_PATH}createClass`, {
         name: name,
         email: email,
         startDate: startDateInTimeStamp,
