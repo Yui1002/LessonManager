@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./PopUpEvent.css";
 import moment from "moment";
+import { config } from './../../../config';
 
 const PopUpEvent = (props) => {
   const [scheduleError, setScheduleError] = useState("");
@@ -26,7 +27,7 @@ const PopUpEvent = (props) => {
     }
 
     axios
-      .post("/schedule", {
+      .post(`${config.BASE_PATH}createSchedule`, {
         name: name,
         email: email,
         startDate: startDateInTimeStamp,

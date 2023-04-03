@@ -3,6 +3,7 @@ include_once SYSTEM_PATH . "/global.php";
 include_once SYSTEM_PATH . '/views/userAction.php';
 include_once SYSTEM_PATH . "/views/students.php";
 include_once SYSTEM_PATH . "/views/notification.php";
+include_once SYSTEM_PATH . "/views/schedules.php";
 
 
 //Get the action from the url. This assumes every request has a action param passed in
@@ -17,7 +18,7 @@ if (isset($_GET['action'])) {
 } else if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
     $action = $_SERVER['REQUEST_METHOD'];
 }
-//$action = Action::GetActionName();
+
 $controller = new RootController();
 $controller->route($action);
 
@@ -28,6 +29,7 @@ class RootController
     private $student;
     private $userActions;
     private $notification;
+    private $schedules;
 
     public function __construct()
     {
@@ -35,6 +37,7 @@ class RootController
         $this->student = new Students();
         $this->userActions = new UserAction();
         $this->notification = new Notification();
+        $this->schedules = new Schedules();
     }
     public function route($action)
     {
@@ -71,6 +74,12 @@ class RootController
                     break;
                 case 'deleteStudent': 
                     $this->deleteStudent();
+                    break;
+                case 'getSchedules':
+                    $this->getSchedules();
+                    break;
+                case 'createSchedule':
+                    $this->createSchedule();
                     break;
             }
         } catch (HttpException $ex) {
@@ -119,16 +128,6 @@ class RootController
 
     public function createNewStudent()
     {
-        // upload file to server
-        // $uploaddir = "server/uploads/";
-        // $name = $this->generateName($_FILES['file']['name']);
-        // $uploadfile = $uploaddir.basename($name);
-
-        // if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
-        //     echo "The file has been uploaded successfully";
-        // } else {
-        //     echo $_FILES["file"]["error"];
-        // }
         $uploadFile = $this->uploadFile($_FILES);
 
         echo $this->student->createNewStudent(
@@ -206,4 +205,18 @@ class RootController
             echo ("$file has been deleted");
         }
     } 
+
+    public function getSchedules() {
+        echo $this->schedules->getSchedules()->getEncoded();
+    }
+
+    public function createSchedule() {
+        echo $this->schedules->createSchedule(
+            $this->data["student_id"], 
+            $this->data["name"], 
+            $this->data["start_date"], 
+            $this->data["end_date"], 
+            $this->data["description"], 
+        );
+    }
 }

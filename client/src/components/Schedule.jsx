@@ -9,6 +9,7 @@ import { NUMBER_MONTHS } from "../helpers/CONSTANT.js";
 import Alert from "@mui/material/Alert";
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
+import { config } from './../../../config';
 
 const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const today = new Date();
@@ -32,8 +33,6 @@ const Schedule = (props) => {
   const [isScheduled, setIsScheduled] = useState(false);
   const [open, setOpen] = useState(false);
 
-  console.log('is overlapped', isOverlapped)
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -43,7 +42,7 @@ const Schedule = (props) => {
   }, []);
 
   const getStudents = async () => {
-    axios.get('/students')
+    axios.get(`${config.BASE_PATH}getAllStudents`)
     .then(res => setStudents(res.data))
     .catch(err => console.log(err));
   };
@@ -148,7 +147,7 @@ const Schedule = (props) => {
 
   const getSchedule = async () => {
     axios
-      .get("/schedule")
+      .get(`${config.BASE_PATH}getSchedules`)
       .then((res) => {
         if (!res.data || !res.data.length) {
           setClasses([]);

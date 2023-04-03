@@ -42,7 +42,6 @@ class Students
 
     public function createNewStudent($firstName, $lastName, $country, $phoneNumber, $email, $file, $lessonHours)
     {
-        echo $firstName;
         $stmt = mysqli_prepare($this->db->getConnection(), $this->createNewStudentSql);
         mysqli_stmt_bind_param($stmt, "ssssssi", $firstName, $lastName, $country, $phoneNumber, $email, $file, $lessonHours);
         return mysqli_stmt_execute($stmt);
