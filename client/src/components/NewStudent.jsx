@@ -3,6 +3,7 @@ import axios from "axios";
 import "./NewStudent.css"
 import COUNTRY_LIST from "./COUNTRY.js";
 import { FaUserAlt } from "react-icons/fa";
+import { config } from './../../../config';
 
 const NewStudent = (props) => {
   const [selectedFile, setSelectedFile] = useState();
@@ -22,7 +23,7 @@ const NewStudent = (props) => {
     formData.append("email", e.target[5].value);
     formData.append("lessonHours", e.target[6].value);
 
-    await axios.post("/students", formData, {
+    await axios.post(`${config.BASE_PATH}students`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
     await axios.get("/profiles", { params: { email: e.target[5].value } });

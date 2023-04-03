@@ -120,15 +120,16 @@ class RootController
     public function createNewStudent()
     {
         // upload file to server
-        $uploaddir = "server/uploads/";
-        $name = $this->generateName($_FILES['file']['name']);
-        $uploadfile = $uploaddir.basename($name);
+        // $uploaddir = "server/uploads/";
+        // $name = $this->generateName($_FILES['file']['name']);
+        // $uploadfile = $uploaddir.basename($name);
 
-        if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
-            echo "The file has been uploaded successfully";
-        } else {
-            echo $_FILES["file"]["error"];
-        }
+        // if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
+        //     echo "The file has been uploaded successfully";
+        // } else {
+        //     echo $_FILES["file"]["error"];
+        // }
+        $uploadFile = $this->uploadFile($_FILES);
 
         echo $this->student->createNewStudent(
             $_POST["firstName"],
@@ -136,7 +137,7 @@ class RootController
             $_POST["country"],
             $_POST["phoneNumber"],
             $_POST["email"],
-            $uploadfile,
+            $uploadFile,
             $_POST["lessonHours"],
         );
     }
@@ -158,20 +159,51 @@ class RootController
 
     public function editProfile()
     {
-        $params = $_POST['firstName'];
-        var_dump($params);
-        $students = new Students();
-        $uploaddir = "server/uploads/";
-        $uploadfile = $uploaddir . basename($_FILES['file']['name']);
-
-        if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
-            echo "The file has been uploaded successfully";
-        } else {
-            echo $_FILES["file"]["error"];
+        // upload new profile photo
+        $uploadFile = $this->uploadFile($_FILES);
+        // find a record by email
+        $email = $_POST["email"];
+        $record = $this->student->getStudentByEmail($email)->getData();
+        if ($record == NULL) {
+            throw new HttpException(400, "User not found", NULL);
         }
+        $id = $record["id"];
+        $oldFile = $record["profile_photo"];
+        $this->deleteFile($oldFile);
+        echo $this->student->editStudent(
+            $id, 
+            $_POST["firstName"], 
+            $_POST["lastName"], 
+            $_POST["country"], 
+            $_POST["phoneNumber"], 
+            $_POST["email"], 
+            $uploadFile, 
+            $_POST["lessonHours"]
+        );
     }
 
     public function deleteStudent() {
         echo $this->student->deleteStudent($this->data["email"]);
     }
+
+    public function uploadFile($file) {
+        $uploaddir = "server/uploads/";
+        $name = $this->generateName($file['file']['name']);
+        $uploadfile = $uploaddir.basename($name);
+
+        if (move_uploaded_file($file['file']['tmp_name'], $uploadfile)) {
+            echo "The file has been uploaded successfully";
+        } else {
+            echo $file["file"]["error"];
+        }
+        return $uploadfile;
+    }
+
+    public function deleteFile($file) {
+        if (!unlink($file)) {
+            echo ("$file cannot be deleted due to an error");
+        } else {
+            echo ("$file has been deleted");
+        }
+    } 
 }
