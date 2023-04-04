@@ -197,6 +197,11 @@ class RootController
     }
 
     public function deleteStudent() {
+        // get image to delete from email
+        $record = $this->student->getStudentByEmail($this->data["email"])->getData();
+        $file = $record["profile_photo"];
+        var_dump($file);
+        $this->deleteFile($file);
         echo $this->student->deleteStudent($this->data["email"]);
     }
 
@@ -213,7 +218,6 @@ class RootController
     }
 
     public function deleteFile($file) {
-        var_dump($file);
         if (!$file) return;
         if (!unlink($file)) {
             echo "Failed to delete file";
