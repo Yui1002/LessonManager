@@ -10,24 +10,9 @@ import Entry from "./Entry.jsx";
 import PastClass from './PastClass.jsx';
 import PrivateRoute from './PrivateRoute.jsx';
 import "./App.css";
-import * as Config from '../../../config';
-
-axios.defaults.baseURL = Config.BASE_PATH;
-
 
 const App = () => {
   const [students, setStudents] = useState([]);
-
-  // useEffect(() => {
-  //   getStudents();
-  // }, []);
-
-  // const getStudents = async () => {
-  //   axios.get('/students')
-  //   .then(res => setStudents(res.data))
-  //   .catch(err => console.log(err));
-  // };
-
   return (
     <Routes>
       <Route path="/" element={<Entry />} />

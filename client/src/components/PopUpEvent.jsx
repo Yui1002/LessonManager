@@ -72,7 +72,7 @@ const PopUpEvent = (props) => {
           <label htmlFor="name">Student name</label>
           <select name="name" id="name">
             <option>select</option>
-            {props.students.length && props.students.map((student, index) => (
+            {props.students.length > 0 && props.students.map((student, index) => (
               <option key={index}>{`${student.firstName} ${student.lastName} (${student.email})`}</option>
             ))}
           </select>

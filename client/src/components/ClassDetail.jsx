@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import './ClassDetail.css';
 import { BsFillPeopleFill } from 'react-icons/bs';
 import {AiFillCalendar} from 'react-icons/ai';

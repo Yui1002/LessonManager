@@ -161,24 +161,36 @@ class RootController
 
     public function editProfile()
     {
-        // upload new profile photo
-        $uploadFile = $this->uploadFile($_FILES);
-        // find a record by email
-        $email = $_POST["email"];
+        $isNewFileUploaded = strlen($_FILES['file']['name']) > 0;
+        var_dump($isNewFileUploaded);
+        if ($isNewFileUploaded) {
+            $uploadFile = $this->uploadFile($_FILES);
+        } else {
+            $uploadFile = NULL;
+        }
+
+        // var_dump($uploadFile);
+        
+        $email = $_POST["email"]; // old email
+        // var_dump($email);
         $record = $this->student->getStudentByEmail($email)->getData();
+        // var_dump($record["id"]);
         if ($record == NULL) {
             throw new HttpException(400, "User not found", NULL);
         }
-        $id = $record["id"];
-        $oldFile = $record["profile_photo"];
-        $this->deleteFile($oldFile);
+        // var_dump($record);
+        // $id = $record["id"];
+    
+        if ($isNewFileUploaded) {
+            $this->deleteFile($record["profile_photo"]);
+        }
         echo $this->student->editStudent(
-            $id, 
+            $record["id"], 
             $_POST["firstName"], 
             $_POST["lastName"], 
             $_POST["country"], 
             $_POST["phoneNumber"], 
-            $_POST["email"], 
+            $_POST["newEmail"],
             $uploadFile, 
             $_POST["lessonHours"]
         );
@@ -194,18 +206,19 @@ class RootController
         $uploadfile = $uploaddir.basename($name);
 
         if (move_uploaded_file($file['file']['tmp_name'], $uploadfile)) {
-            echo "The file has been uploaded successfully";
+            return $uploadfile;
         } else {
-            echo $file["file"]["error"];
+            throw new HttpException(500, "Failed to upload file", NULL);
         }
-        return $uploadfile;
     }
 
     public function deleteFile($file) {
+        var_dump($file);
+        if (!$file) return;
         if (!unlink($file)) {
-            echo ("$file cannot be deleted due to an error");
+            echo "Failed to delete file";
         } else {
-            echo ("$file has been deleted");
+            echo "$file has been deleted";
         }
     } 
 

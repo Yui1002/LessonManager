@@ -11,8 +11,7 @@ class Students
     private $getStudentByIdSql = "SELECT * FROM students WHERE id = ?";
     private $createNewStudentSql = "INSERT INTO students VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?)";
     private $deleteStudentSql = "DELETE FROM students WHERE email = ?";
-    private $updateStudentSql = "UPDATE students SET first_name = ?, last_name=?, country=?, phone_number=?, email=?, profile_photo=?, lesson_hours=? WHERE id=?";
-
+    private $updateStudentSql = "UPDATE students SET first_name = ?, last_name = ?, country = ?, phone_number = ?, email = ?, lesson_hours = ?";
     private $data;
 
     function __construct()
@@ -50,13 +49,15 @@ class Students
     
     public function editStudent($id, $firstName, $lastName, $country, $phoneNumber, $email, $file, $lessonHours) 
     {
-        // update row
-        $stmt = mysqli_prepare($this->db->getConnection(), $this->updateStudentSql);
-        mysqli_stmt_bind_param($stmt, "ssssssii", $firstName, $lastName, $country, $phoneNumber, $email, $file, $lessonHours, $id);
-        mysqli_stmt_execute($stmt);
-        
-        // get row 
-        echo $this->getStudentById($id)->getData();
+        $query = $this->updateStudentSql . ($file ? ",  profile_photo = ?" : "") . " WHERE id = ?";
+        var_dump($query);
+        $stmt = mysqli_prepare($this->db->getConnection(), $query);
+        if ($file) {
+            mysqli_stmt_bind_param($stmt, "sssssisi", $firstName, $lastName, $country, $phoneNumber, $email, $lessonHours, $file, $id);
+        } else {
+            mysqli_stmt_bind_param($stmt, "sssssii", $firstName, $lastName, $country, $phoneNumber, $email, $lessonHours, $id);
+        }
+        return mysqli_stmt_execute($stmt);
     }
     
     public function getStudentById($id) {

@@ -10,7 +10,7 @@ import Alert from "@mui/material/Alert";
 import Slide from "@mui/material/Slide";
 import Box from "@mui/material/Box";
 import { logOut } from "../helpers/cookie.js";
-// import paramters from '../../../config.js';
+import { config } from './../../../config';
 
 // console.log(paramters)/
 const Home = (props) => {
@@ -27,7 +27,7 @@ const Home = (props) => {
   };
 
   const hasClassSoon = () => {
-    axios.get("http://localhost:8888/lessonManager/api/notification").then((data) => {
+    axios.get(`${config.BASE_PATH}notification`).then((data) => {
       setClassScheduledIn1hour(data.data);
     });
   };

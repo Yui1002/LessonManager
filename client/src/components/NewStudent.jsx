@@ -23,10 +23,10 @@ const NewStudent = (props) => {
     formData.append("email", e.target[5].value);
     formData.append("lessonHours", e.target[6].value);
 
-    await axios.post(`${config.BASE_PATH}students`, formData, {
+    await axios.post(`${config.BASE_PATH}createNewStudent`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
-    await axios.get("/profiles", { params: { email: e.target[5].value } });
+    // await axios.get("/profiles", { params: { email: e.target[5].value } });
     props.getStudents();
   };
 

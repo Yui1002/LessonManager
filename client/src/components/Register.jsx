@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Register.css';
+import { config } from './../../../config';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ const Register = () => {
     let username = e.target[0].value;
     let password = e.target[1].value;
 
-    axios.post('http://localhost:80/?action=register', {
+    axios.post(`${config.BASE_PATH}register`, {
       username: username,
       password: password
     })

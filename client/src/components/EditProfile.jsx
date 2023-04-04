@@ -76,8 +76,7 @@ const EditProfile = (props) => {
     const res = await axios.post(`${config.BASE_PATH}editProfile`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
-
-    if (res.status === 204) {
+    if (res.status === 200) {
       props.getStudents();
     } else {
       console.log("update failed");
