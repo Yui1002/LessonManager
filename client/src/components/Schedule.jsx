@@ -3,309 +3,167 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Schedule.css";
 import PopUpEvent from "./PopUpEvent.jsx";
-import moment from "moment";
 import ClassDetail from "./ClassDetail.jsx";
-import { NUMBER_MONTHS } from "../helpers/CONSTANT.js";
-import Alert from "@mui/material/Alert";
-import CloseIcon from '@mui/icons-material/Close';
-import IconButton from '@mui/material/IconButton';
-import { config } from './../../../config';
-
-const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-const today = new Date();
-const TODAY = today.getDate();
-let year = today.getFullYear();
-let month = today.getMonth();
+import { config } from "./../../../config";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
+import {
+  Alert,
+  Button,
+  CloseIcon,
+  IconButton,
+  Modal,
+  Box,
+  Typography,
+  TextField,
+  FormControl,
+  FormLabel,
+  InputLabel,
+  MenuItem,
+  Select,
+  Input,
+  NativeSelect,
+} from "@mui/material";
 
 const Schedule = (props) => {
-  const [calendar, setCalendar] = useState([]);
+  console.log(props);
+  const [value, setValue] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
   const [students, setStudents] = useState([]);
-  const [classes, setClasses] = useState([]);
-  const [scheduleClassShown, setScheduleClassShown] = useState(false);
-  const [noClassScheduled, setNoClassScheduled] = useState(false);
-  const [classDetailShown, setClassDetailShown] = useState(false);
-  const [currentShownSchedule, setCurrentShownSchedule] = useState({});
-  const duringPopUp = scheduleClassShown ? "during-popup" : "";
-  const duringPopUp2 = classDetailShown ? "during-popup_2" : "";
-  const [className, setClassName] = useState("");
-  const [classDate, setClassDate] = useState();
-  const [isOverlapped, setIsOverlapped] = useState(false);
-  const [isScheduled, setIsScheduled] = useState(false);
-  const [open, setOpen] = useState(false);
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     getStudents();
-    showCalendar();
-    getSchedule();
   }, []);
 
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+  };
+
   const getStudents = async () => {
-    axios.get(`${config.BASE_PATH}getAllStudents`)
-    .then(res => setStudents(res.data))
-    .catch(err => console.log(err));
-  };
-
-  const showCalendar = () => {
-    let dates = [
-      ...getCalendarHead(),
-      ...getCalendarBody(),
-      ...getCalendarTail(),
-    ];
-
-    let weeks = [];
-    let weeksCount = dates.length / 7;
-
-    for (let i = 0; i < weeksCount; i++) {
-      weeks.push(dates.splice(0, 7));
-    }
-
-    setCalendar(weeks);
-  };
-
-  const getCalendarHead = () => {
-    let dates = [];
-    let d = new Date(year, month, 0).getDate(); // 30
-    let n = new Date(year, month, 1).getDay(); // 4
-
-    for (let i = 0; i < n; i++) {
-      dates.unshift({
-        date: d - i,
-        month: month - 1,
-        year: year,
-      });
-    }
-    return dates;
-  };
-
-  const getCalendarBody = () => {
-    let dates = [];
-    let lastDate = new Date(year, month + 1, 0).getDate();
-
-    for (let i = 1; i <= lastDate; i++) {
-      dates.push({
-        date: i,
-        month: month,
-        year: year,
-      });
-    }
-    return dates;
-  };
-
-  const getCalendarTail = () => {
-    let dates = [];
-    let lastDay = new Date(year, month + 1, 0).getDay();
-
-    for (let i = 1; i < 7 - lastDay; i++) {
-      dates.push({
-        date: i,
-        month: month + 1,
-        year: year,
-      });
-    }
-    return dates;
-  };
-
-  const getPreviousMonth = () => {
-    month--;
-    if (month < 0) {
-      year--;
-      month = 11;
-    }
-    showCalendar();
-  };
-
-  const getNextMonth = () => {
-    month++;
-    if (month > 11) {
-      year++;
-      month = 0;
-    }
-    showCalendar();
-  };
-
-  const setEvent = (e, year, month, date) => {
-    setClassName(e.target.className);
-    const event = {
-      year: year,
-      month: month + 1,
-      date: date,
-    };
-    setCurrentShownSchedule(event);
-    setScheduleClassShown(true);
-  };
-
-  const closeEvent = () => {
-    setScheduleClassShown(false);
-  };
-
-  const showClassDetail = (date) => {
-    setClassDetailShown(true);
-    setClassDate(date);
-  };
-
-  const getSchedule = async () => {
     axios
-      .get(`${config.BASE_PATH}getClasses`)
-      .then((res) => {
-        if (!res.data || !res.data.length) {
-          setClasses([]);
-        } else {
-          res.data.map((d) => {
-            d["start_date"] = new Date(d["start_date"]).toString();
-            d["end_date"] = new Date(d["end_date"]).toString();
-          });
-          setClasses(res.data);
-        }
-      })
-      .catch((err) => console.log("error: ", err));
+      .get(`${config.BASE_PATH}getAllStudents`)
+      .then((res) => setStudents(res.data))
+      .catch((err) => console.log(err));
   };
 
-  const closeClassDetail = () => {
-    setClassDetailShown(false);
+  const onValueChange = function (e) {
+    let year = e["$y"];
+    let month = e["$M"] + 1;
+    month = month < 10 ? `0${month}` : `${month}`;
+    let day = e["$D"];
+    day = day < 10 ? `0${day}` : `${day}`;
+    setValue(`${year}-${month}-${day}`);
   };
 
-  const deleteClass = (startDate, endDate) => {
-    const warning = window.confirm(
-      "Are you sure you want to delete the scheduled class?"
-    );
-    if (warning) {
-      axios
-        .delete(`${config.BASE_PATH}deleteClass`, {
-          data: {
-            startDate: moment(startDate).format("YYYY-MM-DD HH:mm:ss"),
-            endDate: moment(endDate).format("YYYY-MM-DD HH:mm:ss"),
-          },
-        })
-        .then(async (data) => {
-          await getSchedule();
-        });
-    }
+  const handleOpen = function () {
+    setModalOpen(true);
+  };
+
+  const handleClose = function () {
+    setModalOpen(false);
   };
 
   return (
     <div className="schedule_container">
-      {isOverlapped && open && (
-        <Alert
-          severity="error"
-          action={
-            <IconButton
-              aria-label="close"
-              color="inherit"
-              size="small"
-              onClick={() => setOpen(false)}
-            >
-              <CloseIcon fontSize="inherit" />
-            </IconButton>
-          }
-        >
-          This class is duplicated to another class. Try it different time. 
-        </Alert>
-      )}
-      {isScheduled && (
-        <Alert severity="success" >
-          Class scheduled successfully
-        </Alert>
-      )}
-      <button
-        className="schedule_go_back_button"
-        onClick={() => navigate("/mainPage")}
-      >
-        Go Back
-      </button>
-      <br />
-      <button className="schedule_prev_button" onClick={getPreviousMonth}>
-        &lt;
-      </button>
-      <div className="schedule_title_date">
-        {NUMBER_MONTHS[month + 1]} {year}
-      </div>
-      <button className="schedule_next_button" onClick={getNextMonth}>
-        &gt;
-      </button>
-      {noClassScheduled && (
-        <p className="schedule_no_class">No class scheduled in this month</p>
-      )}
-      <table className="schedule_calendar">
-        <thead>
-          <tr>
-            {days.map((day) => (
-              <th className="schedule_day" key={day}>
-                {day}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {calendar.map((week) => {
-            return (
-              <tr className="schedule_week">
-                {week.map((day) => (
-                  <td
-                    className="schedule_date"
-                    onClick={(e) =>
-                      setEvent(e, year, day["month"], day["date"])
-                    }
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DateCalendar onChange={onValueChange} onClick={handleOpen} />
+        {modalOpen && (
+          <Modal
+            open={modalOpen}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                Schedule a class
+              </Typography>
+              <FormControl>
+                <TextField
+                  sx={{ mb: 3, mt: 3 }}
+                  id="datetime-local"
+                  label="Start"
+                  type="datetime-local"
+                  variant="standard"
+                  defaultValue={`${value}T10:00`}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+                <TextField
+                  sx={{ mb: 3 }}
+                  id="datetime-local"
+                  label="End"
+                  type="datetime-local"
+                  variant="standard"
+                  defaultValue={`${value}T11:00`}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+                <FormControl fullWidth sx={{ mb: 3 }}>
+                  <InputLabel variant="standard" htmlFor="uncontrolled-native">
+                    Student Name
+                  </InputLabel>
+                  <NativeSelect
+                    defaultValue="Select"
+                    inputProps={{
+                      name: "student_name",
+                      id: "uncontrolled-native",
+                    }}
                   >
-                    <span className="schedule_date_text">{day.date}</span>
-                    {classes.map((t, idx) => {
-                      const startDate = new Date(t["start_date"]);
-                      const endDate = new Date(t["end_date"]);
-
-                      if (
-                        day.year === startDate.getFullYear() &&
-                        day.month + 1 === startDate.getMonth() + 1 &&
-                        day.date === startDate.getDate()
-                      ) {
-                        return (
-                          <div
-                            className="class_detail"
-                            onClick={() => showClassDetail(day.date)}
-                          >
-                            {`${
-                              t["name"]
-                            } ${startDate.getHours()}:${startDate.getMinutes()} - ${endDate.getHours()}:${endDate.getMinutes()}`}
-                            {classDetailShown &&
-                              className === "class_detail" &&
-                              classDate === day.date && (
-                                <div className={duringPopUp2}>
-                                  <ClassDetail
-                                    closeClassDetail={closeClassDetail}
-                                    name={t["name"]}
-                                    date={day.date}
-                                    description={t["description"]}
-                                    startDate={startDate}
-                                    endDate={endDate}
-                                    getSchedule={getSchedule}
-                                    deleteClass={deleteClass}
-                                  />
-                                </div>
-                              )}
-                          </div>
-                        );
-                      }
+                    <option>Select</option>
+                    {students.map((student) => {
+                      return (
+                        <option
+                          value={`${student["first_name"]} ${student["last_name"]}`}
+                        >{`${student["first_name"]} ${student["last_name"]}`}</option>
+                      );
                     })}
-                  </td>
-                ))}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-      {scheduleClassShown && className === "schedule_date" && (
-        <div className={duringPopUp}>
-          <PopUpEvent
-            currentShownSchedule={currentShownSchedule}
-            closeEvent={closeEvent}
-            getSchedule={getSchedule}
-            students={students}
-            setIsOverlapped={setIsOverlapped}
-            setIsScheduled={setIsScheduled}
-            setOpen={setOpen}
-          />
-        </div>
-      )}
+                  </NativeSelect>
+                </FormControl>
+                {/* <InputLabel sx={{ mb: 3 }}>Name</InputLabel>
+                <Select
+                  
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  // value={`${students[0]["first_name"]} ${students[0]["last_name"]}`}
+                  label="Name"
+                  // onChange={handleChange}
+                >
+                  {students.map((student) => {
+                    console.log(student);
+                    return (
+                      <MenuItem
+                        value={`${student["first_name"]} ${student["last_name"]}`}
+                      >{`${student["first_name"]} ${student["last_name"]}`}</MenuItem>
+                    );
+                  })}
+                </Select> */}
+                <TextField
+                  sx={{ mb: 3, width: 300 }}
+                  id="standard-basic"
+                  label="Note"
+                  variant="standard"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+                <Button variant="contained">Create</Button>
+              </FormControl>
+            </Box>
+          </Modal>
+        )}
+      </LocalizationProvider>
     </div>
   );
 };

@@ -5,6 +5,7 @@ import moment from "moment";
 import { config } from './../../../config';
 
 const PopUpEvent = (props) => {
+  console.log('props; ', props)
   const [scheduleError, setScheduleError] = useState("");
 
   const scheduleClass = async (e) => {
