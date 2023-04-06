@@ -8,6 +8,7 @@ import { config } from "./../../../config";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
+import moment from 'moment';
 import {
   Alert,
   Button,
@@ -27,10 +28,14 @@ import {
 } from "@mui/material";
 
 const Schedule = (props) => {
-  console.log(props);
   const [value, setValue] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [students, setStudents] = useState([]);
+  const [start, setStart] = useState("");
+  const [end, setEnd] = useState("");
+  const [id, setId] = useState(null);
+  const [name, setName] = useState("");
+  const [note, setNote] = useState("");
 
   useEffect(() => {
     getStudents();
@@ -64,6 +69,26 @@ const Schedule = (props) => {
     setValue(`${year}-${month}-${day}`);
   };
 
+  const onStartTimeChange = function(e) {
+    let startDateTime = moment(e.target.value).format("YYYY-MM-DD hh:mm:ss");
+    setStart(startDateTime)
+  }
+
+  const onEndTimeChange = function(e) {
+    let endDateTime = moment(e.target.value).format("YYYY-MM-DD hh:mm:ss");
+    setEnd(endDateTime);
+  }
+
+  const onStudentChange = function(e) {
+    const value = e.target.value;
+    setId(value.substring(0, value.indexOf("-")));
+    setName(value.substring(value.indexOf("-") + 1));
+  }
+
+  const onNoteChange = function(e) {
+    setNote(e.target.value);
+  }
+
   const handleOpen = function () {
     setModalOpen(true);
   };
@@ -71,6 +96,21 @@ const Schedule = (props) => {
   const handleClose = function () {
     setModalOpen(false);
   };
+
+  const handleSubmit = function() {
+    axios.post(`${config.BASE_PATH}createClass`, {
+      student_id: parseInt(id),
+      name: name,
+      start_date: (start > 0) ? start : `${value} 10:00:00`,
+      end_date: (end > 0) ? end : `${value} 11:00:00`,
+      description: note
+    })
+    .then(res => {
+      
+    })
+
+    setModalOpen(false);
+  }
 
   return (
     <div className="schedule_container">
@@ -89,22 +129,26 @@ const Schedule = (props) => {
               </Typography>
               <FormControl>
                 <TextField
+                  required
                   sx={{ mb: 3, mt: 3 }}
                   id="datetime-local"
                   label="Start"
                   type="datetime-local"
                   variant="standard"
+                  onChange={onStartTimeChange}
                   defaultValue={`${value}T10:00`}
                   InputLabelProps={{
                     shrink: true,
                   }}
                 />
                 <TextField
+                  required
                   sx={{ mb: 3 }}
                   id="datetime-local"
                   label="End"
                   type="datetime-local"
                   variant="standard"
+                  onChange={onEndTimeChange}
                   defaultValue={`${value}T11:00`}
                   InputLabelProps={{
                     shrink: true,
@@ -115,7 +159,9 @@ const Schedule = (props) => {
                     Student Name
                   </InputLabel>
                   <NativeSelect
+                    required
                     defaultValue="Select"
+                    onChange={onStudentChange}
                     inputProps={{
                       name: "student_name",
                       id: "uncontrolled-native",
@@ -125,40 +171,23 @@ const Schedule = (props) => {
                     {students.map((student) => {
                       return (
                         <option
-                          value={`${student["first_name"]} ${student["last_name"]}`}
+                          value={`${student["id"]}-${student["first_name"]} ${student["last_name"]}`}
                         >{`${student["first_name"]} ${student["last_name"]}`}</option>
                       );
                     })}
                   </NativeSelect>
                 </FormControl>
-                {/* <InputLabel sx={{ mb: 3 }}>Name</InputLabel>
-                <Select
-                  
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  // value={`${students[0]["first_name"]} ${students[0]["last_name"]}`}
-                  label="Name"
-                  // onChange={handleChange}
-                >
-                  {students.map((student) => {
-                    console.log(student);
-                    return (
-                      <MenuItem
-                        value={`${student["first_name"]} ${student["last_name"]}`}
-                      >{`${student["first_name"]} ${student["last_name"]}`}</MenuItem>
-                    );
-                  })}
-                </Select> */}
                 <TextField
                   sx={{ mb: 3, width: 300 }}
                   id="standard-basic"
                   label="Note"
                   variant="standard"
+                  onChange={onNoteChange}
                   InputLabelProps={{
                     shrink: true,
                   }}
                 />
-                <Button variant="contained">Create</Button>
+                <Button variant="contained" onClick={handleSubmit}>Create</Button>
               </FormControl>
             </Box>
           </Modal>

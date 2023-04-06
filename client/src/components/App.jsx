@@ -12,21 +12,19 @@ import PrivateRoute from './PrivateRoute.jsx';
 import "./App.css";
 
 const App = () => {
-  const [students, setStudents] = useState([]);
   return (
     <Routes>
       <Route path="/" element={<Entry />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      <Route path="/mainPage" element={<Home setStudents={setStudents} />} />
+      <Route path="/mainPage" element={<Home/>} />
         <Route
           path="/profile"
-          // element={<Profile getStudents={getStudents} students={students} />}
-          element={<Profile students={students} />}
+          element={<Profile/>}
         />
         <Route
           path="/schedule"
-          element={<Schedule students={students} />}
+          element={<Schedule/>}
         />
         <Route path="/pastClass" element={<PastClass />} />
       <Route element={<PrivateRoute />}>

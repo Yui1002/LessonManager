@@ -231,6 +231,12 @@ class RootController
     }
 
     public function createClass() {
+        var_dump($this->data["student_id"]);
+        var_dump($this->data["name"]);
+        var_dump($this->data["start_date"]);
+        var_dump($this->data["end_date"]);
+        var_dump($this->data["description"]);
+
         $this->classes->createClass(
             $this->data["student_id"], 
             $this->data["name"], 
