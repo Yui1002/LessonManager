@@ -8,7 +8,7 @@ import { config } from "./../../../config";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
-import moment from 'moment';
+import moment from "moment";
 import {
   Alert,
   Button,
@@ -36,10 +36,23 @@ const Schedule = (props) => {
   const [id, setId] = useState(null);
   const [name, setName] = useState("");
   const [note, setNote] = useState("");
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [showError, setShowError] = useState(false);
 
   useEffect(() => {
     getStudents();
   }, []);
+
+  useEffect(() => {
+    const timeId = setTimeout(() => {
+      setShowSuccess(false);
+      setShowError(false);
+    }, 3000);
+
+    return () => {
+      clearTimeout(timeId);
+    };
+  }, [showError, showSuccess]);
 
   const style = {
     position: "absolute",
@@ -69,25 +82,25 @@ const Schedule = (props) => {
     setValue(`${year}-${month}-${day}`);
   };
 
-  const onStartTimeChange = function(e) {
+  const onStartTimeChange = function (e) {
     let startDateTime = moment(e.target.value).format("YYYY-MM-DD hh:mm:ss");
-    setStart(startDateTime)
-  }
+    setStart(startDateTime);
+  };
 
-  const onEndTimeChange = function(e) {
+  const onEndTimeChange = function (e) {
     let endDateTime = moment(e.target.value).format("YYYY-MM-DD hh:mm:ss");
     setEnd(endDateTime);
-  }
+  };
 
-  const onStudentChange = function(e) {
+  const onStudentChange = function (e) {
     const value = e.target.value;
     setId(value.substring(0, value.indexOf("-")));
     setName(value.substring(value.indexOf("-") + 1));
-  }
+  };
 
-  const onNoteChange = function(e) {
+  const onNoteChange = function (e) {
     setNote(e.target.value);
-  }
+  };
 
   const handleOpen = function () {
     setModalOpen(true);
@@ -97,25 +110,36 @@ const Schedule = (props) => {
     setModalOpen(false);
   };
 
-  const handleSubmit = function() {
-    axios.post(`${config.BASE_PATH}createClass`, {
-      student_id: parseInt(id),
-      name: name,
-      start_date: (start > 0) ? start : `${value} 10:00:00`,
-      end_date: (end > 0) ? end : `${value} 11:00:00`,
-      description: note
-    })
-    .then(res => {
-        if (res.response.status === 400) {
-          
-        }
-    })
-
+  const handleSubmit = function () {
+    axios
+      .post(`${config.BASE_PATH}createClass`, {
+        student_id: parseInt(id),
+        name: name,
+        start_date: start > 0 ? start : `${value} 10:00:00`,
+        end_date: end > 0 ? end : `${value} 11:00:00`,
+        description: note,
+      })
+      .then((res) => {
+        setShowSuccess(true);
+      })
+      .catch(err => {
+        setShowError(true);
+      })
     setModalOpen(false);
-  }
+  };
 
   return (
     <div className="schedule_container">
+      {showSuccess && (
+        <Alert severity="success">
+          Class has been scheduled successfully!
+        </Alert>
+      )}
+      {showError && (
+        <Alert severity="error">
+          This class is overlapped with other class
+        </Alert>
+      )}
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DateCalendar onChange={onValueChange} onClick={handleOpen} />
         {modalOpen && (
@@ -189,7 +213,9 @@ const Schedule = (props) => {
                     shrink: true,
                   }}
                 />
-                <Button variant="contained" onClick={handleSubmit}>Create</Button>
+                <Button variant="contained" onClick={handleSubmit}>
+                  Create
+                </Button>
               </FormControl>
             </Box>
           </Modal>

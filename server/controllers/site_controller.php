@@ -227,7 +227,6 @@ class RootController
         // check if class overlaps
         $isOverlapped = $this->classes->isOverlap($this->data["start_date"], $this->data["end_date"]);
         if (!$isOverlapped) {
-            echo "not overlapped";
             $this->classes->createClass(
                 $this->data["student_id"], 
                 $this->data["name"], 
@@ -235,9 +234,11 @@ class RootController
                 $this->data["end_date"], 
                 $this->data["description"], 
             );
+            $res = new HttpException(200, "Scheduled successfully", NULL);
+            echo $res->get();
         } else {
-            $err = new HttpException(400, "This class is overlapped", NULL);
-            echo $err->get();
+            $res = new HttpException(400, "This class is overlapped", NULL);
+            echo $res->get();
         }
     }
 
