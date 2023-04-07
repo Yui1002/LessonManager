@@ -4,10 +4,11 @@
   height: 800px;
 }
 
-/* .css-cwhad8-MuiDateCalendar-root {
-  min-height: 450px !important;
+.css-cwhad8-MuiDateCalendar-root {
+  min-width: 700px;
+  min-height: 700px !important;
   width: 500px !important;
-  height: 450px !important;
+  height: 500px !important;
 }
 
 .css-1vbvu5h-MuiDateCalendar-root {
@@ -17,11 +18,11 @@
 }
 
 .css-15v8kdh-MuiPickersFadeTransitionGroup-root-MuiDateCalendar-viewTransitionContainer {
-  height: 400px !important;
+  min-height: 600px !important;
 }
 
 .css-1cafy48-MuiPickersSlideTransition-root-MuiDayCalendar-slideTransition {
-  min-height: 400px !important;
+  min-height: 500px !important;
 }
 
 
@@ -30,18 +31,19 @@
 }
 
 .css-rhmlg1-MuiTypography-root-MuiDayCalendar-weekDayLabel {
-  width: 100px !important;
-  height: 50px !important;
+  width: 80px !important;
+  height: 80px !important;
   font-size: 1.30rem !important;
 }
 
 .css-5rffsk-MuiPickersDay-root, 
+.css-1v09r0c-MuiButtonBase-root-MuiPickersDay-root,
 .css-1qs309j-MuiButtonBase-root-MuiPickersDay-root,
 .css-7oawqu-MuiButtonBase-root-MuiPickersDay-root {
-  width: 100px !important;
-  height: 50px !important;
+  width: 80px !important;
+  height: 80px !important;
   font-size: 1.30rem !important;
-} */
+}
 
 .schedule_prev_button {
   display: inline-block;
