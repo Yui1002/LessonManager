@@ -106,7 +106,9 @@ const Schedule = (props) => {
       description: note
     })
     .then(res => {
-      
+        if (res.response.status === 400) {
+          
+        }
     })
 
     setModalOpen(false);

@@ -4,6 +4,7 @@ include_once SYSTEM_PATH . '/views/userAction.php';
 include_once SYSTEM_PATH . "/views/students.php";
 include_once SYSTEM_PATH . "/views/notification.php";
 include_once SYSTEM_PATH . "/views/classes.php";
+include_once SYSTEM_PATH . "/helpers/HttpException.php";
 
 
 //Get the action from the url. This assumes every request has a action param passed in
@@ -162,24 +163,16 @@ class RootController
     public function editProfile()
     {
         $isNewFileUploaded = strlen($_FILES['file']['name']) > 0;
-        var_dump($isNewFileUploaded);
         if ($isNewFileUploaded) {
             $uploadFile = $this->uploadFile($_FILES);
         } else {
             $uploadFile = NULL;
         }
-
-        // var_dump($uploadFile);
-        
-        $email = $_POST["email"]; // old email
-        // var_dump($email);
+        $email = $_POST["email"]; 
         $record = $this->student->getStudentByEmail($email)->getData();
-        // var_dump($record["id"]);
         if ($record == NULL) {
             throw new HttpException(400, "User not found", NULL);
         }
-        // var_dump($record);
-        // $id = $record["id"];
     
         if ($isNewFileUploaded) {
             $this->deleteFile($record["profile_photo"]);
@@ -231,19 +224,21 @@ class RootController
     }
 
     public function createClass() {
-        var_dump($this->data["student_id"]);
-        var_dump($this->data["name"]);
-        var_dump($this->data["start_date"]);
-        var_dump($this->data["end_date"]);
-        var_dump($this->data["description"]);
-
-        $this->classes->createClass(
-            $this->data["student_id"], 
-            $this->data["name"], 
-            $this->data["start_date"], 
-            $this->data["end_date"], 
-            $this->data["description"], 
-        );
+        // check if class overlaps
+        $isOverlapped = $this->classes->isOverlap($this->data["start_date"], $this->data["end_date"]);
+        if (!$isOverlapped) {
+            echo "not overlapped";
+            $this->classes->createClass(
+                $this->data["student_id"], 
+                $this->data["name"], 
+                $this->data["start_date"], 
+                $this->data["end_date"], 
+                $this->data["description"], 
+            );
+        } else {
+            $err = new HttpException(400, "This class is overlapped", NULL);
+            echo $err->get();
+        }
     }
 
     public function deleteClass() {

@@ -9,6 +9,7 @@ class Classes
     private $getClassIdSql = "SELECT id FROM schedules WHERE start_date = ? AND end_date = ?";
     private $createClassSql = "INSERT into schedules VALUES (DEFAULT, ?, ?, ?, ?, ?);";
     private $deleteClassSql = "DELETE FROM schedules WHERE id = ?";
+    private $isOverlapSql = "SELECT * FROM schedules WHERE (? < start_date AND ? > start_date AND ? < end_date) or (start_date <= ? AND ? <= end_date) or (? > start_date AND ? < end_date AND ? > end_date);";
 
     private $data;
 
@@ -30,6 +31,14 @@ class Classes
         $stmt = mysqli_prepare($this->db->getConnection(), $this->createClassSql);
         mysqli_stmt_bind_param($stmt, "issss", $studentId, $name, $startDate, $endDate, $description);
         return mysqli_stmt_execute($stmt);
+    }
+
+    public function isOverlap($startDate, $endDate) {
+        $stmt = mysqli_prepare($this->db->getConnection(), $this->isOverlapSql);
+        mysqli_stmt_bind_param($stmt, "ssssssss", $startDate, $endDate, $endDate, $startDate, $endDate, $startDate, $startDate, $endDate);
+        mysqli_stmt_execute($stmt);
+        $stmt->store_result();
+        return $stmt->num_rows > 0;
     }
 
     public function deleteClass($id) 
