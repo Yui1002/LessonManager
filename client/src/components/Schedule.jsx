@@ -74,12 +74,21 @@ const Schedule = (props) => {
   };
 
   const onValueChange = function (e) {
+    let currentSelectedYear = value.length > 0  ? value.split("-")[0] : ""; // 2026
+    let currentSelectedMonth = value.length > 0  ? value.split("-")[1] : ""; // 8
+    let currentSelectedDay = value.length > 0  ? value.split("-")[2] : ""; // 13
+
     let year = e["$y"];
     let month = e["$M"] + 1;
     month = month < 10 ? `0${month}` : `${month}`;
     let day = e["$D"];
     day = day < 10 ? `0${day}` : `${day}`;
     setValue(`${year}-${month}-${day}`);
+    if (currentSelectedYear == "" && currentSelectedMonth == "" && currentSelectedDay == "")
+      handleOpen(e);
+
+    if (currentSelectedYear == year && (currentSelectedMonth != month || currentSelectedDay != day))
+      handleOpen(e);
   };
 
   const onStartTimeChange = function (e) {
@@ -102,7 +111,7 @@ const Schedule = (props) => {
     setNote(e.target.value);
   };
 
-  const handleOpen = function () {
+  const handleOpen = function (e) {
     setModalOpen(true);
   };
 
@@ -125,8 +134,11 @@ const Schedule = (props) => {
       .catch(err => {
         setShowError(true);
       })
+
     setModalOpen(false);
   };
+
+  // target.innerText
 
   return (
     <div className="schedule_container">
@@ -140,8 +152,8 @@ const Schedule = (props) => {
           This class is overlapped with other class
         </Alert>
       )}
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DateCalendar onChange={onValueChange} onClick={handleOpen} />
+      <LocalizationProvider dateAdapter={AdapterDayjs}> 
+        <DateCalendar onChange={onValueChange} showDaysOutsideCurrentMonth />
         {modalOpen && (
           <Modal
             open={modalOpen}

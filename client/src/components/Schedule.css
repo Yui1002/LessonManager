@@ -1,8 +1,47 @@
 .schedule_container {
   position: relative;
   width: 1000px;
-  height: 600px;
+  height: 800px;
 }
+
+/* .css-cwhad8-MuiDateCalendar-root {
+  min-height: 450px !important;
+  width: 500px !important;
+  height: 450px !important;
+}
+
+.css-1vbvu5h-MuiDateCalendar-root {
+  max-height: 1000px !important;
+  height: 800px !important;
+  width: 800px !important;
+}
+
+.css-15v8kdh-MuiPickersFadeTransitionGroup-root-MuiDateCalendar-viewTransitionContainer {
+  height: 400px !important;
+}
+
+.css-1cafy48-MuiPickersSlideTransition-root-MuiDayCalendar-slideTransition {
+  min-height: 400px !important;
+}
+
+
+.css-dplwbx-MuiPickersCalendarHeader-label {
+  font-size: 30px !important;
+}
+
+.css-rhmlg1-MuiTypography-root-MuiDayCalendar-weekDayLabel {
+  width: 100px !important;
+  height: 50px !important;
+  font-size: 1.30rem !important;
+}
+
+.css-5rffsk-MuiPickersDay-root, 
+.css-1qs309j-MuiButtonBase-root-MuiPickersDay-root,
+.css-7oawqu-MuiButtonBase-root-MuiPickersDay-root {
+  width: 100px !important;
+  height: 50px !important;
+  font-size: 1.30rem !important;
+} */
 
 .schedule_prev_button {
   display: inline-block;
