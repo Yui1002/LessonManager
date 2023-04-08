@@ -10,6 +10,7 @@ class Classes
     private $createClassSql = "INSERT into schedules VALUES (DEFAULT, ?, ?, ?, ?, ?);";
     private $deleteClassSql = "DELETE FROM schedules WHERE id = ?";
     private $isOverlapSql = "SELECT * FROM schedules WHERE (? < start_date AND ? > start_date AND ? < end_date) or (start_date <= ? AND ? <= end_date) or (? > start_date AND ? < end_date AND ? > end_date);";
+    private $getPastClassSql = "SELECT * FROM schedules WHERE month(start_date) = ? and year(start_date) = ?;";
 
     private $data;
 
@@ -55,6 +56,16 @@ class Classes
         $result = $stmt->get_result(); 
         $user = $result->fetch_assoc();
         $this->data = $user;
+        return $this;
+    }
+
+    public function getPastClasses($month, $year) {
+        $stmt = mysqli_prepare($this->db->getConnection(), $this->getPastClassSql);
+        mysqli_stmt_bind_param($stmt, "ii", $month, $year);
+        mysqli_stmt_execute($stmt);
+        $result = $stmt->get_result();
+        $classes = $result->fetch_all(MYSQLI_ASSOC);
+        $this->data = $classes;
         return $this;
     }
 

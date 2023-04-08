@@ -9,7 +9,9 @@ import { config } from "./../../../config";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
-import { Alert } from "@mui/material";
+import { PickersDay } from '@mui/x-date-pickers/PickersDay';
+import { DayCalendarSkeleton } from '@mui/x-date-pickers/DayCalendarSkeleton';
+import { Alert, Badge } from "@mui/material";
 
 const Schedule = (props) => {
   const [value, setValue] = useState("");
@@ -17,9 +19,12 @@ const Schedule = (props) => {
   const [students, setStudents] = useState([]);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
+  const [highlightedDays, setHighlisghtedDays] = useState([1, 2, 3]);
+  const [test, setTest] = useState()
 
   useEffect(() => {
     getStudents();
+    // getSchedules();
   }, []);
 
   useEffect(() => {
@@ -33,14 +38,43 @@ const Schedule = (props) => {
     };
   }, [showError, showSuccess]);
 
-  const getStudents = async () => {
+  const getStudents = () => {
     axios
       .get(`${config.BASE_PATH}getAllStudents`)
       .then((res) => setStudents(res.data))
       .catch((err) => console.log(err));
   };
 
+  const getSchedules = () => {
+    // get all schedules
+    axios
+      .get(`${config.BASE_PATH}getClasses`)
+      .then((res) => {
+        let data = res.data;
+        data.map((x) => {
+          // extract date from data
+          let dateTime = x["start_date"];
+          let date = dateTime.split(" ")[0];
+          // set to highlightedDays
+          setHighlisghtedDays(date);
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const serverDay = function () {
+    return (
+      <Badge key={"3"} overlap="circular" badgeContent={'🌚'}>
+        <PickersDay outsideCurrentMonth={true} day={test} />
+      </Badge>
+    );
+  };
+
+
   const onValueChange = function (e) {
+    setTest(e);
     let currentSelectedYear = value.length > 0 ? value.split("-")[0] : "";
     let currentSelectedMonth = value.length > 0 ? value.split("-")[1] + 1 : "";
     let currentSelectedDay = value.length > 0 ? value.split("-")[2] : "";
@@ -85,7 +119,10 @@ const Schedule = (props) => {
         </Alert>
       )}
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DateCalendar onChange={onValueChange} showDaysOutsideCurrentMonth />
+        <DateCalendar
+          onChange={onValueChange}
+          showDaysOutsideCurrentMonth
+        />
         {modalOpen && (
           <ScheduleClassModal
             modalOpen={modalOpen}

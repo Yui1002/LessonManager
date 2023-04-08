@@ -15,6 +15,7 @@ import {
 import moment from "moment";
 import "./PastClass.css";
 import {useNavigate} from "react-router-dom";
+import { config } from "./../../../config";
 
 const PastClass = () => {
   const [pastClasses, setPastClasses] = useState([]);
@@ -27,11 +28,12 @@ const PastClass = () => {
   }, [month, year]);
 
   const getPastClasses = () => {
-    if (month === '' || year === '') {
-      return;
-    }
-    console.log('lolol')
-    axios.get(`/schedule/past?month=${month}&year=${year}`).then((res) => {
+    if (month === '' || year === '') return;
+
+    axios.get(`${config.BASE_PATH}getPastClasses`, {
+      params: { month: month, year: year }
+    })
+    .then((res) => {
       if (res.data === '') {
         setPastClasses([]);
       } else {

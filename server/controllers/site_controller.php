@@ -85,6 +85,9 @@ class RootController
                 case 'deleteClass':
                     $this->deleteClass();
                     break;
+                case 'getPastClasses':
+                    $this->getPastClasses();
+                    break;
             }
         } catch (HttpException $ex) {
             $ex->get();
@@ -245,5 +248,12 @@ class RootController
     public function deleteClass() {
         $id = $this->classes->getClassId($this->data["start_date"], $this->data["end_date"])->getData()["id"];
         echo $this->classes->deleteClass($id);
+    }
+
+    public function getPastClasses() {
+        $month = $_GET["month"];
+        $year = $_GET["year"];
+        $res = $this->classes->getPastClasses($month, $year)->getEncoded();
+        echo $res;
     }
 }
