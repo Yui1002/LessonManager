@@ -30,7 +30,7 @@ const PastClass = () => {
   const getPastClasses = () => {
     if (month === '' || year === '') return;
 
-    axios.get(`${config.BASE_PATH}getPastClasses`, {
+    axios.get(`${config.BASE_PATH}getClassesByDate`, {
       params: { month: month, year: year }
     })
     .then((res) => {

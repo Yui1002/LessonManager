@@ -9,30 +9,43 @@ import { config } from "./../../../config";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
-import { PickersDay } from '@mui/x-date-pickers/PickersDay';
+import { PickersDay } from "@mui/x-date-pickers/PickersDay";
 import { Alert, Badge } from "@mui/material";
 
 function ServerDay(props) {
-  const { highlightedDays = [], day, outsideCurrentMonth, ...other } = props;
+  const { highlightedDays, day, outsideCurrentMonth, ...other } = props;
+  const isSelected =
+    !props.outsideCurrentMonth && highlightedDays.indexOf(props.day.date()) > 0;
+
   return (
-    <Badge key={"3"} overlap="circular" badgeContent={'🌚'}>
-      <PickersDay {...other} outsideCurrentMonth={outsideCurrentMonth} day={day} />
+    <Badge
+      key={props.day.toString()}
+      overlap="circular"
+      color="primary"
+      badgeContent={isSelected ? "" : undefined}
+    >
+      <PickersDay
+        {...other}
+        outsideCurrentMonth={outsideCurrentMonth}
+        day={day}
+      />
     </Badge>
   );
-};
+}
 
 const Schedule = (props) => {
+  const [month, setMonth] = useState(new Date().getMonth() + 1);
+  const [year, setYear] = useState(new Date().getFullYear());
   const [value, setValue] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [students, setStudents] = useState([]);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
-  const [highlightedDays, setHighlisghtedDays] = useState([1, 2, 3]);
-  const [test, setTest] = useState()
+  const [highlightedDays, setHighlisghtedDays] = useState([1, 2, 15]);
 
   useEffect(() => {
     getStudents();
-    // getSchedules();
+    getSchedules();
   }, []);
 
   useEffect(() => {
@@ -54,26 +67,59 @@ const Schedule = (props) => {
   };
 
   const getSchedules = () => {
-    // get all schedules
     axios
-      .get(`${config.BASE_PATH}getClasses`)
+      .get(`${config.BASE_PATH}getClassesByDate`, {
+        params: {
+          month: month,
+          year: year,
+        },
+      })
       .then((res) => {
-        let data = res.data;
-        data.map((x) => {
-          // extract date from data
+        res.data.map((x) => {
           let dateTime = x["start_date"];
-          let date = dateTime.split(" ")[0];
-          // set to highlightedDays
-          setHighlisghtedDays(date);
+          let date = new Date(dateTime).getDate();
+          console.log(highlightedDays);
+          // if (highlightedDays.indexOf(date) < 0) {
+          //   console.log('yes: ', date)
+          setHighlisghtedDays((oldArray) => [...oldArray, date]);
+          // } else {
+          //   console.log('duplicate')
+          // }
         });
+        // setHighlisghtedDays((val) =>
+        //   val.map((x) => new Date(x["start_date"]).getDate())
+        // );
+        // setHighlisghtedDays(val => val.map((x) => {
+        //   let dateTime = x["start_date"];
+        //   let date = new Date(dateTime).getDate();
+        //   return date;
+        // }))
+        // res.data.map((x) => {
+        //   let dateTime = x["start_date"];
+        //   let date = new Date(dateTime).getDate();
+        //   console.log(date)
+        //   setHighlisghtedDays(oldArray => [...oldArray, date]);
+        // })
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
+  // function ServerDay(props) {
+  //   const { highlightedDays, day, outsideCurrentMonth, ...other } = props;
+  //   return (
+  //     <Badge key={"3"} overlap="circular" badgeContent={"🌚"}>
+  //       <PickersDay
+  //         {...other}
+  //         outsideCurrentMonth={outsideCurrentMonth}
+  //         day={day}
+  //       />
+  //     </Badge>
+  //   );
+  // }
+
   const onValueChange = function (e) {
-    setTest(e);
     let currentSelectedYear = value.length > 0 ? value.split("-")[0] : "";
     let currentSelectedMonth = value.length > 0 ? value.split("-")[1] + 1 : "";
     let currentSelectedDay = value.length > 0 ? value.split("-")[2] : "";
@@ -107,6 +153,14 @@ const Schedule = (props) => {
     setModalOpen(false);
   };
 
+  const handleMonthChange = function (e) {
+    setMonth(e["$M"] + 1);
+  };
+
+  const handleYearChange = function (e) {
+    setYear(e["$y"]);
+  };
+
   return (
     <div className="schedule_container">
       {showSuccess && (
@@ -120,7 +174,9 @@ const Schedule = (props) => {
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DateCalendar
           onChange={onValueChange}
-          // showDaysOutsideCurrentMonth
+          onMonthChange={handleMonthChange}
+          onYearChange={handleYearChange}
+          showDaysOutsideCurrentMonth
           slots={{ day: ServerDay }}
           slotProps={{ day: { highlightedDays } }}
         />

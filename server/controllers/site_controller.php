@@ -85,8 +85,8 @@ class RootController
                 case 'deleteClass':
                     $this->deleteClass();
                     break;
-                case 'getPastClasses':
-                    $this->getPastClasses();
+                case 'getClassesByDate':
+                    $this->getClassesByDate();
                     break;
             }
         } catch (HttpException $ex) {
@@ -250,10 +250,10 @@ class RootController
         echo $this->classes->deleteClass($id);
     }
 
-    public function getPastClasses() {
+    public function getClassesByDate() {
         $month = $_GET["month"];
         $year = $_GET["year"];
-        $res = $this->classes->getPastClasses($month, $year)->getEncoded();
+        $res = $this->classes->getClassesByDate($month, $year)->getEncoded();
         echo $res;
     }
 }

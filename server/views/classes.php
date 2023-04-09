@@ -59,7 +59,7 @@ class Classes
         return $this;
     }
 
-    public function getPastClasses($month, $year) {
+    public function getClassesByDate($month, $year) {
         $stmt = mysqli_prepare($this->db->getConnection(), $this->getPastClassSql);
         mysqli_stmt_bind_param($stmt, "ii", $month, $year);
         mysqli_stmt_execute($stmt);

@@ -45,6 +45,11 @@
   font-size: 1.30rem !important;
 }
 
+.css-ejll1l-MuiBadge-badge {
+  top: 24% !important;
+  right: 28% !important;
+}
+
 .schedule_prev_button {
   display: inline-block;
   position: fixed;
