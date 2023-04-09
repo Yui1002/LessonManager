@@ -10,8 +10,16 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { PickersDay } from '@mui/x-date-pickers/PickersDay';
-import { DayCalendarSkeleton } from '@mui/x-date-pickers/DayCalendarSkeleton';
 import { Alert, Badge } from "@mui/material";
+
+function ServerDay(props) {
+  const { highlightedDays = [], day, outsideCurrentMonth, ...other } = props;
+  return (
+    <Badge key={"3"} overlap="circular" badgeContent={'🌚'}>
+      <PickersDay {...other} outsideCurrentMonth={outsideCurrentMonth} day={day} />
+    </Badge>
+  );
+};
 
 const Schedule = (props) => {
   const [value, setValue] = useState("");
@@ -64,15 +72,6 @@ const Schedule = (props) => {
       });
   };
 
-  const serverDay = function () {
-    return (
-      <Badge key={"3"} overlap="circular" badgeContent={'🌚'}>
-        <PickersDay outsideCurrentMonth={true} day={test} />
-      </Badge>
-    );
-  };
-
-
   const onValueChange = function (e) {
     setTest(e);
     let currentSelectedYear = value.length > 0 ? value.split("-")[0] : "";
@@ -121,7 +120,9 @@ const Schedule = (props) => {
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DateCalendar
           onChange={onValueChange}
-          showDaysOutsideCurrentMonth
+          // showDaysOutsideCurrentMonth
+          slots={{ day: ServerDay }}
+          slotProps={{ day: { highlightedDays } }}
         />
         {modalOpen && (
           <ScheduleClassModal
