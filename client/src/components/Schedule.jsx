@@ -12,28 +12,8 @@ import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { PickersDay } from "@mui/x-date-pickers/PickersDay";
 import { Alert, Badge } from "@mui/material";
 
-function ServerDay(props) {
-  const { highlightedDays, day, outsideCurrentMonth, ...other } = props;
-  const isSelected =
-    !props.outsideCurrentMonth && highlightedDays.indexOf(props.day.date()) > 0;
-
-  return (
-    <Badge
-      key={props.day.toString()}
-      overlap="circular"
-      color="primary"
-      badgeContent={isSelected ? "" : undefined}
-    >
-      <PickersDay
-        {...other}
-        outsideCurrentMonth={outsideCurrentMonth}
-        day={day}
-      />
-    </Badge>
-  );
-}
-
 const Schedule = (props) => {
+  const navigate = useNavigate();
   const [month, setMonth] = useState(new Date().getMonth() + 1);
   const [year, setYear] = useState(new Date().getFullYear());
   const [value, setValue] = useState("");
@@ -41,12 +21,15 @@ const Schedule = (props) => {
   const [students, setStudents] = useState([]);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
-  const [highlightedDays, setHighlisghtedDays] = useState([1, 2, 15]);
+  const [highlightedDays, setHighlisghtedDays] = useState([]);
 
   useEffect(() => {
     getStudents();
-    getSchedules();
   }, []);
+
+  useEffect(() => {
+    getSchedules();
+  }, [month]);
 
   useEffect(() => {
     const timeId = setTimeout(() => {
@@ -78,47 +61,40 @@ const Schedule = (props) => {
         res.data.map((x) => {
           let dateTime = x["start_date"];
           let date = new Date(dateTime).getDate();
-          console.log(highlightedDays);
-          // if (highlightedDays.indexOf(date) < 0) {
-          //   console.log('yes: ', date)
           setHighlisghtedDays((oldArray) => [...oldArray, date]);
-          // } else {
-          //   console.log('duplicate')
-          // }
         });
-        // setHighlisghtedDays((val) =>
-        //   val.map((x) => new Date(x["start_date"]).getDate())
-        // );
-        // setHighlisghtedDays(val => val.map((x) => {
-        //   let dateTime = x["start_date"];
-        //   let date = new Date(dateTime).getDate();
-        //   return date;
-        // }))
-        // res.data.map((x) => {
-        //   let dateTime = x["start_date"];
-        //   let date = new Date(dateTime).getDate();
-        //   console.log(date)
-        //   setHighlisghtedDays(oldArray => [...oldArray, date]);
-        // })
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  // function ServerDay(props) {
-  //   const { highlightedDays, day, outsideCurrentMonth, ...other } = props;
-  //   return (
-  //     <Badge key={"3"} overlap="circular" badgeContent={"🌚"}>
-  //       <PickersDay
-  //         {...other}
-  //         outsideCurrentMonth={outsideCurrentMonth}
-  //         day={day}
-  //       />
-  //     </Badge>
-  //   );
-  // }
+  function ServerDay(props) {
+    console.log(props);
+    console.log("date: ", props.day.date());
+    const { highlightedDays, day, outsideCurrentMonth, ...other } = props;
+    console.log("highlightedDays2: ", highlightedDays);
+    const isSelected =
+      !props.outsideCurrentMonth &&
+      highlightedDays.indexOf(props.day.date()) > 0;
+    // [1].indexOf()
+    console.log("isSelected: ", isSelected);
 
+    return (
+      <Badge
+        key={props.day.toString()}
+        overlap="circular"
+        color="primary"
+        badgeContent={isSelected ? "" : undefined}
+      >
+        <PickersDay
+          {...other}
+          outsideCurrentMonth={outsideCurrentMonth}
+          day={day}
+        />
+      </Badge>
+    );
+  }
   const onValueChange = function (e) {
     let currentSelectedYear = value.length > 0 ? value.split("-")[0] : "";
     let currentSelectedMonth = value.length > 0 ? value.split("-")[1] + 1 : "";
@@ -154,6 +130,7 @@ const Schedule = (props) => {
   };
 
   const handleMonthChange = function (e) {
+    setHighlisghtedDays([]);
     setMonth(e["$M"] + 1);
   };
 
@@ -163,6 +140,12 @@ const Schedule = (props) => {
 
   return (
     <div className="schedule_container">
+      <button
+        className="schedule_go_back_button"
+        onClick={() => navigate("/mainPage")}
+      >
+        Go Back
+      </button>
       {showSuccess && (
         <Alert severity="success">Class has been scheduled successfully!</Alert>
       )}
