@@ -9,12 +9,26 @@ import { config } from './../../../config';
 const Profile = (props) => {
   const [students, setStudents] = useState([]);
   const [showForm, setShowForm] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const duringPopUp3 = showForm ? "during-popup_3" : "";
   const navigate = useNavigate();
 
   useEffect(() => {
-    getStudents();
+    checkLogin();
   }, [])
+
+  const checkLogin = async () => {
+    axios.get(`${config.BASE_PATH}checkLogin`)
+    .then(() => {
+      setIsLoggedIn(true);
+      getStudents();
+    })
+    .catch((err) => {
+      setIsLoggedIn(false);
+      navigate("/");
+      return;
+    });
+  }
 
   const getStudents = async () => {
     axios.get(`${config.BASE_PATH}getAllStudents`)
@@ -41,39 +55,42 @@ const Profile = (props) => {
 
   return (
     <div>
-      <button
-        className="profile_go_back_button"
-        onClick={() => navigate("/mainPage")}
-      >
-        Go Back
-      </button>
-      <br />
-      <h1 className="profile_title">Student's Profile</h1>
-      <div className="profile_add_student_button_wrap">
-        <button
-          className="profile_add_student_button"
-          onClick={() => setShowForm(true)}
-        >
-          Create a New Student
-        </button>
-      </div>
-      {showForm && (
-        <div className={duringPopUp3}>
-          <NewStudent closeForm={closeForm} setShowForm={setShowForm} getStudents={getStudents} />
-        </div>
-      )}
-      <div className="students_list">
-        {students.map((student) => (
-          <div key={student.id} className="student">
-            <Student
-              student={student}
-              deleteStudent={deleteStudent}
-              getStudents={getStudents}
-            />
+      {isLoggedIn && (
+        <div>
+          <button
+            className="profile_go_back_button"
+            onClick={() => navigate("/mainPage")}
+          >
+            Go Back
+          </button>
+          <br />
+          <h1 className="profile_title">Student's Profile</h1>
+          <div className="profile_add_student_button_wrap">
+            <button
+              className="profile_add_student_button"
+              onClick={() => setShowForm(true)}
+            >
+              Create a New Student
+            </button>
           </div>
-        ))}
+          {showForm && (
+            <div className={duringPopUp3}>
+              <NewStudent closeForm={closeForm} setShowForm={setShowForm} getStudents={getStudents} />
+            </div>
+          )}
+          <div className="students_list">
+            {students.map((student) => (
+              <div key={student.id} className="student">
+                <Student
+                  student={student}
+                  deleteStudent={deleteStudent}
+                  getStudents={getStudents}
+                />
+              </div>
+            ))}
+          </div>
+        </div>)}
       </div>
-    </div>
   );
 };
 

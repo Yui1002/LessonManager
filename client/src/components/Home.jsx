@@ -3,17 +3,14 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./Home.css";
-import Snackbar from "@mui/material/Snackbar";
-import IconButton from "@mui/material/IconButton";
+import { IconButton, Alert } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import Alert from "@mui/material/Alert";
-import Slide from "@mui/material/Slide";
-import Box from "@mui/material/Box";
-import { logOut } from "../helpers/cookie.js";
+import { useNavigate } from 'react-router-dom';
+// import { logOut } from "../helpers/cookie.js";
 import { config } from './../../../config';
 
-// console.log(paramters)/
 const Home = (props) => {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [classScheduledIn1hour, setClassScheduledIn1hour] = useState([]);
 
@@ -23,7 +20,16 @@ const Home = (props) => {
   }, []);
 
   const logout = () => {
-    logOut();
+    axios.get(`${config.BASE_PATH}endSession`)
+    .then(() => {
+      console.log("logged out");
+      navigate('/')
+      return;
+    }).catch((err) => {
+      console.log(err);
+      navigate('/')
+      return;
+    })
   };
 
   const hasClassSoon = () => {

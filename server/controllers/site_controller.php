@@ -50,6 +50,7 @@ class RootController
                     $this->index();
                     break;
                 case 'register':
+                    echo 'hello from register';
                     $this->register();
                     break;
                 case 'login':
@@ -88,6 +89,12 @@ class RootController
                 case 'getClassesByDate':
                     $this->getClassesByDate();
                     break;
+                case 'checkLogin':
+                    $this->isLoggedIn();
+                    break;
+                case 'endSession': 
+                    $this->endSession();
+                    break;
             }
         } catch (HttpException $ex) {
             $ex->get();
@@ -110,17 +117,32 @@ class RootController
 
     public function login()
     {
-        if (isset($_SESSION["UserLoggedIn"])) {
-            return $_SESSION["UserLoggedIn"];
+        $isLoggedIn = $this->isLoggedIn();
+        if (isset($isLoggedIn)) {
+            return $isLoggedIn;  
         }
 
         $login = new UserAction();
         $data = json_decode(file_get_contents("php://input"), true);
         if (!$login->loginUser($data["username"], $data["password"])) {
-            http_response_code(400);
+            http_response_code(401);
             return;
         }
+        
+        $_SESSION = array();
         $_SESSION["UserLoggedIn"] = true;
+        http_response_code(200);
+    }
+
+    //isset -> NOT ( SOMETHING OR SOMETHING )
+    //NOT ( (NOT SET) OR (NOT TRUE) )
+    public function isLoggedIn() {
+        if (isset($_SESSION) && $_SESSION["UserLoggedIn"]) {
+            http_response_code(200);
+            return $_SESSION["UserLoggedIn"];
+        }
+        http_response_code(401);
+        return NULL;        
     }
 
     public function getAllStudents()
@@ -255,5 +277,11 @@ class RootController
         $year = $_GET["year"];
         $res = $this->classes->getClassesByDate($month, $year)->getEncoded();
         echo $res;
+    }
+
+    public function endSession() {
+        $_SESSION["UserLoggedIn"] = false;
+        session_destroy();
+        return;
     }
 }

@@ -8,4 +8,5 @@ server/config.php
 server_nodejs
 .htaccess
 server/uploads
+.htaccessBackup
 
