@@ -9,26 +9,12 @@ import { config } from './../../../config';
 const Profile = (props) => {
   const [students, setStudents] = useState([]);
   const [showForm, setShowForm] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const duringPopUp3 = showForm ? "during-popup_3" : "";
   const navigate = useNavigate();
 
   useEffect(() => {
-    checkLogin();
-  }, [])
-
-  const checkLogin = async () => {
-    axios.get(`${config.BASE_PATH}checkLogin`)
-    .then(() => {
-      setIsLoggedIn(true);
-      getStudents();
-    })
-    .catch((err) => {
-      setIsLoggedIn(false);
-      navigate("/");
-      return;
-    });
-  }
+    props.checkLogin(getStudents);
+  }, []);
 
   const getStudents = async () => {
     axios.get(`${config.BASE_PATH}getAllStudents`)
@@ -55,7 +41,7 @@ const Profile = (props) => {
 
   return (
     <div>
-      {isLoggedIn && (
+      {props.isLoggedIn && (
         <div>
           <button
             className="profile_go_back_button"

@@ -24,7 +24,8 @@ const Schedule = (props) => {
   const [highlightedDays, setHighlisghtedDays] = useState([]);
 
   useEffect(() => {
-    getStudents();
+    props.checkLogin(getStudents);
+    // getStudents();
   }, []);
 
   useEffect(() => {
@@ -139,43 +140,49 @@ const Schedule = (props) => {
   };
 
   return (
-    <div className="schedule_container">
-      <button
-        className="schedule_go_back_button"
-        onClick={() => navigate("/mainPage")}
-      >
-        Go Back
-      </button>
-      {showSuccess && (
-        <Alert severity="success">Class has been scheduled successfully!</Alert>
+    <div>
+      {props.isLoggedIn && (
+        <div className="schedule_container">
+          <button
+            className="schedule_go_back_button"
+            onClick={() => navigate("/mainPage")}
+          >
+            Go Back
+          </button>
+          {showSuccess && (
+            <Alert severity="success">
+              Class has been scheduled successfully!
+            </Alert>
+          )}
+          {showError && (
+            <Alert severity="error">
+              This class is overlapped with other class
+            </Alert>
+          )}
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DateCalendar
+              onChange={onValueChange}
+              onMonthChange={handleMonthChange}
+              onYearChange={handleYearChange}
+              showDaysOutsideCurrentMonth
+              slots={{ day: ServerDay }}
+              slotProps={{ day: { highlightedDays } }}
+            />
+            {modalOpen && (
+              <ScheduleClassModal
+                modalOpen={modalOpen}
+                handleClose={handleClose}
+                handleOpen={handleOpen}
+                value={value}
+                students={students}
+                setShowError={setShowError}
+                setShowSuccess={setShowSuccess}
+                setModalOpen={setModalOpen}
+              />
+            )}
+          </LocalizationProvider>
+        </div>
       )}
-      {showError && (
-        <Alert severity="error">
-          This class is overlapped with other class
-        </Alert>
-      )}
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DateCalendar
-          onChange={onValueChange}
-          onMonthChange={handleMonthChange}
-          onYearChange={handleYearChange}
-          showDaysOutsideCurrentMonth
-          slots={{ day: ServerDay }}
-          slotProps={{ day: { highlightedDays } }}
-        />
-        {modalOpen && (
-          <ScheduleClassModal
-            modalOpen={modalOpen}
-            handleClose={handleClose}
-            handleOpen={handleOpen}
-            value={value}
-            students={students}
-            setShowError={setShowError}
-            setShowSuccess={setShowSuccess}
-            setModalOpen={setModalOpen}
-          />
-        )}
-      </LocalizationProvider>
     </div>
   );
 };
