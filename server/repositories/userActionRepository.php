@@ -2,7 +2,7 @@
 
 include_once SYSTEM_PATH . "/database.php";
 
-class UserAction
+class UserActionRepository
 {
 
     private $db;
@@ -15,16 +15,16 @@ class UserAction
         $this->db = Database::getInstance();
     }
 
-    public function registerUser($username, $password)
+    public function registerUser($data)
     {
 
-        if ($this->doesUserExist($username)) {
+        if ($this->doesUserExist($data["username"])) {
             throw new HttpException(400, "User already exists", NULL);
         }
 
-        $hashedPassword = $this->getHashedPassword($password);
+        $hashedPassword = $this->getHashedPassword($data["password"]);
         $stmt = mysqli_prepare($this->db->getConnection(), $this->insertIntoUserSql);
-        mysqli_stmt_bind_param($stmt, "ss", $username, $hashedPassword);
+        mysqli_stmt_bind_param($stmt, "ss", $data["username"], $hashedPassword);
         return mysqli_stmt_execute($stmt);
     }
 
@@ -37,9 +37,9 @@ class UserAction
         return $row;
     }
 
-    public function loginUser($username, $password)
+    public function loginUser($data)
     {
-        return $this->verifyLogin($username, $password);
+        return $this->verifyLogin($data["username"], $data["password"]);
     }
 
     public function getHashedPassword($password)

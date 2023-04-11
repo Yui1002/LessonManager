@@ -6,6 +6,8 @@ include_once SYSTEM_PATH . "/views/notification.php";
 include_once SYSTEM_PATH . "/views/classes.php";
 include_once SYSTEM_PATH . "/helpers/HttpException.php";
 
+include_once SYSTEM_PATH . "../managers/studentsManager.php";
+include_once SYSTEM_PATH . "../managers/notificationManager.php";
 
 //Get the action from the url. This assumes every request has a action param passed in
 //function or class (action) returns string
@@ -35,9 +37,10 @@ class RootController
     public function __construct()
     {
         $this->data = NULL;
-        $this->student = new Students();
+        // $this->student = new Students();
+        $this->student = new StudentsManager();
         $this->userActions = new UserAction();
-        $this->notification = new Notification();
+        $this->notification = new NotificationManager();
         $this->classes = new Classes();
     }
     public function route($action)
@@ -112,7 +115,8 @@ class RootController
     //if the path intends to go to register, get the register file
     public function register()
     {
-        $this->userActions->registerUser($this->data["username"], $this->data["password"]);
+        // $this->userActions->registerUser($this->data["username"], $this->data["password"]);
+        $this->userActions->registerUser($this->data);
     }
 
     public function login()
@@ -124,7 +128,7 @@ class RootController
 
         $login = new UserAction();
         $data = json_decode(file_get_contents("php://input"), true);
-        if (!$login->loginUser($data["username"], $data["password"])) {
+        if (!$login->loginUser($data)) {
             http_response_code(401);
             return;
         }
@@ -152,33 +156,25 @@ class RootController
 
     public function getStudentByEmail()
     {
-        echo $this->student->getStudentByEmail($this->data["email"])->getEncoded();
+        echo $this->student->getStudentByEmail($this->data)->getEncoded();
     }
 
     public function createNewStudent()
     {
-        $uploadFile = $this->uploadFile($_FILES);
-
-        echo $this->student->createNewStudent(
-            $_POST["firstName"],
-            $_POST["lastName"],
-            $_POST["country"],
-            $_POST["phoneNumber"],
-            $_POST["email"],
-            $uploadFile,
-            $_POST["lessonHours"],
-        );
+        // $uploadFile = $this->uploadFile($_FILES);
+        // echo $this->student->createNewStudent($_POST, $uploadFile);
+        echo $this->student->createNewStudent($_POST, $_FILES);
     }
 
-    public function generateName($fileName) 
-    {
-        $name = substr($fileName, 0, strrpos($fileName, '.'));
-        if (strlen($name) > 15) $name = substr($name, 0, 15);
-        $name = trim($name);
-        $nameMime = substr($fileName, strrpos($fileName, '.'));
-        $timestampSec = strval(time());
-        return $name.$timestampSec.$nameMime;
-    }
+    // public function generateName($fileName) 
+    // {
+    //     $name = substr($fileName, 0, strrpos($fileName, '.'));
+    //     if (strlen($name) > 15) $name = substr($name, 0, 15);
+    //     $name = trim($name);
+    //     $nameMime = substr($fileName, strrpos($fileName, '.'));
+    //     $timestampSec = strval(time());
+    //     return $name.$timestampSec.$nameMime;
+    // }
 
     public function getNotification()
     {
@@ -189,7 +185,8 @@ class RootController
     {
         $isNewFileUploaded = strlen($_FILES['file']['name']) > 0;
         if ($isNewFileUploaded) {
-            $uploadFile = $this->uploadFile($_FILES);
+            // $uploadFile = $this->uploadFile($_FILES);
+            $uploadFile = $this->student->uploadFile($_FILES);
         } else {
             $uploadFile = NULL;
         }
@@ -200,49 +197,41 @@ class RootController
         }
     
         if ($isNewFileUploaded) {
-            $this->deleteFile($record["profile_photo"]);
+            $this->student->deleteFile($record["profile_photo"]);
         }
-        echo $this->student->editStudent(
-            $record["id"], 
-            $_POST["firstName"], 
-            $_POST["lastName"], 
-            $_POST["country"], 
-            $_POST["phoneNumber"], 
-            $_POST["newEmail"],
-            $uploadFile, 
-            $_POST["lessonHours"]
-        );
+        echo $this->student->editStudent($_POST, $uploadFile);
     }
 
     public function deleteStudent() {
+        echo $this->student->deleteStudent($this->data);
         // get image to delete from email
-        $record = $this->student->getStudentByEmail($this->data["email"])->getData();
-        $file = $record["profile_photo"];
-        var_dump($file);
-        $this->deleteFile($file);
-        echo $this->student->deleteStudent($this->data["email"]);
+        // $record = $this->student->getStudentByEmail($this->data["email"])->getData();
+        // $file = $record["profile_photo"];
+        // var_dump($file);
+        // $this->deleteFile($file);
+        // echo $this->student->deleteStudent($this->data["email"]);
     }
 
-    public function uploadFile($file) {
-        $uploaddir = "server/uploads/";
-        $name = $this->generateName($file['file']['name']);
-        $uploadfile = $uploaddir.basename($name);
+    // public function uploadFile($file) {
+    //     $uploaddir = "server/uploads/";
+    //     $name = $this->generateName($file['file']['name']);
+    //     $uploadfile = $uploaddir.basename($name);
 
-        if (move_uploaded_file($file['file']['tmp_name'], $uploadfile)) {
-            return $uploadfile;
-        } else {
-            throw new HttpException(500, "Failed to upload file", NULL);
-        }
-    }
+    //     if (move_uploaded_file($file['file']['tmp_name'], $uploadfile)) {
+    //         return $uploadfile;
+    //     } else {
+    //         throw new HttpException(500, "Failed to upload file", NULL);
+    //     }
+    // }
 
-    public function deleteFile($file) {
-        if (!$file) return;
-        if (!unlink($file)) {
-            echo "Failed to delete file";
-        } else {
-            echo "$file has been deleted";
-        }
-    } 
+    // public function deleteFile($file) {
+    //     if (!$file) return;
+    //     if (!unlink($file)) {
+    //         echo "Failed to delete file";
+    //     } else {
+    //         echo "$file has been deleted";
+    //     }
+    // } 
 
     public function getClasses() {
         echo $this->classes->getClasses()->getEncoded();
@@ -252,13 +241,7 @@ class RootController
         // check if class overlaps
         $isOverlapped = $this->classes->isOverlap($this->data["start_date"], $this->data["end_date"]);
         if (!$isOverlapped) {
-            $this->classes->createClass(
-                $this->data["student_id"], 
-                $this->data["name"], 
-                $this->data["start_date"], 
-                $this->data["end_date"], 
-                $this->data["description"], 
-            );
+            $this->classes->createClass($this->data);
             $res = new HttpException(200, "Scheduled successfully", NULL);
             echo $res->get();
         } else {

@@ -3,7 +3,7 @@
 include_once SYSTEM_PATH . "/database.php";
 
 
-class Students
+class StudentsRepository
 {
     private $db;
     private $getStudentsSql = "SELECT * FROM students";
@@ -39,23 +39,21 @@ class Students
         return $this;
     }
 
-    public function createNewStudent($firstName, $lastName, $country, $phoneNumber, $email, $file, $lessonHours)
+    public function createNewStudent($data, $file)
     {
         $stmt = mysqli_prepare($this->db->getConnection(), $this->createNewStudentSql);
-        mysqli_stmt_bind_param($stmt, "ssssssi", $firstName, $lastName, $country, $phoneNumber, $email, $file, $lessonHours);
+        mysqli_stmt_bind_param($stmt, "ssssssi", $data["firstName"], $data["lastname"], $data["country"], $data["phoneNumber"], $data["email"], $file, $data["lessonHours"]);
         return mysqli_stmt_execute($stmt);
     }
-
     
-    public function editStudent($id, $firstName, $lastName, $country, $phoneNumber, $email, $file, $lessonHours) 
+    public function editStudent($data, $file) 
     {
         $query = $this->updateStudentSql . ($file ? ",  profile_photo = ?" : "") . " WHERE id = ?";
-        var_dump($query);
         $stmt = mysqli_prepare($this->db->getConnection(), $query);
         if ($file) {
-            mysqli_stmt_bind_param($stmt, "sssssisi", $firstName, $lastName, $country, $phoneNumber, $email, $lessonHours, $file, $id);
+            mysqli_stmt_bind_param($stmt, "sssssisi", $data["firstName"], $data["lastName"], $data["country"], $data["phoneNumber"], $data["newEmail"], $data["lessonHours"], $file, $data["id"]);
         } else {
-            mysqli_stmt_bind_param($stmt, "sssssii", $firstName, $lastName, $country, $phoneNumber, $email, $lessonHours, $id);
+            mysqli_stmt_bind_param($stmt, "sssssii", $data["firstName"], $data["lastName"], $data["country"], $data["phoneNumber"], $data["newEmail"], $data["lessonHours"], $data["id"]);
         }
         return mysqli_stmt_execute($stmt);
     }

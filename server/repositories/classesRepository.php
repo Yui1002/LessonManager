@@ -27,10 +27,10 @@ class Classes
         return $this;
     }
 
-    public function createClass($studentId, $name, $startDate, $endDate, $description) 
+    public function createClass($data) 
     {
         $stmt = mysqli_prepare($this->db->getConnection(), $this->createClassSql);
-        mysqli_stmt_bind_param($stmt, "issss", $studentId, $name, $startDate, $endDate, $description);
+        mysqli_stmt_bind_param($stmt, "issss", $data["student_id"], $data["name"], $data["start_date"], $data["end_date"], $data["description"]);
         return mysqli_stmt_execute($stmt);
     }
 

@@ -2,7 +2,7 @@
 
 include_once SYSTEM_PATH . "/database.php";
 
-class Notification {
+class NotificationRepository {
     private $db;
     private $getNotificationSql = "SELECT * FROM schedules WHERE start_date >= NOW() + INTERVAL 1 MINUTE AND start_date <= NOW() + INTERVAL 1 HOUR;";
 
@@ -19,7 +19,6 @@ class Notification {
         $rows = $stmt->fetch_all(MYSQLI_ASSOC);
         $this->data = $rows;
         return $this;
-
     }
 
     public function getEncoded() {
