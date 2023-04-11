@@ -9,6 +9,7 @@ include_once SYSTEM_PATH . "/helpers/HttpException.php";
 include_once SYSTEM_PATH . "../managers/studentsManager.php";
 include_once SYSTEM_PATH . "../managers/notificationManager.php";
 include_once SYSTEM_PATH . "../managers/classesManager.php";
+include_once SYSTEM_PATH . "../managers/userActionManager.php";
 
 //Get the action from the url. This assumes every request has a action param passed in
 //function or class (action) returns string
@@ -40,7 +41,7 @@ class RootController
         $this->data = NULL;
         // $this->student = new Students();
         $this->student = new StudentsManager();
-        $this->userActions = new UserAction();
+        $this->userActions = new UserActionManager();
         $this->notification = new NotificationManager();
         $this->classes = new classesManager();
     }
@@ -122,21 +123,21 @@ class RootController
 
     public function login()
     {
-        $isLoggedIn = $this->isLoggedIn();
-        if (isset($isLoggedIn)) {
-            return $isLoggedIn;  
-        }
+        // $isLoggedIn = $this->isLoggedIn();
+        // if (isset($isLoggedIn)) {
+        //     return $isLoggedIn;  
+        // }
 
-        $login = new UserAction();
-        $data = json_decode(file_get_contents("php://input"), true);
-        if (!$login->loginUser($data)) {
-            http_response_code(401);
-            return;
-        }
+        // $login = new UserAction();
+        // $data = json_decode(file_get_contents("php://input"), true);
+        // if (!$login->loginUser($data)) {
+        //     http_response_code(401);
+        //     return;
+        // }
         
-        $_SESSION = array();
-        $_SESSION["UserLoggedIn"] = true;
-        http_response_code(200);
+        // $_SESSION = array();
+        // $_SESSION["UserLoggedIn"] = true;
+        // http_response_code(200);
     }
 
     //isset -> NOT ( SOMETHING OR SOMETHING )
