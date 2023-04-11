@@ -2,7 +2,7 @@
 
 include_once SYSTEM_PATH . "/database.php";
 
-class Classes 
+class ClassesRepository
 {
     private $db;
     private $getClassesSql = "SELECT student_id, name, start_date, end_date, description FROM schedules;";

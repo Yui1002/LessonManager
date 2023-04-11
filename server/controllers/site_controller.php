@@ -8,6 +8,7 @@ include_once SYSTEM_PATH . "/helpers/HttpException.php";
 
 include_once SYSTEM_PATH . "../managers/studentsManager.php";
 include_once SYSTEM_PATH . "../managers/notificationManager.php";
+include_once SYSTEM_PATH . "../managers/classesManager.php";
 
 //Get the action from the url. This assumes every request has a action param passed in
 //function or class (action) returns string
@@ -41,7 +42,7 @@ class RootController
         $this->student = new StudentsManager();
         $this->userActions = new UserAction();
         $this->notification = new NotificationManager();
-        $this->classes = new Classes();
+        $this->classes = new classesManager();
     }
     public function route($action)
     {
@@ -238,28 +239,31 @@ class RootController
     }
 
     public function createClass() {
+        echo $this->classes->createClass($this->data);
         // check if class overlaps
-        $isOverlapped = $this->classes->isOverlap($this->data["start_date"], $this->data["end_date"]);
-        if (!$isOverlapped) {
-            $this->classes->createClass($this->data);
-            $res = new HttpException(200, "Scheduled successfully", NULL);
-            echo $res->get();
-        } else {
-            $res = new HttpException(400, "This class is overlapped", NULL);
-            echo $res->get();
-        }
+        // $isOverlapped = $this->classes->isOverlap($this->data["start_date"], $this->data["end_date"]);
+        // if (!$isOverlapped) {
+        //     $this->classes->createClass($this->data);
+        //     $res = new HttpException(200, "Scheduled successfully", NULL);
+        //     echo $res->get();
+        // } else {
+        //     $res = new HttpException(400, "This class is overlapped", NULL);
+        //     echo $res->get();
+        // }
     }
 
     public function deleteClass() {
-        $id = $this->classes->getClassId($this->data["start_date"], $this->data["end_date"])->getData()["id"];
-        echo $this->classes->deleteClass($id);
+        echo $this->classes->deleteClass($this->data);
+        // $id = $this->classes->getClassId($this->data["start_date"], $this->data["end_date"])->getData()["id"];
+        // echo $this->classes->deleteClass($id);
     }
 
     public function getClassesByDate() {
-        $month = $_GET["month"];
-        $year = $_GET["year"];
-        $res = $this->classes->getClassesByDate($month, $year)->getEncoded();
-        echo $res;
+        echo $this->classes->getClassesByDate($_GET);
+        // $month = $_GET["month"];
+        // $year = $_GET["year"];
+        // $res = $this->classes->getClassesByDate($month, $year)->getEncoded();
+        // echo $res;
     }
 
     public function endSession() {
