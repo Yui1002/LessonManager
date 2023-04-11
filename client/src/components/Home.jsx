@@ -6,7 +6,6 @@ import "./Home.css";
 import { IconButton, Alert } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useNavigate } from 'react-router-dom';
-// import { logOut } from "../helpers/cookie.js";
 import { config } from './../../../config';
 
 const Home = (props) => {
@@ -22,7 +21,6 @@ const Home = (props) => {
   const logout = () => {
     axios.get(`${config.BASE_PATH}endSession`)
     .then(() => {
-      console.log("logged out");
       navigate('/')
       return;
     }).catch((err) => {
@@ -34,6 +32,7 @@ const Home = (props) => {
 
   const hasClassSoon = () => {
     axios.get(`${config.BASE_PATH}notification`).then((data) => {
+      console.log(data)
       setClassScheduledIn1hour(data.data);
     });
   };

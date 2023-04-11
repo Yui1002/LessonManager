@@ -13,7 +13,6 @@ import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
 import EditSharpIcon from "@mui/icons-material/EditSharp";
 
 const Student = (props) => {
-  console.log('props: ', props);
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(true);

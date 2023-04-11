@@ -71,15 +71,10 @@ const Schedule = (props) => {
   };
 
   function ServerDay(props) {
-    console.log(props);
-    console.log("date: ", props.day.date());
     const { highlightedDays, day, outsideCurrentMonth, ...other } = props;
-    console.log("highlightedDays2: ", highlightedDays);
     const isSelected =
       !props.outsideCurrentMonth &&
       highlightedDays.indexOf(props.day.date()) > 0;
-    // [1].indexOf()
-    console.log("isSelected: ", isSelected);
 
     return (
       <Badge
