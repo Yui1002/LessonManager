@@ -1,9 +1,6 @@
 <?php
+
 include_once SYSTEM_PATH . "/global.php";
-include_once SYSTEM_PATH . '/views/userAction.php';
-include_once SYSTEM_PATH . "/views/students.php";
-include_once SYSTEM_PATH . "/views/notification.php";
-include_once SYSTEM_PATH . "/views/classes.php";
 include_once SYSTEM_PATH . "/helpers/HttpException.php";
 
 include_once SYSTEM_PATH . "../managers/studentsManager.php";
@@ -29,17 +26,15 @@ $controller->route($action);
 
 class RootController
 {
-
     private $data;
     private $student;
     private $userActions;
     private $notification;
     private $classes;
-
+    
     public function __construct()
     {
         $this->data = NULL;
-        // $this->student = new Students();
         $this->student = new StudentsManager();
         $this->userActions = new UserActionManager();
         $this->notification = new NotificationManager();

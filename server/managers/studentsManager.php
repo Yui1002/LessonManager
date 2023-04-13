@@ -8,6 +8,7 @@ class StudentsManager {
 
     public function __construct()
     {
+        echo "hello";
         $this->student = new StudentsRepository();
     }
 
