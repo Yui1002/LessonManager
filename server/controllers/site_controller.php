@@ -67,9 +67,6 @@ class RootController
                 case 'getStudentByEmail':
                     $this->getStudentByEmail();
                     break;
-                case 'getStudentId':
-                    $this->getStudentId();
-                    break;
                 case 'createNewStudent':
                     $this->createNewStudent();
                     break;
@@ -123,9 +120,16 @@ class RootController
 
     public function login()
     {
-        // $isLoggedIn = $this->isLoggedIn();
-        // if (isset($isLoggedIn)) {
-        //     return $isLoggedIn;  
+        $isLoggedIn = $this->isLoggedIn();
+        if (isset($isLoggedIn)) {
+            return $isLoggedIn;  
+        }
+
+        $data = json_decode(file_get_contents("php://input"), true);
+        echo $this->userActions->loginUser($data);
+        // if (!$this->userActions->loginUser($data)) {
+        //     http_response_code(401);
+        //     return;
         // }
 
         // $login = new UserAction();
@@ -135,9 +139,9 @@ class RootController
         //     return;
         // }
         
-        // $_SESSION = array();
-        // $_SESSION["UserLoggedIn"] = true;
-        // http_response_code(200);
+        $_SESSION = array();
+        $_SESSION["UserLoggedIn"] = true;
+        http_response_code(200);
     }
 
     //isset -> NOT ( SOMETHING OR SOMETHING )
