@@ -1,7 +1,7 @@
 <?php
 
-include_once SYSTEM_PATH . "../repositories/classesRepository.php";
-include_once SYSTEM_PATH . "../helpers/HttpException.php";
+include_once SYSTEM_PATH . "/repositories/classesRepository.php";
+include_once SYSTEM_PATH . "/helpers/HttpException.php";
 
 class classesManager {
     private $classes;

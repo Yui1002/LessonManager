@@ -1,6 +1,6 @@
 <?php
 
-include_once SYSTEM_PATH . "../repositories/studentsRepository.php";
+include_once SYSTEM_PATH . "/repositories/studentsRepository.php";
 
 class StudentsManager {
 
@@ -8,7 +8,6 @@ class StudentsManager {
 
     public function __construct()
     {
-        echo "hello";
         $this->student = new StudentsRepository();
     }
 

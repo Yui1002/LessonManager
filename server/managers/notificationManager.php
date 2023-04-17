@@ -1,6 +1,6 @@
 <?php
 
-include_once SYSTEM_PATH . "../repositories/notificationRepository.php";
+include_once SYSTEM_PATH . "/repositories/notificationRepository.php";
 
 class NotificationManager {
     

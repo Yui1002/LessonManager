@@ -3,10 +3,10 @@
 include_once SYSTEM_PATH . "/global.php";
 include_once SYSTEM_PATH . "/helpers/HttpException.php";
 
-include_once SYSTEM_PATH . "../managers/studentsManager.php";
-include_once SYSTEM_PATH . "../managers/notificationManager.php";
-include_once SYSTEM_PATH . "../managers/classesManager.php";
-include_once SYSTEM_PATH . "../managers/userActionManager.php";
+include_once SYSTEM_PATH . "/managers/studentsManager.php";
+include_once SYSTEM_PATH . "/managers/notificationManager.php";
+include_once SYSTEM_PATH . "/managers/classesManager.php";
+include_once SYSTEM_PATH . "/managers/userActionManager.php";
 
 //Get the action from the url. This assumes every request has a action param passed in
 //function or class (action) returns string
