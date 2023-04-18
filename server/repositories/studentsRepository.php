@@ -48,12 +48,13 @@ class StudentsRepository
     
     public function editStudent($data, $file) 
     {
-        $query = $this->updateStudentSql . ($file ? ",  profile_photo = ?" : "") . " WHERE id = ?";
+        $query = $this->updateStudentSql . ($file ? ",  profile_photo = ?" : "") . " WHERE email = ?";
+        var_dump($query);
         $stmt = mysqli_prepare($this->db->getConnection(), $query);
         if ($file) {
-            mysqli_stmt_bind_param($stmt, "sssssisi", $data["firstName"], $data["lastName"], $data["country"], $data["phoneNumber"], $data["newEmail"], $data["lessonHours"], $file, $data["id"]);
+            mysqli_stmt_bind_param($stmt, "sssssiss", $data["firstName"], $data["lastName"], $data["country"], $data["phoneNumber"], $data["newEmail"], $data["lessonHours"], $file, $data["email"]);
         } else {
-            mysqli_stmt_bind_param($stmt, "sssssii", $data["firstName"], $data["lastName"], $data["country"], $data["phoneNumber"], $data["newEmail"], $data["lessonHours"], $data["id"]);
+            mysqli_stmt_bind_param($stmt, "sssssis", $data["firstName"], $data["lastName"], $data["country"], $data["phoneNumber"], $data["newEmail"], $data["lessonHours"], $data["email"]);
         }
         return mysqli_stmt_execute($stmt);
     }
@@ -73,12 +74,13 @@ class StudentsRepository
         mysqli_stmt_bind_param($stmt, "s", $email);
         return mysqli_stmt_execute($stmt);
     }
-    
-    public function getData() {
-        return $this->data;
-    }
 
     public function getEncoded() {
         return json_encode($this->data);
     }
+
+    public function getData() {
+        return $this->data;
+    }
 }
+

@@ -186,7 +186,6 @@ class RootController
     {
         $isNewFileUploaded = strlen($_FILES['file']['name']) > 0;
         if ($isNewFileUploaded) {
-            // $uploadFile = $this->uploadFile($_FILES);
             $uploadFile = $this->student->uploadFile($_FILES);
         } else {
             $uploadFile = NULL;
@@ -196,7 +195,6 @@ class RootController
         if ($record == NULL) {
             throw new HttpException(400, "User not found", NULL);
         }
-    
         if ($isNewFileUploaded) {
             $this->student->deleteFile($record["profile_photo"]);
         }

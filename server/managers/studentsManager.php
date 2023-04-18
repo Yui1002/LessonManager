@@ -16,7 +16,7 @@ class StudentsManager {
     }
 
     public function getStudentByEmail($data) {
-        return $this->student->getStudentByEmail($data["email"]);
+        return $this->student->getStudentByEmail($data);
     }
 
     public function createNewStudent($data, $file) {
@@ -33,6 +33,7 @@ class StudentsManager {
 
     public function editStudent($data, $file) {
         return $this->student->editStudent($data, $file);
+        // return $this->student->getStudentByEmail($data["newEmail"]);
     }
 
     public function uploadFile($file) {
@@ -64,4 +65,5 @@ class StudentsManager {
             echo "$file has been deleted";
         }
     }
+    
 }
