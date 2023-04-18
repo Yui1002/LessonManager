@@ -19,6 +19,7 @@ const Profile = (props) => {
   const getStudents = async () => {
     axios.get(`${config.BASE_PATH}getAllStudents`)
     .then(res => {
+      console.log(res.data)
       setStudents(res.data)
     })
     .catch(err => console.log(err));

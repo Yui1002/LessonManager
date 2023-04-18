@@ -72,6 +72,7 @@ class StudentsRepository
     public function deleteStudent($email) {
         $stmt = mysqli_prepare($this->db->getConnection(), $this->deleteStudentSql);
         mysqli_stmt_bind_param($stmt, "s", $email);
+        echo 'hello';
         return mysqli_stmt_execute($stmt);
     }
 

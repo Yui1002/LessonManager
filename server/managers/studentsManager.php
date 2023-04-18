@@ -27,13 +27,14 @@ class StudentsManager {
     public function deleteStudent($data) {
         $record = $this->student->getStudentByEmail($data["email"])->getData();
         $file = $record["profile_photo"];
-        $this->deleteFile($file);
+        if ($file) {
+            $this->deleteFile($file);
+        }
         return $this->student->deleteStudent($data["email"]);
     }
 
     public function editStudent($data, $file) {
         return $this->student->editStudent($data, $file);
-        // return $this->student->getStudentByEmail($data["newEmail"]);
     }
 
     public function uploadFile($file) {
@@ -59,11 +60,12 @@ class StudentsManager {
 
     public function deleteFile($file) {
         if (!$file) return;
-        if (!unlink($file)) {
-            echo "Failed to delete file";
+        if (unlink($file)) {
+            echo "file successfully deleted";
+            return true;
         } else {
-            echo "$file has been deleted";
+            echo "file failed to be deleted";
+            return false;
         }
     }
-    
 }
