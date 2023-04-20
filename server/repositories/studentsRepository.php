@@ -42,14 +42,13 @@ class StudentsRepository
     public function createNewStudent($data, $file)
     {
         $stmt = mysqli_prepare($this->db->getConnection(), $this->createNewStudentSql);
-        mysqli_stmt_bind_param($stmt, "ssssssi", $data["firstName"], $data["lastname"], $data["country"], $data["phoneNumber"], $data["email"], $file, $data["lessonHours"]);
+        mysqli_stmt_bind_param($stmt, "ssssssi", $data["firstName"], $data["lastName"], $data["country"], $data["phoneNumber"], $data["email"], $file, $data["lessonHours"]);
         return mysqli_stmt_execute($stmt);
     }
     
     public function editStudent($data, $file) 
     {
         $query = $this->updateStudentSql . ($file ? ",  profile_photo = ?" : "") . " WHERE email = ?";
-        var_dump($query);
         $stmt = mysqli_prepare($this->db->getConnection(), $query);
         if ($file) {
             mysqli_stmt_bind_param($stmt, "sssssiss", $data["firstName"], $data["lastName"], $data["country"], $data["phoneNumber"], $data["newEmail"], $data["lessonHours"], $file, $data["email"]);

@@ -111,6 +111,7 @@ const NewStudent = (props) => {
             name="phone_number"
             type="tel"
             autoComplete="phone_number"
+            placeholder="XXX-XXX-XXXX"
             required
           />
         </section>

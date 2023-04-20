@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Schedule.css";
-import PopUpEvent from "./PopUpEvent.jsx";
 import ClassDetail from "./ClassDetail.jsx";
 import ScheduleClassModal from "./ScheduleClassModal.jsx";
 import { config } from "./../../../config";
@@ -154,28 +153,30 @@ const Schedule = (props) => {
               This class is overlapped with other class
             </Alert>
           )}
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DateCalendar
-              onChange={onValueChange}
-              onMonthChange={handleMonthChange}
-              onYearChange={handleYearChange}
-              showDaysOutsideCurrentMonth
-              slots={{ day: ServerDay }}
-              slotProps={{ day: { highlightedDays } }}
-            />
-            {modalOpen && (
-              <ScheduleClassModal
-                modalOpen={modalOpen}
-                handleClose={handleClose}
-                handleOpen={handleOpen}
-                value={value}
-                students={students}
-                setShowError={setShowError}
-                setShowSuccess={setShowSuccess}
-                setModalOpen={setModalOpen}
+          <div className="calendar_container">
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DateCalendar
+                onChange={onValueChange}
+                onMonthChange={handleMonthChange}
+                onYearChange={handleYearChange}
+                showDaysOutsideCurrentMonth
+                slots={{ day: ServerDay }}
+                slotProps={{ day: { highlightedDays } }}
               />
-            )}
-          </LocalizationProvider>
+              {modalOpen && (
+                <ScheduleClassModal
+                  modalOpen={modalOpen}
+                  handleClose={handleClose}
+                  handleOpen={handleOpen}
+                  value={value}
+                  students={students}
+                  setShowError={setShowError}
+                  setShowSuccess={setShowSuccess}
+                  setModalOpen={setModalOpen}
+                />
+              )}
+            </LocalizationProvider>
+          </div>
         </div>
       )}
     </div>

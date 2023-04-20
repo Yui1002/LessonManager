@@ -64,7 +64,7 @@ const PastClass = (props) => {
           >
             Go Back
           </button>
-          <h2 className="past_class_title">Past classes</h2>
+          <h2 className="past_class_title">Past Classes</h2>
           <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
             <InputLabel id="demo-simple-select-standard-label">
               Month
@@ -76,7 +76,7 @@ const PastClass = (props) => {
               onChange={handleMonthChange}
               label="month"
             >
-              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((m) => (
+              {["January", "February", "March", "April", "May", "June", "July", "August", "September", "Ougust", "November", "December"].map((m) => (
                 <MenuItem value={m}>{m}</MenuItem>
               ))}
             </Select>

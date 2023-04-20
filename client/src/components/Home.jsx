@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { config } from './../../../config';
 
 const Home = (props) => {
+  console.log("home props: ", props);
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [classScheduledIn1hour, setClassScheduledIn1hour] = useState([]);
@@ -42,10 +43,8 @@ const Home = (props) => {
       <div className="side_nav">
         <Link to="/profile">Profile</Link>
         <Link to="/schedule">Schedule</Link>
-        <Link to="/" onClick={logout}>
-          Logout
-        </Link>
         <Link to="/pastClass">Past Class</Link>
+        <Link to="/" onClick={logout}>Logout</Link>
       </div>
       {open && classScheduledIn1hour.length > 0 && (
         <Alert
