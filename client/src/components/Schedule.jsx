@@ -2,309 +2,181 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Schedule.css";
-import PopUpEvent from "./PopUpEvent.jsx";
-import moment from "moment";
 import ClassDetail from "./ClassDetail.jsx";
-import { NUMBER_MONTHS } from "../helpers/CONSTANT.js";
-import Alert from "@mui/material/Alert";
-import CloseIcon from '@mui/icons-material/Close';
-import IconButton from '@mui/material/IconButton';
-
-const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-const today = new Date();
-const TODAY = today.getDate();
-let year = today.getFullYear();
-let month = today.getMonth();
+import ScheduleClassModal from "./ScheduleClassModal.jsx";
+import { config } from "./../../../config";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
+import { PickersDay } from "@mui/x-date-pickers/PickersDay";
+import { Alert, Badge } from "@mui/material";
 
 const Schedule = (props) => {
-  const [calendar, setCalendar] = useState([]);
-  const [students, setStudents] = useState([]);
-  const [classes, setClasses] = useState([]);
-  const [scheduleClassShown, setScheduleClassShown] = useState(false);
-  const [noClassScheduled, setNoClassScheduled] = useState(false);
-  const [classDetailShown, setClassDetailShown] = useState(false);
-  const [currentShownSchedule, setCurrentShownSchedule] = useState({});
-  const duringPopUp = scheduleClassShown ? "during-popup" : "";
-  const duringPopUp2 = classDetailShown ? "during-popup_2" : "";
-  const [className, setClassName] = useState("");
-  const [classDate, setClassDate] = useState();
-  const [isOverlapped, setIsOverlapped] = useState(false);
-  const [isScheduled, setIsScheduled] = useState(false);
-  const [open, setOpen] = useState(false);
-
-  console.log('is overlapped', isOverlapped)
-
   const navigate = useNavigate();
+  const [month, setMonth] = useState(new Date().getMonth() + 1);
+  const [year, setYear] = useState(new Date().getFullYear());
+  const [value, setValue] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
+  const [students, setStudents] = useState([]);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [showError, setShowError] = useState(false);
+  const [highlightedDays, setHighlisghtedDays] = useState([]);
 
   useEffect(() => {
-    getStudents();
-    showCalendar();
-    getSchedule();
+    props.checkLogin(getStudents);
+    // getStudents();
   }, []);
 
-  const getStudents = async () => {
-    axios.get('/students')
-    .then(res => setStudents(res.data))
-    .catch(err => console.log(err));
-  };
+  useEffect(() => {
+    getSchedules();
+  }, [month]);
 
-  const showCalendar = () => {
-    let dates = [
-      ...getCalendarHead(),
-      ...getCalendarBody(),
-      ...getCalendarTail(),
-    ];
+  useEffect(() => {
+    const timeId = setTimeout(() => {
+      setShowSuccess(false);
+      setShowError(false);
+    }, 3000);
 
-    let weeks = [];
-    let weeksCount = dates.length / 7;
-
-    for (let i = 0; i < weeksCount; i++) {
-      weeks.push(dates.splice(0, 7));
-    }
-
-    setCalendar(weeks);
-  };
-
-  const getCalendarHead = () => {
-    let dates = [];
-    let d = new Date(year, month, 0).getDate(); // 30
-    let n = new Date(year, month, 1).getDay(); // 4
-
-    for (let i = 0; i < n; i++) {
-      dates.unshift({
-        date: d - i,
-        month: month - 1,
-        year: year,
-      });
-    }
-    return dates;
-  };
-
-  const getCalendarBody = () => {
-    let dates = [];
-    let lastDate = new Date(year, month + 1, 0).getDate();
-
-    for (let i = 1; i <= lastDate; i++) {
-      dates.push({
-        date: i,
-        month: month,
-        year: year,
-      });
-    }
-    return dates;
-  };
-
-  const getCalendarTail = () => {
-    let dates = [];
-    let lastDay = new Date(year, month + 1, 0).getDay();
-
-    for (let i = 1; i < 7 - lastDay; i++) {
-      dates.push({
-        date: i,
-        month: month + 1,
-        year: year,
-      });
-    }
-    return dates;
-  };
-
-  const getPreviousMonth = () => {
-    month--;
-    if (month < 0) {
-      year--;
-      month = 11;
-    }
-    showCalendar();
-  };
-
-  const getNextMonth = () => {
-    month++;
-    if (month > 11) {
-      year++;
-      month = 0;
-    }
-    showCalendar();
-  };
-
-  const setEvent = (e, year, month, date) => {
-    setClassName(e.target.className);
-    const event = {
-      year: year,
-      month: month + 1,
-      date: date,
+    return () => {
+      clearTimeout(timeId);
     };
-    setCurrentShownSchedule(event);
-    setScheduleClassShown(true);
-  };
+  }, [showError, showSuccess]);
 
-  const closeEvent = () => {
-    setScheduleClassShown(false);
-  };
-
-  const showClassDetail = (date) => {
-    setClassDetailShown(true);
-    setClassDate(date);
-  };
-
-  const getSchedule = async () => {
+  const getStudents = () => {
     axios
-      .get("/schedule")
-      .then((res) => {
-        if (!res.data || !res.data.length) {
-          setClasses([]);
-        } else {
-          res.data.map((d) => {
-            d["start_date"] = new Date(d["start_date"]).toString();
-            d["end_date"] = new Date(d["end_date"]).toString();
-          });
-          setClasses(res.data);
-        }
+      .get(`${config.BASE_PATH}getAllStudents`)
+      .then((res) => setStudents(res.data))
+      .catch((err) => console.log(err));
+  };
+
+  const getSchedules = () => {
+    axios
+      .get(`${config.BASE_PATH}getClassesByDate`, {
+        params: {
+          month: month,
+          year: year,
+        },
       })
-      .catch((err) => console.log("error: ", err));
-  };
-
-  const closeClassDetail = () => {
-    setClassDetailShown(false);
-  };
-
-  const deleteClass = (startDate, endDate) => {
-    const warning = window.confirm(
-      "Are you sure you want to delete the scheduled class?"
-    );
-    if (warning) {
-      axios
-        .delete("/schedule", {
-          data: {
-            startDate: moment(startDate).format("YYYY-MM-DD HH:mm:ss"),
-            endDate: moment(endDate).format("YYYY-MM-DD HH:mm:ss"),
-          },
-        })
-        .then(async (data) => {
-          await getSchedule();
+      .then((res) => {
+        res.data.map((x) => {
+          let dateTime = x["start_date"];
+          let date = new Date(dateTime).getDate();
+          setHighlisghtedDays((oldArray) => [...oldArray, date]);
         });
-    }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  function ServerDay(props) {
+    const { highlightedDays, day, outsideCurrentMonth, ...other } = props;
+    const isSelected =
+      !props.outsideCurrentMonth &&
+      highlightedDays.indexOf(props.day.date()) > 0;
+
+    return (
+      <Badge
+        key={props.day.toString()}
+        overlap="circular"
+        color="primary"
+        badgeContent={isSelected ? "" : undefined}
+      >
+        <PickersDay
+          {...other}
+          outsideCurrentMonth={outsideCurrentMonth}
+          day={day}
+        />
+      </Badge>
+    );
+  }
+  const onValueChange = function (e) {
+    let currentSelectedYear = value.length > 0 ? value.split("-")[0] : "";
+    let currentSelectedMonth = value.length > 0 ? value.split("-")[1] + 1 : "";
+    let currentSelectedDay = value.length > 0 ? value.split("-")[2] : "";
+
+    let year = e["$y"];
+    let month = e["$M"] + 1;
+    month = month < 10 ? `0${month}` : `${month}`;
+    let day = e["$D"];
+    day = day < 10 ? `0${day}` : `${day}`;
+    setValue(`${year}-${month}-${day}`);
+
+    if (
+      currentSelectedYear == "" &&
+      currentSelectedMonth == "" &&
+      currentSelectedDay == ""
+    )
+      handleOpen(e);
+
+    if (
+      currentSelectedYear == year &&
+      (currentSelectedMonth != month || currentSelectedDay != day)
+    )
+      handleOpen(e);
+  };
+
+  const handleOpen = function (e) {
+    setModalOpen(true);
+  };
+
+  const handleClose = function () {
+    setModalOpen(false);
+  };
+
+  const handleMonthChange = function (e) {
+    setHighlisghtedDays([]);
+    setMonth(e["$M"] + 1);
+  };
+
+  const handleYearChange = function (e) {
+    setYear(e["$y"]);
   };
 
   return (
-    <div className="schedule_container">
-      {isOverlapped && open && (
-        <Alert
-          severity="error"
-          action={
-            <IconButton
-              aria-label="close"
-              color="inherit"
-              size="small"
-              onClick={() => setOpen(false)}
-            >
-              <CloseIcon fontSize="inherit" />
-            </IconButton>
-          }
-        >
-          This class is duplicated to another class. Try it different time. 
-        </Alert>
-      )}
-      {isScheduled && (
-        <Alert severity="success" >
-          Class scheduled successfully
-        </Alert>
-      )}
-      <button
-        className="schedule_go_back_button"
-        onClick={() => navigate("/home")}
-      >
-        Go Back
-      </button>
-      <br />
-      <button className="schedule_prev_button" onClick={getPreviousMonth}>
-        &lt;
-      </button>
-      <div className="schedule_title_date">
-        {NUMBER_MONTHS[month + 1]} {year}
-      </div>
-      <button className="schedule_next_button" onClick={getNextMonth}>
-        &gt;
-      </button>
-      {noClassScheduled && (
-        <p className="schedule_no_class">No class scheduled in this month</p>
-      )}
-      <table className="schedule_calendar">
-        <thead>
-          <tr>
-            {days.map((day) => (
-              <th className="schedule_day" key={day}>
-                {day}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {calendar.map((week) => {
-            return (
-              <tr className="schedule_week">
-                {week.map((day) => (
-                  <td
-                    className="schedule_date"
-                    onClick={(e) =>
-                      setEvent(e, year, day["month"], day["date"])
-                    }
-                  >
-                    <span className="schedule_date_text">{day.date}</span>
-                    {classes.map((t, idx) => {
-                      const startDate = new Date(t["start_date"]);
-                      const endDate = new Date(t["end_date"]);
-
-                      if (
-                        day.year === startDate.getFullYear() &&
-                        day.month + 1 === startDate.getMonth() + 1 &&
-                        day.date === startDate.getDate()
-                      ) {
-                        return (
-                          <div
-                            className="class_detail"
-                            onClick={() => showClassDetail(day.date)}
-                          >
-                            {`${
-                              t["name"]
-                            } ${startDate.getHours()}:${startDate.getMinutes()} - ${endDate.getHours()}:${endDate.getMinutes()}`}
-                            {classDetailShown &&
-                              className === "class_detail" &&
-                              classDate === day.date && (
-                                <div className={duringPopUp2}>
-                                  <ClassDetail
-                                    closeClassDetail={closeClassDetail}
-                                    name={t["name"]}
-                                    date={day.date}
-                                    description={t["description"]}
-                                    startDate={startDate}
-                                    endDate={endDate}
-                                    getSchedule={getSchedule}
-                                    deleteClass={deleteClass}
-                                  />
-                                </div>
-                              )}
-                          </div>
-                        );
-                      }
-                    })}
-                  </td>
-                ))}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-      {scheduleClassShown && className === "schedule_date" && (
-        <div className={duringPopUp}>
-          <PopUpEvent
-            currentShownSchedule={currentShownSchedule}
-            closeEvent={closeEvent}
-            getSchedule={getSchedule}
-            students={students}
-            setIsOverlapped={setIsOverlapped}
-            setIsScheduled={setIsScheduled}
-            setOpen={setOpen}
-          />
+    <div>
+      {props.isLoggedIn && (
+        <div className="schedule_container">
+          <button
+            className="schedule_go_back_button"
+            onClick={() => navigate("/mainPage")}
+          >
+            Go Back
+          </button>
+          {showSuccess && (
+            <Alert severity="success">
+              Class has been scheduled successfully!
+            </Alert>
+          )}
+          {showError && (
+            <Alert severity="error">
+              This class is overlapped with other class
+            </Alert>
+          )}
+          <div className="calendar_container">
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DateCalendar
+                onChange={onValueChange}
+                onMonthChange={handleMonthChange}
+                onYearChange={handleYearChange}
+                showDaysOutsideCurrentMonth
+                slots={{ day: ServerDay }}
+                slotProps={{ day: { highlightedDays } }}
+              />
+              {modalOpen && (
+                <ScheduleClassModal
+                  modalOpen={modalOpen}
+                  handleClose={handleClose}
+                  handleOpen={handleOpen}
+                  value={value}
+                  students={students}
+                  setShowError={setShowError}
+                  setShowSuccess={setShowSuccess}
+                  setModalOpen={setModalOpen}
+                />
+              )}
+            </LocalizationProvider>
+          </div>
         </div>
       )}
     </div>

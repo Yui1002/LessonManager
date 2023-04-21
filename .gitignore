@@ -2,5 +2,11 @@ node_modules
 .env
 client/dist/main.js
 client/dist/images
-.DS_Store
 config.js
+.DS_Store
+server/config.php
+server_nodejs
+.htaccess
+server/uploads
+.htaccessBackup
+

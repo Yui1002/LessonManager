@@ -3,15 +3,14 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./Home.css";
-import Snackbar from "@mui/material/Snackbar";
-import IconButton from "@mui/material/IconButton";
+import { IconButton, Alert } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import Alert from "@mui/material/Alert";
-import Slide from "@mui/material/Slide";
-import Box from "@mui/material/Box";
-import { logOut } from "../helpers/cookie.js";
+import { useNavigate } from 'react-router-dom';
+import { config } from './../../../config';
 
 const Home = (props) => {
+  console.log("home props: ", props);
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [classScheduledIn1hour, setClassScheduledIn1hour] = useState([]);
 
@@ -21,11 +20,19 @@ const Home = (props) => {
   }, []);
 
   const logout = () => {
-    logOut();
+    axios.get(`${config.BASE_PATH}endSession`)
+    .then(() => {
+      navigate('/')
+      return;
+    }).catch((err) => {
+      console.log(err);
+      navigate('/')
+      return;
+    })
   };
 
   const hasClassSoon = () => {
-    axios.get("/schedule/notification").then((data) => {
+    axios.get(`${config.BASE_PATH}notification`).then((data) => {
       setClassScheduledIn1hour(data.data);
     });
   };
@@ -36,10 +43,8 @@ const Home = (props) => {
       <div className="side_nav">
         <Link to="/profile">Profile</Link>
         <Link to="/schedule">Schedule</Link>
-        <Link to="/" onClick={logout}>
-          Logout
-        </Link>
         <Link to="/pastClass">Past Class</Link>
+        <Link to="/" onClick={logout}>Logout</Link>
       </div>
       {open && classScheduledIn1hour.length > 0 && (
         <Alert

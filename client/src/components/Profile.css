@@ -9,21 +9,17 @@
   height: 40px;
 }
 
-.profile_add_student_button {
-  width: 30%;
-  height: 100%;
-}
-
 .students_list {
-  width: 90%;
+  /* width: 100%;
+  height: 1000px; */
+  width: 80%;
   display: flex;
-  margin: auto;
+  justify-content: space-between;
+  margin: 0 auto;
   flex-wrap: wrap;
 }
 
 .student {
-  width: 18.5%;
-  height: 200px;
   margin: 0.75%;
   background-color: #ddd;
 }

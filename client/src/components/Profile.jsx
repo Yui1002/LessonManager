@@ -4,6 +4,7 @@ import Student from "./Student.jsx";
 import axios from "axios";
 import "./Profile.css";
 import NewStudent from "./NewStudent.jsx";
+import { config } from './../../../config';
 
 const Profile = (props) => {
   const [students, setStudents] = useState([]);
@@ -12,12 +13,15 @@ const Profile = (props) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    getStudents();
-  }, [])
+    props.checkLogin(getStudents);
+  }, []);
 
   const getStudents = async () => {
-    axios.get('/students')
-    .then(res => setStudents(res.data))
+    axios.get(`${config.BASE_PATH}getAllStudents`)
+    .then(res => {
+      console.log(res.data)
+      setStudents(res.data)
+    })
     .catch(err => console.log(err));
   };
 
@@ -27,7 +31,7 @@ const Profile = (props) => {
 
   const deleteStudent = async (email) => {
     if (confirm('Are you sure you want to delete the student?')) {
-      await axios.delete("/student", {
+      await axios.delete(`${config.BASE_PATH}deleteStudent`, {
         data: {
           email: email
         },
@@ -38,39 +42,42 @@ const Profile = (props) => {
 
   return (
     <div>
-      <button
-        className="profile_go_back_button"
-        onClick={() => navigate("/home")}
-      >
-        Go Back
-      </button>
-      <br />
-      <h1 className="profile_title">Student's Profile</h1>
-      <div className="profile_add_student_button_wrap">
-        <button
-          className="profile_add_student_button"
-          onClick={() => setShowForm(true)}
-        >
-          Create a New Student
-        </button>
-      </div>
-      {showForm && (
-        <div className={duringPopUp3}>
-          <NewStudent closeForm={closeForm} setShowForm={setShowForm} getStudents={getStudents} />
-        </div>
-      )}
-      <div className="students_list">
-        {students.map((student) => (
-          <div key={student.id} className="student">
-            <Student
-              student={student}
-              deleteStudent={deleteStudent}
-              getStudents={getStudents}
-            />
+      {props.isLoggedIn && (
+        <div>
+          <button
+            className="profile_go_back_button"
+            onClick={() => navigate("/mainPage")}
+          >
+            Go Back
+          </button>
+          <br />
+          <h1 className="profile_title">Student's Profile</h1>
+          <div className="profile_add_student_button_wrap">
+            <button
+              className="profile_add_student_button"
+              onClick={() => setShowForm(true)}
+            >
+              Create a New Student
+            </button>
           </div>
-        ))}
+          {showForm && (
+            <div className={duringPopUp3}>
+              <NewStudent closeForm={closeForm} setShowForm={setShowForm} getStudents={getStudents} />
+            </div>
+          )}
+          <div className="students_list">
+            {students.map((student) => (
+              <div key={student.id} className="student">
+                <Student
+                  student={student}
+                  deleteStudent={deleteStudent}
+                  getStudents={getStudents}
+                />
+              </div>
+            ))}
+          </div>
+        </div>)}
       </div>
-    </div>
   );
 };
 

@@ -7,7 +7,6 @@ import {
   CardContent,
   Avatar,
   Typography,
-  IconButton,
   Modal,
 } from "@mui/material";
 import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
@@ -27,18 +26,16 @@ const Student = (props) => {
             props.student.profile_photo === null ? (
               <Avatar>H</Avatar>
             ) : (
-              <Avatar
-                src={`data:image/png;base64, ${props.student.profile_photo}`}
-              />
+              <Avatar src={props.student.profile_photo} />
             )
           }
         />
         <CardContent>
           <Typography variant="body1" component="div">
-            {props.student.firstName} {props.student.lastName}
+            {props.student.first_name} {props.student.last_name}
           </Typography>
           <Typography variant="body2" component="div">
-            {props.student.lessonHours} hours
+            {props.student.lesson_hours} hours
           </Typography>
           <Typography variant="body2" component="div">
             {props.student.country}
@@ -51,19 +48,19 @@ const Student = (props) => {
           </Typography>
         </CardContent>
         <CardActions>
-          <IconButton>
-            <DeleteSharpIcon
-              onClick={() => props.deleteStudent(props.student.email)}
-            />
-          </IconButton>
-          <IconButton>
-            <EditSharpIcon onClick={handleOpen} />
-          </IconButton>
+          <DeleteSharpIcon
+            onClick={() => props.deleteStudent(props.student.email)}
+          />
+          <EditSharpIcon onClick={handleOpen} />
         </CardActions>
       </Card>
 
       <Modal open={open} onClose={handleClose}>
-          <EditProfile student={props.student} setOpen={setOpen} getStudents={props.getStudents} />
+        <EditProfile
+          student={props.student}
+          setOpen={setOpen}
+          getStudents={props.getStudents}
+        />
       </Modal>
     </div>
   );

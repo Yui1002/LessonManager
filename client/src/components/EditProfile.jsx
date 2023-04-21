@@ -3,9 +3,9 @@ import axios from "axios";
 import "./EditProfile.css";
 import COUNTRY_LIST from "./COUNTRY.js";
 import { Box, Typography, TextField, MenuItem, Button } from "@mui/material";
+import { config } from './../../../config';
 
 const EditProfile = (props) => {
-  console.log(props);
 
   const style = {
     position: "absolute",
@@ -19,12 +19,12 @@ const EditProfile = (props) => {
     p: 4,
   };
 
-  const [firstName, setFirstName] = useState(props.student.firstName);
-  const [lastName, setLastName] = useState(props.student.lastName);
+  const [firstName, setFirstName] = useState(props.student.first_name);
+  const [lastName, setLastName] = useState(props.student.last_name);
   const [country, setCountry] = useState(props.student.country);
-  const [phone, setPhone] = useState(props.student.phone);
+  const [phone, setPhone] = useState(props.student.phone_number);
   const [email, setEmail] = useState(props.student.email);
-  const [hours, setHours] = useState(props.student.lessonHours);
+  const [hours, setHours] = useState(props.student.lesson_hours);
   const [isFile, setIsFile] = useState(false);
   const [photo, setPhoto] = useState("");
   const [photoSrc, setPhotoSrc] = useState("");
@@ -73,15 +73,15 @@ const EditProfile = (props) => {
     formData.append("newEmail", email);
     formData.append("lessonHours", hours);
 
-    const res = await axios.put("/student", formData, {
+    const res = await axios.post(`${config.BASE_PATH}editProfile`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
-    });
-
-    if (res.status === 204) {
+    })
+    .then(() => {
       props.getStudents();
-    } else {
-      console.log("update failed");
-    }
+    })
+    .catch((err) => {
+      console.log('Failed to fetch data');
+    })
   };
 
   return (
@@ -94,7 +94,7 @@ const EditProfile = (props) => {
           ) : (
             <img
               className="popup_img_photo"
-              src={`data:image/png;base64, ${props.student.profile_photo}`}
+              src={props.student.profile_photo}
             />
           )}
         </label>
@@ -110,7 +110,7 @@ const EditProfile = (props) => {
         required
         id="outlined-required"
         label="first name"
-        defaultValue={props.student.firstName}
+        defaultValue={props.student.first_name}
         size="small"
         sx={{ mr: 2, mb: 2 }}
         onChange={onFirstNameChange}
@@ -119,7 +119,7 @@ const EditProfile = (props) => {
         required
         id="outlined-required"
         label="last name"
-        defaultValue={props.student.lastName}
+        defaultValue={props.student.last_name}
         size="small"
         onChange={onLastNameChange}
       />
@@ -142,7 +142,7 @@ const EditProfile = (props) => {
         required
         id="outlined-required"
         label="phone number"
-        defaultValue={props.student.phone}
+        defaultValue={props.student.phone_number}
         size="small"
         onChange={onPhoneChange}
       />
@@ -159,7 +159,7 @@ const EditProfile = (props) => {
         required
         id="outlined-required"
         label="lesson_hours"
-        defaultValue={props.student.lessonHours}
+        defaultValue={props.student.lesson_hours}
         size="small"
         onChange={onHoursChange}
       />

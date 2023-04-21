@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Login.css';
-import { setSession } from '../helpers/cookie.js';
+import { config } from './../../../config';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -15,15 +15,13 @@ const Login = () => {
     let username = e.target[0].value;
     let password = e.target[1].value;
 
-    axios.post('/login', {
+    axios.post(`${config.BASE_PATH}login`, {
       username: username,
       password: password
     })
       .then((data) => {
-        if (data.data.auth) {
-          setSession(data.data.token)
-          setIsLoggedIn(true);
-        }
+        setIsLoggedIn(true);
+
       })
       .catch(err => {
         setIsLoggedIn(false);
@@ -44,7 +42,7 @@ const Login = () => {
           <input id="current-password" name="password" type="password" autoComplete="current-password" required className='login_input_password'/>
         </section>
         <button type="submit" value="Sign in" className='login_button'>Log in</button>
-        {isLoggedIn && navigate('/home')}
+        {isLoggedIn && navigate('/mainPage')}
         {loginError && <p>We cannot find an account with that information</p>}
         New user? <button onClick={() => navigate('/register')} className="register_navigate_button">Register</button>
       </form>
