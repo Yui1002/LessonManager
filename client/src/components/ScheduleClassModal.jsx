@@ -129,7 +129,7 @@ const ScheduleClassModal = (props) => {
               }}
             >
               <option>Select</option>
-              {props.students.map((student) => {
+              {props.students.length && props.students.map((student) => {
                 return (
                   <option
                     value={`${student["id"]}-${student["first_name"]} ${student["last_name"]}`}

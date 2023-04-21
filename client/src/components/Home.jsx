@@ -65,7 +65,7 @@ const Home = (props) => {
           {`Class starts within 1 hour with ${classScheduledIn1hour[0].name}`}
         </Alert>
       )}
-      <h1 className="home_title">Hello Guillermo!</h1>
+      <h1 className="home_title">Hello!</h1>
     </div>
   );
 };
