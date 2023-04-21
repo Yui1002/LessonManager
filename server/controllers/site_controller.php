@@ -92,6 +92,8 @@ class RootController
                 case 'endSession': 
                     $this->endSession();
                     break;
+                default:
+                    break;
             }
         } catch (HttpException $ex) {
             $ex->get();
