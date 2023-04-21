@@ -2,6 +2,9 @@
 
 ## About the project
 LessonManager is a lesson planning app for teachers. It has various features listed below: 
+
+https://user-images.githubusercontent.com/57865436/233713940-b893782b-2478-40dd-be16-4e4765a571c0.mov
+
 - Register / Login / Logout with secure authentication
 - See a list of students with a country, phone number, email and lesson hours
 - See a teacher's lesson schedule 
