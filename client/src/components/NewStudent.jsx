@@ -3,7 +3,7 @@ import axios from "axios";
 import "./NewStudent.css"
 import COUNTRY_LIST from "./COUNTRY.js";
 import { FaUserAlt } from "react-icons/fa";
-import { config } from './../../../config';
+import { config } from "../../config.js";
 
 const NewStudent = (props) => {
   const [selectedFile, setSelectedFile] = useState();

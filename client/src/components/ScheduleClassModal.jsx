@@ -3,7 +3,7 @@ import { Modal, Box, Typography, IconButton, FormControl, TextField, InputLabel,
 import CloseIcon from "@mui/icons-material/Close";
 import moment from "moment";
 import axios from 'axios';
-import { config } from "./../../../config";
+import { config } from "../../config";
 
 const ScheduleClassModal = (props) => {
   const [start, setStart] = useState("");

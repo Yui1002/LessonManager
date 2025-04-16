@@ -4,7 +4,7 @@ import Student from "./Student.jsx";
 import axios from "axios";
 import "./Profile.css";
 import NewStudent from "./NewStudent.jsx";
-import { config } from "./../../../config";
+import { config } from "../../config.js";
 
 const Profile = (props) => {
   const [students, setStudents] = useState([]);

@@ -9,7 +9,7 @@ import Home from "./Home.jsx";
 import Entry from "./Entry.jsx";
 import PastClass from "./PastClass.jsx";
 import "./App.css";
-import { config } from "./../../../config";
+import { config } from "../../config.js";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
