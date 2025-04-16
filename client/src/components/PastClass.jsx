@@ -15,7 +15,7 @@ import {
 import moment from "moment";
 import "./PastClass.css";
 import { useNavigate } from "react-router-dom";
-import { config } from "./../../../config";
+import { config } from "../../config";
 
 const PastClass = (props) => {
   const [pastClasses, setPastClasses] = useState([]);

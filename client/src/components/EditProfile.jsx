@@ -3,7 +3,7 @@ import axios from "axios";
 import "./EditProfile.css";
 import COUNTRY_LIST from "./COUNTRY.js";
 import { Box, Typography, TextField, MenuItem, Button } from "@mui/material";
-import { config } from './../../../config';
+import { config } from "../../config.js";
 
 const EditProfile = (props) => {
 

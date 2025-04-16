@@ -6,7 +6,7 @@ import "./Home.css";
 import { IconButton, Alert } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useNavigate } from 'react-router-dom';
-import { config } from './../../../config';
+import { config } from "../../config";
 
 const Home = (props) => {
   console.log("home props: ", props);
